@@ -27,7 +27,7 @@ const projects = (await getCollection('work'))
 		<div class="wrapper stack gap-8 lg:gap-20">
 			<header class="hero">
 				<Hero
-					title="Sayed Mohammad Mahdi Sadrnezhaad"
+					title="Mahdi Sadrnezhaad"
 					tagline="Linux specialist, physicist, and software practitioner writing across computer science, information technology, physics, and philosophy of science."
 					align="start"
 				>
@@ -39,7 +39,7 @@ const projects = (await getCollection('work'))
 				</Hero>
 
 				<img
-					alt="Sayed Mohammad Mahdi Sadrnezhaad"
+					alt="Mahdi Sadrnezhaad"
 					width="480"
 					height="620"
 					src="/assets/mahdi-2014.jpg"
@@ -104,6 +104,11 @@ const projects = (await getCollection('work'))
 </BaseLayout>
 
 <style>
+	.hero :global(.title) {
+		max-width: none;
+		white-space: nowrap;
+	}
+
 	.hero {
 		display: flex;
 		flex-direction: column;
