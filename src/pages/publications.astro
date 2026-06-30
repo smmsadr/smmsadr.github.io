@@ -6,27 +6,27 @@ import Hero from '../components/Hero.astro';
 import PortfolioPreview from '../components/PortfolioPreview.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-const projects = (await getCollection('work')).sort(
+const entries = (await getCollection('publications')).sort(
 	(a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf(),
 );
 ---
 
 <BaseLayout
-	title="Writing | Sayed Mohammad Mahdi Sadrnezhaad"
-	description="Physics, computer science, and philosophy of science writing by Sayed Mohammad Mahdi Sadrnezhaad."
+	title="Publications | Sayed Mohammad Mahdi Sadrnezhaad"
+	description="Conference and journal contributions in quantum machine learning and related topics."
 >
 	<div class="stack gap-20">
 		<main class="wrapper stack gap-8">
 			<Hero
-				title="Writing"
-				tagline="Articles, research notes, and course essays from mahdi.sadrn.com and earlier work."
+				title="Publications"
+				tagline="Research outputs in quantum machine learning and computational science."
 				align="start"
 			/>
 			<Grid variant="offset">
 				{
-					projects.map((project) => (
+					entries.map((entry) => (
 						<li>
-							<PortfolioPreview entry={project} hrefBase="/work" />
+							<PortfolioPreview entry={entry} hrefBase="/publications" />
 						</li>
 					))
 				}
@@ -35,3 +35,4 @@ const projects = (await getCollection('work')).sort(
 		<ContactCTA />
 	</div>
 </BaseLayout>
+
