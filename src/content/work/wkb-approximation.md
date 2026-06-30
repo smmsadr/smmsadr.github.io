@@ -1,18 +1,19 @@
 ---
 title: WKB Approximation
-publishDate: 2009-11-01 00:00:00
-img: /assets/stock-1.jpg
-img_alt: Iridescent ripples of a bright blue and pink liquid
+publishDate: 2009-12-01 00:00:00
+img: /assets/stock-2.jpg
+img_alt: A bright pink sheet of paper used to wrap flowers curves in front of rich blue background
 description: |
-  Notes from Advanced Quantum Mechanics I at the University of Basic Science.
+  Advanced Quantum Mechanics I, Department of Physics, University of Basic Science, (Fall 2009).
 tags:
   - Physics
   - Quantum Mechanics
-  - Notes
 ---
 
-This archive entry comes from Advanced Quantum Mechanics I, Department of Physics, University of Basic Science, Fall 2009.
+*Advanced Quantum Mechanics I, Department of Physics, University of Basic Science, (Fall 2009).*
 
-The new page keeps the original article discoverable while the full technical material is migrated.
+[PDF Version](http://docs.sadrnezhaad.com/mahdi/Physics/WKB.pdf)
 
-[Read the original article](https://mahdi.sadrn.com/index.php/physics/37-wkb-approximation)
+```
+* This article is available in only Persian.
+```
