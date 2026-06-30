@@ -27,22 +27,22 @@ const projects = (await getCollection('work'))
 		<div class="wrapper stack gap-8 lg:gap-20">
 			<header class="hero">
 				<Hero
-					title="Hello, my name is Mahdi Sadrnezhaad"
-					tagline="I build software, explore ideas, and turn useful projects into polished web experiences."
+					title="Sayed Mohammad Mahdi Sadrnezhaad"
+					tagline="Linux specialist, physicist, and software practitioner writing across computer science, information technology, physics, and philosophy of science."
 					align="start"
 				>
 					<div class="roles">
-						<Pill><Icon icon="code" size="1.33em" /> Developer</Pill>
-						<Pill><Icon icon="strategy" size="1.33em" /> Builder</Pill>
-						<Pill><Icon icon="pencil-line" size="1.33em" /> Notes</Pill>
+						<Pill><Icon icon="terminal-window" size="1.33em" /> Linux Specialist</Pill>
+						<Pill><Icon icon="strategy" size="1.33em" /> Physicist</Pill>
+						<Pill><Icon icon="pencil-line" size="1.33em" /> Writer</Pill>
 					</div>
 				</Hero>
 
 				<img
-					alt="Portrait photo placeholder"
+					alt="Sayed Mohammad Mahdi Sadrnezhaad"
 					width="480"
 					height="620"
-					src="/assets/portrait.jpg"
+					src="/assets/mahdi-2014.jpg"
 				/>
 			</header>
 
@@ -52,8 +52,8 @@ const projects = (await getCollection('work'))
 		<main class="wrapper stack gap-20 lg:gap-48">
 			<section class="section with-background with-cta">
 				<header class="section-header stack gap-2 lg:gap-4">
-					<h3>Selected Work</h3>
-					<p>Featured projects and experiments. Replace these starter entries with your own work.</p>
+					<h3>Selected Writing</h3>
+					<p>Essays, course notes, and research summaries migrated from the older site.</p>
 				</header>
 
 				<div class="gallery">
@@ -70,7 +70,7 @@ const projects = (await getCollection('work'))
 
 				<div class="cta">
 					<CallToAction href="/work/">
-						View All
+						View Archive
 						<Icon icon="arrow-right" size="1.2em" />
 					</CallToAction>
 				</div>
@@ -78,17 +78,17 @@ const projects = (await getCollection('work'))
 
 			<section class="section with-background bg-variant">
 				<header class="section-header stack gap-2 lg:gap-4">
-					<h3>Now</h3>
+					<h3>Areas</h3>
 					<p>
-						A small snapshot of what this site can grow into: projects, writing, tools, and open
-						source links.
+						The old website grouped work around physics, computer science, systems, and broader
+						questions about science and rationality.
 					</p>
 				</header>
 
 				<div class="gallery">
 					<Grid variant="small">
 						{
-							['Projects', 'Writing', 'Open Source', 'Experiments', 'Contact'].map((brand) => (
+							['Computer Science', 'Information Technology', 'Physics', 'Scientific Computing', 'Philosophy of Science'].map((brand) => (
 								<li class="mention-card">
 									<p>{brand}</p>
 								</li>
