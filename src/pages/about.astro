@@ -315,6 +315,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 			grid-column-start: 2;
 		}
 
+		.about > .about-hero {
+			grid-column: 1 / -1;
+		}
+
 		section:not(.about-hero) {
 			display: contents;
 			font-size: var(--text-lg);
