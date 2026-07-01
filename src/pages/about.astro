@@ -1,5 +1,6 @@
 ---
 import ContactCTA from '../components/ContactCTA.astro';
+import Icon from '../components/Icon.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
@@ -52,20 +53,63 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 				</div>
 			</section>
 
-			<section>
-				<h2 class="section-title">Background</h2>
-				<div class="content">
+			<section class="my-story" aria-labelledby="my-story-title">
+				<header class="story-header">
+					<p class="story-eyebrow">My Journey</p>
+					<h2 id="my-story-title" class="story-title">
+						From Physics to Intelligent Systems
+					</h2>
+				</header>
+
+				<div class="story-divider" aria-hidden="true">
+					<span class="story-divider-line"></span>
+					<span class="story-divider-dot"></span>
+					<span class="story-divider-line"></span>
+				</div>
+
+				<div class="story-body">
 					<p>
-						I have studied and researched physics and science since 2001, with a focus on
-						condensed matter physics and physical phenomena that affect material properties. I
-						have also worked in the information technology industry since 2008.
+						My journey began in physics, where I became fascinated by understanding
+						complex systems through mathematics. That curiosity gradually expanded into
+						software engineering, optimization, machine learning, and eventually quantum
+						computing.
 					</p>
 					<p>
-						My work spans Linux, network and database administration, programming, scientific
-						computing, and simulation. Writing and course material previously published at
-						<a href="https://mahdi.sadrn.com/">mahdi.sadrn.com</a> now lives on this site.
+						Today I design decision systems that combine rigorous mathematical models with
+						modern AI to solve practical problems across forecasting, optimization, hybrid
+						intelligence, and scientific computing.
 					</p>
 				</div>
+
+				<ul class="story-chapters" aria-label="Fields that shaped my path">
+					<li class="chapter">
+						<span class="chapter-icon" aria-hidden="true">
+							<Icon icon="atom" color="var(--accent-regular)" size="1.4rem" gradient />
+						</span>
+						<span class="chapter-label">Physics</span>
+					</li>
+					<li class="chapter-arrow" aria-hidden="true">→</li>
+					<li class="chapter">
+						<span class="chapter-icon" aria-hidden="true">
+							<Icon icon="code" color="var(--accent-regular)" size="1.4rem" gradient />
+						</span>
+						<span class="chapter-label">Software</span>
+					</li>
+					<li class="chapter-arrow" aria-hidden="true">→</li>
+					<li class="chapter">
+						<span class="chapter-icon" aria-hidden="true">
+							<Icon icon="chart-line-up" color="var(--accent-regular)" size="1.4rem" gradient />
+						</span>
+						<span class="chapter-label">Optimization</span>
+					</li>
+					<li class="chapter-arrow" aria-hidden="true">→</li>
+					<li class="chapter">
+						<span class="chapter-icon" aria-hidden="true">
+							<Icon icon="cpu" color="var(--accent-regular)" size="1.4rem" gradient />
+						</span>
+						<span class="chapter-label">AI &amp; Quantum</span>
+					</li>
+				</ul>
 			</section>
 			<section>
 				<h2 class="section-title">Work Experience</h2>
@@ -275,7 +319,162 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 		}
 	}
 
+	/* -------- My Story (storytelling section) -------- */
+
+	.my-story {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 1.75rem;
+		padding: 2.5rem 1.5rem;
+		border-radius: 1.5rem;
+		border: 1px solid hsla(210, 80%, 70%, 0.14);
+		background: linear-gradient(
+			180deg,
+			hsla(var(--gray-999-basis), 0.55),
+			hsla(var(--gray-999-basis), 0.25)
+		);
+		backdrop-filter: blur(22px);
+		-webkit-backdrop-filter: blur(22px);
+		box-shadow: var(--shadow-sm);
+		overflow: hidden;
+	}
+
+	.my-story::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+		background: radial-gradient(
+			circle at 90% -10%,
+			hsla(187, 85%, 53%, 0.14),
+			transparent 55%
+		);
+	}
+
+	.story-header {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
+	}
+
+	.story-eyebrow {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: var(--text-base);
+		letter-spacing: 0.24em;
+		text-transform: uppercase;
+		color: var(--accent-regular);
+	}
+
+	.story-title {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: clamp(var(--text-2xl), 3.6vw, var(--text-4xl));
+		line-height: 1.15;
+		color: var(--gray-0);
+		font-weight: 600;
+		max-width: 22ch;
+	}
+
+	.story-divider {
+		position: relative;
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+	}
+
+	.story-divider-line {
+		flex: 1;
+		height: 1px;
+		background: linear-gradient(
+			90deg,
+			transparent,
+			hsla(187, 85%, 60%, 0.35),
+			transparent
+		);
+	}
+
+	.story-divider-dot {
+		width: 6px;
+		height: 6px;
+		border-radius: 999rem;
+		background: var(--accent-regular);
+		box-shadow: 0 0 12px hsla(187, 85%, 60%, 0.65);
+	}
+
+	.story-body {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		max-width: 68ch;
+		color: var(--gray-200);
+		font-size: var(--text-md);
+		line-height: 1.75;
+	}
+
+	.story-body p {
+		margin: 0;
+	}
+
+	.story-chapters {
+		position: relative;
+		list-style: none;
+		margin: 0.5rem 0 0;
+		padding: 0;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.75rem 1rem;
+	}
+
+	.chapter {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.6rem;
+		padding: 0.55rem 0.9rem;
+		border: 1px solid hsla(210, 80%, 70%, 0.18);
+		border-radius: 999rem;
+		background: hsla(var(--gray-999-basis), 0.35);
+		color: var(--gray-100);
+		font-family: var(--font-brand);
+		font-size: var(--text-sm);
+		letter-spacing: 0.04em;
+	}
+
+	.chapter-icon {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 1.85rem;
+		height: 1.85rem;
+		border-radius: 0.6rem;
+		background: hsla(187, 85%, 53%, 0.10);
+		border: 1px solid hsla(187, 85%, 53%, 0.22);
+	}
+
+	.chapter-arrow {
+		color: var(--gray-400);
+		font-size: var(--text-md);
+		user-select: none;
+	}
+
+	@media (min-width: 50em) {
+		.my-story {
+			padding: 3.25rem 3rem;
+			gap: 2rem;
+		}
+
+		.story-body {
+			font-size: var(--text-lg);
+		}
+	}
+
 	/* -------- Rest of page (unchanged) -------- */
+
+</style>
 
 	section {
 		display: flex;
@@ -315,11 +514,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 			grid-column-start: 2;
 		}
 
-		.about > .about-hero {
+		.about > .about-hero,
+		.about > .my-story {
 			grid-column: 1 / -1;
 		}
 
-		section:not(.about-hero) {
+		section:not(.about-hero):not(.my-story) {
 			display: contents;
 			font-size: var(--text-lg);
 		}
