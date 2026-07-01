@@ -1,0 +1,30 @@
+---
+import Icon from './Icon.astro';
+import type { TimelineEntry } from '../data/timeline';
+
+interface Props {
+	entry: TimelineEntry;
+	index: number;
+	x: number; // 0..100 (percent of horizontal track)
+	y: number; // 0..100 (percent of vertical track)
+}
+
+const { entry, index, x, y } = Astro.props;
+const ariaLabel = `${entry.year} — ${entry.title}${entry.organization ? `, ${entry.organization}` : ''}`;
+---
+
+<button
+	type="button"
+	class:list={['rm-node', { 'is-current': entry.current }]}
+	data-node-id={entry.id}
+	aria-expanded="false"
+	aria-controls={`rm-card-${entry.id}`}
+	aria-label={ariaLabel}
+	style={`--x:${x}%;--y:${y}%;--i:${index};`}
+>
+	<span class="rm-dot" aria-hidden="true">
+		<Icon icon={entry.icon} color="var(--accent-regular)" size="1rem" gradient />
+	</span>
+	<span class="rm-node-year">{entry.year}</span>
+</button>
+

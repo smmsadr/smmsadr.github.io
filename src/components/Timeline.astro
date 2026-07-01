@@ -1,0 +1,620 @@
+---
+import { timelineData } from '../data/timeline';
+import TimelineNode from './TimelineNode.astro';
+import TimelineCard from './TimelineCard.astro';
+
+// ---------------------------------------------------------------
+// Compute node positions and a smooth cubic-Bezier path server-side
+// so the SVG is fully rendered without JS.
+// ---------------------------------------------------------------
+type Pt = { x: number; y: number };
+
+const N = timelineData.length;
+
+// Gentle vertical wave for the horizontal roadmap.
+const wave = [-18, 14, -14, 18, -16, 12, -18, 14, -12];
+
+const points: Pt[] = timelineData.map((_, i) => ({
+	x: 6 + (i * (88 / Math.max(N - 1, 1))),
+	y: 50 + (wave[i % wave.length] ?? 0),
+}));
+
+function smoothPath(pts: Pt[]): string {
+	if (pts.length < 2) return '';
+	let d = `M ${pts[0].x.toFixed(2)} ${pts[0].y.toFixed(2)}`;
+	for (let i = 0; i < pts.length - 1; i++) {
+		const p0 = pts[i - 1] ?? pts[i];
+		const p1 = pts[i];
+		const p2 = pts[i + 1];
+		const p3 = pts[i + 2] ?? p2;
+		const cp1x = p1.x + (p2.x - p0.x) / 6;
+		const cp1y = p1.y + (p2.y - p0.y) / 6;
+		const cp2x = p2.x - (p3.x - p1.x) / 6;
+		const cp2y = p2.y - (p3.y - p1.y) / 6;
+		d += ` C ${cp1x.toFixed(2)} ${cp1y.toFixed(2)}, ${cp2x.toFixed(2)} ${cp2y.toFixed(2)}, ${p2.x.toFixed(2)} ${p2.y.toFixed(2)}`;
+	}
+	return d;
+}
+
+const pathD = smoothPath(points);
+---
+
+<section class="rm-timeline" aria-labelledby="rm-title" data-timeline>
+	<header class="rm-header">
+		<p class="rm-eyebrow">Journey</p>
+		<h2 id="rm-title" class="rm-title">Experience &amp; Education</h2>
+		<p class="rm-sub">
+			A roadmap from today back to my first steps in physics — click any milestone to open it.
+		</p>
+	</header>
+
+	<div class="rm-viewport">
+		<div class="rm-track" data-track>
+			<svg
+				class="rm-svg"
+				viewBox="0 0 100 100"
+				preserveAspectRatio="none"
+				aria-hidden="true"
+				focusable="false"
+			>
+				<defs>
+					<linearGradient id="rmPathGrad" x1="0" y1="0" x2="1" y2="0">
+						<stop offset="0%"   stop-color="hsla(187, 85%, 60%, 0.95)" />
+						<stop offset="50%"  stop-color="hsla(210, 85%, 65%, 0.75)" />
+						<stop offset="100%" stop-color="hsla(265, 80%, 70%, 0.55)" />
+					</linearGradient>
+				</defs>
+				<path
+					class="rm-path"
+					d={pathD}
+					fill="none"
+					stroke="url(#rmPathGrad)"
+					stroke-width="1.6"
+					vector-effect="non-scaling-stroke"
+					stroke-linecap="round"
+				/>
+			</svg>
+
+			{
+				timelineData.map((entry, i) => (
+					<TimelineNode entry={entry} index={i} x={points[i].x} y={points[i].y} />
+				))
+			}
+		</div>
+
+		<div class="rm-cards" data-cards>
+			{timelineData.map((entry) => <TimelineCard entry={entry} />)}
+
+			<p class="rm-hint" data-hint>
+				Select a milestone above to see details.
+			</p>
+		</div>
+	</div>
+</section>
+
+<script>
+	type NodeEl = HTMLButtonElement;
+
+	function initTimeline(root: HTMLElement) {
+		const path = root.querySelector<SVGPathElement>('.rm-path');
+		const nodes = Array.from(root.querySelectorAll<NodeEl>('.rm-node'));
+		const cards = Array.from(root.querySelectorAll<HTMLElement>('.rm-card'));
+		const hint = root.querySelector<HTMLElement>('[data-hint]');
+		const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+		// Prime the SVG stroke for the "draw-in" animation.
+		if (path) {
+			try {
+				const len = path.getTotalLength();
+				if (len > 0) {
+					path.style.strokeDasharray = `${len}`;
+					path.style.strokeDashoffset = `${len}`;
+				}
+			} catch {
+				/* getTotalLength unavailable in some environments — silently ignore. */
+			}
+		}
+
+		const reveal = () => {
+			root.classList.add('is-revealed');
+			if (path) path.style.strokeDashoffset = '0';
+		};
+
+		if (prefersReduced || !('IntersectionObserver' in window)) {
+			reveal();
+		} else {
+			const io = new IntersectionObserver(
+				(entries) => {
+					entries.forEach((e) => {
+						if (e.isIntersecting) {
+							reveal();
+							io.disconnect();
+						}
+					});
+				},
+				{ threshold: 0.15, rootMargin: '0px 0px -10% 0px' },
+			);
+			io.observe(root);
+		}
+
+		const closeAll = () => {
+			nodes.forEach((n) => {
+				n.classList.remove('is-active');
+				n.setAttribute('aria-expanded', 'false');
+			});
+			cards.forEach((c) => {
+				c.classList.remove('is-open');
+				c.hidden = true;
+			});
+			if (hint) hint.hidden = false;
+		};
+
+		const activate = (id: string, node: NodeEl) => {
+			const alreadyActive = node.classList.contains('is-active');
+			closeAll();
+			if (alreadyActive) return;
+			node.classList.add('is-active');
+			node.setAttribute('aria-expanded', 'true');
+			const card = cards.find((c) => c.dataset.cardId === id);
+			if (card) {
+				card.hidden = false;
+				// force reflow so the transition triggers reliably
+				void card.offsetWidth;
+				card.classList.add('is-open');
+			}
+			if (hint) hint.hidden = true;
+		};
+
+		nodes.forEach((n) => {
+			n.addEventListener('click', () => {
+				const id = n.dataset.nodeId;
+				if (id) activate(id, n);
+			});
+			n.addEventListener('keydown', (e) => {
+				const idx = nodes.indexOf(n);
+				if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+					e.preventDefault();
+					nodes[(idx + 1) % nodes.length]?.focus();
+				} else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+					e.preventDefault();
+					nodes[(idx - 1 + nodes.length) % nodes.length]?.focus();
+				} else if (e.key === 'Home') {
+					e.preventDefault();
+					nodes[0]?.focus();
+				} else if (e.key === 'End') {
+					e.preventDefault();
+					nodes[nodes.length - 1]?.focus();
+				} else if (e.key === 'Escape') {
+					e.preventDefault();
+					closeAll();
+					n.focus();
+				}
+			});
+		});
+	}
+
+	document.querySelectorAll<HTMLElement>('[data-timeline]').forEach(initTimeline);
+</script>
+
+<style>
+	/* ---------------- Header ---------------- */
+
+	.rm-timeline {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+	}
+
+	.rm-header {
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
+	}
+
+	.rm-eyebrow {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: var(--text-base);
+		letter-spacing: 0.24em;
+		text-transform: uppercase;
+		color: var(--accent-regular);
+	}
+
+	.rm-title {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: clamp(var(--text-2xl), 3.6vw, var(--text-4xl));
+		line-height: 1.15;
+		color: var(--gray-0);
+		font-weight: 600;
+	}
+
+	.rm-sub {
+		margin: 0;
+		color: var(--gray-300);
+		font-size: var(--text-md);
+		line-height: 1.6;
+	}
+
+	/* ---------------- Viewport & track (mobile default) ---------------- */
+
+	.rm-viewport {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+
+	.rm-track {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 0.85rem;
+		padding-left: 2.75rem;
+	}
+
+	.rm-track::before {
+		content: '';
+		position: absolute;
+		top: 0.75rem;
+		bottom: 0.75rem;
+		left: 1.5rem;
+		width: 1px;
+		background: linear-gradient(
+			180deg,
+			transparent,
+			hsla(187, 85%, 60%, 0.4) 12%,
+			hsla(210, 85%, 65%, 0.4) 55%,
+			hsla(265, 80%, 70%, 0.4) 88%,
+			transparent
+		);
+	}
+
+	.rm-svg {
+		display: none;
+	}
+
+	/* ---------------- Nodes ---------------- */
+
+	.rm-node {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.85rem;
+		margin: 0;
+		padding: 0.15rem 0;
+		border: 0;
+		background: transparent;
+		color: inherit;
+		cursor: pointer;
+		font-family: var(--font-brand);
+		text-align: left;
+		opacity: 0;
+		transform: translateY(6px);
+		transition:
+			opacity 0.45s ease,
+			transform 0.45s ease;
+		transition-delay: calc(var(--i, 0) * 60ms + 150ms);
+	}
+
+	.rm-node:focus-visible {
+		outline: none;
+	}
+
+	.rm-dot {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 2.25rem;
+		height: 2.25rem;
+		border-radius: 999rem;
+		background: hsla(187, 85%, 53%, 0.10);
+		border: 1px solid hsla(187, 85%, 53%, 0.4);
+		box-shadow:
+			0 0 0 4px hsla(var(--gray-999-basis), 0.6),
+			0 0 14px -4px hsla(187, 85%, 60%, 0.5);
+		transition:
+			transform var(--theme-transition),
+			background var(--theme-transition),
+			border-color var(--theme-transition),
+			box-shadow var(--theme-transition);
+	}
+
+	.rm-node-year {
+		font-size: var(--text-sm);
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--gray-200);
+	}
+
+	.rm-node:hover .rm-dot,
+	.rm-node:focus-visible .rm-dot {
+		transform: scale(1.08);
+		background: hsla(187, 85%, 53%, 0.2);
+		border-color: hsla(187, 85%, 65%, 0.6);
+		box-shadow:
+			0 0 0 4px hsla(var(--gray-999-basis), 0.6),
+			0 0 24px -4px hsla(187, 85%, 65%, 0.75);
+	}
+
+	.rm-node:focus-visible .rm-dot {
+		box-shadow:
+			0 0 0 4px hsla(var(--gray-999-basis), 0.6),
+			0 0 0 6px hsla(187, 85%, 65%, 0.55),
+			0 0 24px -4px hsla(187, 85%, 65%, 0.75);
+	}
+
+	.rm-node.is-active .rm-dot {
+		background: hsla(187, 85%, 53%, 0.3);
+		border-color: hsla(187, 85%, 75%, 0.8);
+		box-shadow:
+			0 0 0 4px hsla(var(--gray-999-basis), 0.6),
+			0 0 28px -2px hsla(187, 85%, 70%, 0.85);
+	}
+
+	.rm-node.is-active .rm-dot::after {
+		content: '';
+		position: absolute;
+		inset: -6px;
+		border-radius: 999rem;
+		border: 1px solid hsla(187, 85%, 70%, 0.6);
+		animation: rm-pulse 2.4s ease-out infinite;
+		pointer-events: none;
+	}
+
+	.rm-node.is-current .rm-dot {
+		background: hsla(265, 80%, 65%, 0.16);
+		border-color: hsla(265, 80%, 75%, 0.55);
+	}
+
+	@keyframes rm-pulse {
+		0%   { transform: scale(1);   opacity: 0.8; }
+		100% { transform: scale(1.7); opacity: 0;   }
+	}
+
+	.rm-timeline.is-revealed .rm-node {
+		opacity: 1;
+		transform: translateY(0);
+	}
+
+	/* ---------------- Cards ---------------- */
+
+	.rm-cards {
+		position: relative;
+	}
+
+	.rm-hint {
+		margin: 0;
+		color: var(--gray-400);
+		font-size: var(--text-sm);
+		text-align: center;
+		padding: 1rem 0;
+	}
+
+	.rm-card {
+		display: flex;
+		flex-direction: column;
+		gap: 0.85rem;
+		padding: 1.4rem 1.5rem;
+		border: 1px solid hsla(210, 80%, 70%, 0.2);
+		border-radius: 1.25rem;
+		background: linear-gradient(
+			180deg,
+			hsla(var(--gray-999-basis), 0.6),
+			hsla(var(--gray-999-basis), 0.3)
+		);
+		backdrop-filter: blur(22px);
+		-webkit-backdrop-filter: blur(22px);
+		box-shadow:
+			var(--shadow-md),
+			0 0 32px -14px hsla(187, 85%, 55%, 0.55);
+		opacity: 0;
+		transform: translateY(10px);
+		transition:
+			opacity 0.35s ease,
+			transform 0.35s ease;
+	}
+
+	.rm-card.is-open {
+		opacity: 1;
+		transform: translateY(0);
+	}
+
+	.rm-card[hidden] {
+		display: none;
+	}
+
+	.rm-card-head {
+		display: flex;
+		gap: 0.9rem;
+		align-items: flex-start;
+	}
+
+	.rm-card-icon {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 2.4rem;
+		height: 2.4rem;
+		border-radius: 0.75rem;
+		background: hsla(187, 85%, 53%, 0.10);
+		border: 1px solid hsla(187, 85%, 53%, 0.28);
+		flex-shrink: 0;
+	}
+
+	.rm-card-heading {
+		display: flex;
+		flex-direction: column;
+		gap: 0.15rem;
+	}
+
+	.rm-card-year {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: var(--text-sm);
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: var(--accent-regular);
+	}
+
+	.rm-card-title {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: var(--text-lg);
+		color: var(--gray-0);
+		font-weight: 600;
+		line-height: 1.2;
+	}
+
+	.rm-card-org {
+		margin: 0;
+		color: var(--gray-300);
+		font-size: var(--text-sm);
+	}
+
+	.rm-card-desc {
+		margin: 0;
+		color: var(--gray-200);
+		font-size: var(--text-base);
+		line-height: 1.6;
+	}
+
+	.rm-card-tags {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+	}
+
+	.rm-card-tags li {
+		font-size: 0.75rem;
+		letter-spacing: 0.04em;
+		color: var(--gray-100);
+		padding: 0.3rem 0.65rem;
+		border: 1px solid hsla(187, 85%, 53%, 0.28);
+		border-radius: 999rem;
+		background: hsla(187, 85%, 53%, 0.06);
+	}
+
+	.rm-card-cta {
+		align-self: flex-start;
+		color: var(--accent-regular);
+		text-decoration: none;
+		font-size: var(--text-sm);
+		border-bottom: 1px solid transparent;
+		transition: border-color var(--theme-transition);
+	}
+
+	.rm-card-cta:hover,
+	.rm-card-cta:focus-visible {
+		border-color: var(--accent-regular);
+	}
+
+	/* ---------------- Path animation ---------------- */
+
+	.rm-path {
+		transition: stroke-dashoffset 1.8s ease-out;
+	}
+
+	/* ---------------- Tablet ---------------- */
+
+	@media (min-width: 45em) {
+		.rm-track {
+			gap: 1rem;
+			padding-left: 3rem;
+		}
+
+		.rm-track::before {
+			left: 1.65rem;
+		}
+	}
+
+	/* ---------------- Desktop horizontal roadmap ---------------- */
+
+	@media (min-width: 60em) {
+		.rm-track {
+			display: block;
+			padding: 1.5rem 0 2.75rem;
+			height: 16rem;
+		}
+
+		.rm-track::before {
+			display: none;
+		}
+
+		.rm-svg {
+			display: block;
+			position: absolute;
+			inset: 0;
+			width: 100%;
+			height: 100%;
+			overflow: visible;
+		}
+
+		.rm-node {
+			position: absolute;
+			left: var(--x);
+			top: var(--y);
+			flex-direction: column;
+			align-items: center;
+			gap: 0;
+			padding: 0;
+			transform: translate(-50%, -50%) scale(0.9);
+		}
+
+		.rm-timeline.is-revealed .rm-node {
+			transform: translate(-50%, -50%) scale(1);
+		}
+
+		.rm-dot {
+			width: 2.6rem;
+			height: 2.6rem;
+		}
+
+		.rm-node-year {
+			position: absolute;
+			top: calc(100% + 0.5rem);
+			font-size: 0.7rem;
+			white-space: nowrap;
+		}
+
+		.rm-cards {
+			min-height: 12rem;
+			margin-top: 0.5rem;
+		}
+
+		.rm-card {
+			max-width: 46rem;
+			margin-inline: auto;
+			padding: 1.75rem 2rem;
+		}
+	}
+
+	/* ---------------- Reduced motion ---------------- */
+
+	@media (prefers-reduced-motion: reduce) {
+		.rm-node,
+		.rm-card {
+			opacity: 1 !important;
+			transform: none !important;
+			transition: none !important;
+		}
+		@media (min-width: 60em) {
+			.rm-node {
+				transform: translate(-50%, -50%) !important;
+			}
+		}
+		.rm-path {
+			stroke-dashoffset: 0 !important;
+			transition: none !important;
+		}
+		.rm-node.is-active .rm-dot::after {
+			animation: none;
+		}
+	}
+</style>
+

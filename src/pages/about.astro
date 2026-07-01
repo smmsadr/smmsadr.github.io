@@ -1,6 +1,7 @@
 ---
 import ContactCTA from '../components/ContactCTA.astro';
 import Icon from '../components/Icon.astro';
+import Timeline from '../components/Timeline.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
@@ -172,133 +173,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 					</li>
 				</ol>
 			</section>
-			<section class="experience" aria-labelledby="experience-title">
-				<header class="exp-header">
-					<p class="exp-eyebrow">Experience</p>
-					<h2 id="experience-title" class="exp-title">
-						A path across physics, engineering, and intelligent systems.
-					</h2>
-				</header>
-
-				<ol class="timeline">
-					<li class="tl-item">
-						<div class="tl-marker" aria-hidden="true">
-							<span class="tl-dot">
-								<Icon icon="atom" color="var(--accent-regular)" size="1.1rem" gradient />
-							</span>
-						</div>
-						<article class="tl-card">
-							<p class="tl-year">2001</p>
-							<h3 class="tl-title">Physics</h3>
-							<p class="tl-desc">
-								Began undergraduate studies in Applied Physics at Sharif University of
-								Technology, focusing on condensed matter and computational physics.
-							</p>
-						</article>
-					</li>
-
-					<li class="tl-item">
-						<div class="tl-marker" aria-hidden="true">
-							<span class="tl-dot">
-								<Icon icon="terminal-window" color="var(--accent-regular)" size="1.1rem" gradient />
-							</span>
-						</div>
-						<article class="tl-card">
-							<p class="tl-year">2008</p>
-							<h3 class="tl-title">IT Infrastructure</h3>
-							<p class="tl-desc">
-								Stepped into industry as IT Manager at the Materials and Energy Research
-								Center, running Linux servers, networks, and virtualisation clusters.
-							</p>
-						</article>
-					</li>
-
-					<li class="tl-item">
-						<div class="tl-marker" aria-hidden="true">
-							<span class="tl-dot">
-								<Icon icon="code" color="var(--accent-regular)" size="1.1rem" gradient />
-							</span>
-						</div>
-						<article class="tl-card">
-							<p class="tl-year">2011</p>
-							<h3 class="tl-title">Linux &amp; Database Engineering</h3>
-							<p class="tl-desc">
-								Systems administration, database engineering, and application development
-								at Behestan Rayan — the transition from operations into programming.
-							</p>
-						</article>
-					</li>
-
-					<li class="tl-item">
-						<div class="tl-marker" aria-hidden="true">
-							<span class="tl-dot">
-								<Icon icon="calculator" color="var(--accent-regular)" size="1.1rem" gradient />
-							</span>
-						</div>
-						<article class="tl-card">
-							<p class="tl-year">2014</p>
-							<h3 class="tl-title">Computer Science</h3>
-							<p class="tl-desc">
-								Moved to Kuala Lumpur for an MSc in Computer Science at the University of
-								Malaya, combining research with DevOps work at Deriv.
-							</p>
-						</article>
-					</li>
-
-					<li class="tl-item">
-						<div class="tl-marker" aria-hidden="true">
-							<span class="tl-dot">
-								<Icon icon="chart-line-up" color="var(--accent-regular)" size="1.1rem" gradient />
-							</span>
-						</div>
-						<article class="tl-card">
-							<p class="tl-year">2021</p>
-							<h3 class="tl-title">Senior Quantitative Engineer</h3>
-							<p class="tl-desc">
-								Shifted fully into quantitative modelling and data science at Kinesso and
-								Experis, building forecasting and optimization systems in production.
-							</p>
-						</article>
-					</li>
-
-					<li class="tl-item">
-						<div class="tl-marker" aria-hidden="true">
-							<span class="tl-dot">
-								<Icon icon="rocket-launch" color="var(--accent-regular)" size="1.1rem" gradient />
-							</span>
-						</div>
-						<article class="tl-card">
-							<p class="tl-year">2024</p>
-							<h3 class="tl-title">PhD Research</h3>
-							<p class="tl-desc">
-								Started PhD research at the intersection of quantum computing,
-								optimization, and machine learning.
-							</p>
-						</article>
-					</li>
-
-					<li class="tl-item tl-item-current">
-						<div class="tl-marker" aria-hidden="true">
-							<span class="tl-dot tl-dot-current">
-								<Icon icon="cpu" color="var(--accent-regular)" size="1.1rem" gradient />
-							</span>
-						</div>
-						<article class="tl-card">
-							<p class="tl-year">Today</p>
-							<h3 class="tl-title">Hybrid AI · Decision Systems · Quantum ML</h3>
-							<p class="tl-desc">
-								Designing decision systems that combine mathematical modelling, agentic
-								AI, and quantum machine learning to solve real-world problems.
-							</p>
-							<ul class="tl-tags">
-								<li>Hybrid AI</li>
-								<li>Decision Systems</li>
-								<li>Quantum Machine Learning</li>
-							</ul>
-						</article>
-					</li>
-				</ol>
-			</section>
 			<section class="capabilities" aria-labelledby="capabilities-title">
 				<header class="cap-header">
 					<p class="cap-eyebrow">Capabilities</p>
@@ -379,42 +253,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 					</li>
 				</ol>
 			</section>
-			<section>
-				<h2 class="section-title">Education</h2>
-				<div class="content">
-					<p><strong>University of Malaya</strong>, MS, Computer Science, 2014 - listed as Current on the old site</p>
-					<p><strong>Sharif University of Technology</strong>, BS, Applied Physics, 2001 - 2006</p>
-				</div>
-			</section>
+			<Timeline />
 		</main>
 
 		<ContactCTA />
 	</div>
 </BaseLayout>
 
-<script>
-	// Subtle reveal for the experience timeline items.
-	const items = document.querySelectorAll<HTMLElement>('.tl-item');
-	if (items.length > 0) {
-		const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-		if (prefersReduced || !('IntersectionObserver' in window)) {
-			items.forEach((el) => el.classList.add('is-visible'));
-		} else {
-			const observer = new IntersectionObserver(
-				(entries) => {
-					entries.forEach((entry) => {
-						if (entry.isIntersecting) {
-							(entry.target as HTMLElement).classList.add('is-visible');
-							observer.unobserve(entry.target);
-						}
-					});
-				},
-				{ rootMargin: '0px 0px -10% 0px', threshold: 0.12 },
-			);
-			items.forEach((el) => observer.observe(el));
-		}
-	}
-</script>
 
 <style>
 	.about {
@@ -1066,236 +911,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 		}
 	}
 
-	/* -------- Experience Timeline -------- */
-
-	.experience {
-		position: relative;
-		display: flex;
-		flex-direction: column;
-		gap: 2rem;
-	}
-
-	.exp-header {
-		display: flex;
-		flex-direction: column;
-		gap: 0.6rem;
-	}
-
-	.exp-eyebrow {
-		margin: 0;
-		font-family: var(--font-brand);
-		font-size: var(--text-base);
-		letter-spacing: 0.24em;
-		text-transform: uppercase;
-		color: var(--accent-regular);
-	}
-
-	.exp-title {
-		margin: 0;
-		font-family: var(--font-brand);
-		font-size: clamp(var(--text-2xl), 3.6vw, var(--text-4xl));
-		line-height: 1.15;
-		color: var(--gray-0);
-		font-weight: 600;
-	}
-
-	.timeline {
-		list-style: none;
-		padding: 0;
-		margin: 0;
-		position: relative;
-		display: flex;
-		flex-direction: column;
-		gap: 1.25rem;
-	}
-
-	/* The rail — a soft vertical gradient behind the dots. */
-	.timeline::before {
-		content: '';
-		position: absolute;
-		top: 0.5rem;
-		bottom: 0.5rem;
-		left: 1.125rem;
-		width: 1px;
-		background: linear-gradient(
-			180deg,
-			transparent,
-			hsla(187, 85%, 60%, 0.35) 12%,
-			hsla(210, 85%, 65%, 0.35) 55%,
-			hsla(265, 80%, 70%, 0.35) 88%,
-			transparent
-		);
-	}
-
-	.tl-item {
-		position: relative;
-		display: grid;
-		grid-template-columns: 2.25rem 1fr;
-		gap: 1rem;
-		align-items: stretch;
-		opacity: 0;
-		transform: translateY(12px);
-		transition:
-			opacity 0.6s ease,
-			transform 0.6s ease;
-	}
-
-	.tl-item.is-visible {
-		opacity: 1;
-		transform: translateY(0);
-	}
-
-	.tl-marker {
-		position: relative;
-		display: flex;
-		justify-content: center;
-		padding-top: 0.35rem;
-	}
-
-	.tl-dot {
-		position: relative;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		width: 2.25rem;
-		height: 2.25rem;
-		border-radius: 999rem;
-		background: hsla(187, 85%, 53%, 0.10);
-		border: 1px solid hsla(187, 85%, 53%, 0.32);
-		box-shadow: 0 0 0 4px hsla(var(--gray-999-basis), 0.6);
-		z-index: 1;
-	}
-
-	.tl-dot-current::after {
-		content: '';
-		position: absolute;
-		inset: -4px;
-		border-radius: 999rem;
-		border: 1px solid hsla(187, 85%, 60%, 0.45);
-		animation: tl-pulse 2.6s ease-out infinite;
-	}
-
-	@keyframes tl-pulse {
-		0%   { transform: scale(1);   opacity: 0.75; }
-		100% { transform: scale(1.6); opacity: 0;    }
-	}
-
-	.tl-card {
-		position: relative;
-		display: flex;
-		flex-direction: column;
-		gap: 0.35rem;
-		padding: 1.15rem 1.35rem;
-		border: 1px solid hsla(210, 80%, 70%, 0.14);
-		border-radius: 1.15rem;
-		background: linear-gradient(
-			180deg,
-			hsla(var(--gray-999-basis), 0.55),
-			hsla(var(--gray-999-basis), 0.25)
-		);
-		backdrop-filter: blur(22px);
-		-webkit-backdrop-filter: blur(22px);
-		box-shadow: var(--shadow-sm);
-		transition:
-			transform var(--theme-transition),
-			border-color var(--theme-transition),
-			box-shadow var(--theme-transition);
-	}
-
-	.tl-card:hover {
-		transform: translateY(-2px);
-		border-color: hsla(187, 85%, 53%, 0.36);
-		box-shadow:
-			var(--shadow-md),
-			0 0 20px -10px hsla(187, 85%, 53%, 0.4);
-	}
-
-	.tl-year {
-		margin: 0;
-		font-family: var(--font-brand);
-		font-size: var(--text-sm);
-		letter-spacing: 0.18em;
-		text-transform: uppercase;
-		color: var(--accent-regular);
-	}
-
-	.tl-title {
-		margin: 0;
-		font-family: var(--font-brand);
-		font-size: var(--text-lg);
-		line-height: 1.25;
-		color: var(--gray-0);
-		font-weight: 600;
-	}
-
-	.tl-desc {
-		margin: 0.15rem 0 0;
-		color: var(--gray-200);
-		font-size: var(--text-sm);
-		line-height: 1.6;
-	}
-
-	.tl-tags {
-		list-style: none;
-		margin: 0.6rem 0 0;
-		padding: 0;
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.4rem;
-	}
-
-	.tl-tags li {
-		font-size: 0.72rem;
-		letter-spacing: 0.06em;
-		color: var(--gray-100);
-		padding: 0.25rem 0.6rem;
-		border: 1px solid hsla(187, 85%, 53%, 0.32);
-		border-radius: 999rem;
-		background: hsla(187, 85%, 53%, 0.08);
-	}
-
-	@media (min-width: 50em) {
-		.timeline {
-			gap: 1.5rem;
-		}
-
-		.tl-item {
-			grid-template-columns: 3rem 1fr;
-			gap: 1.25rem;
-		}
-
-		.timeline::before {
-			left: 1.5rem;
-		}
-
-		.tl-dot {
-			width: 3rem;
-			height: 3rem;
-		}
-
-		.tl-title {
-			font-size: var(--text-xl);
-		}
-
-		.tl-desc {
-			font-size: var(--text-base);
-		}
-	}
-
-	@media (prefers-reduced-motion: reduce) {
-		.tl-item {
-			opacity: 1;
-			transform: none;
-			transition: none;
-		}
-		.tl-card {
-			transition: none;
-		}
-		.tl-dot-current::after {
-			animation: none;
-			display: none;
-		}
-	}
 
 	/* -------- Rest of page (unchanged) -------- */
 
@@ -1342,11 +957,11 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 		.about > .my-story,
 		.about > .how-i-think,
 		.about > .capabilities,
-		.about > .experience {
+		.about > .rm-timeline {
 			grid-column: 1 / -1;
 		}
 
-		section:not(.about-hero):not(.my-story):not(.how-i-think):not(.capabilities):not(.experience) {
+		section:not(.about-hero):not(.my-story):not(.how-i-think):not(.capabilities):not(.rm-timeline) {
 			display: contents;
 			font-size: var(--text-lg);
 		}

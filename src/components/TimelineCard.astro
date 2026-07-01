@@ -1,0 +1,45 @@
+---
+import Icon from './Icon.astro';
+import type { TimelineEntry } from '../data/timeline';
+
+interface Props {
+	entry: TimelineEntry;
+}
+
+const { entry } = Astro.props;
+---
+
+<article
+	class="rm-card"
+	id={`rm-card-${entry.id}`}
+	data-card-id={entry.id}
+	role="region"
+	aria-label={`${entry.year} details`}
+	hidden
+>
+	<header class="rm-card-head">
+		<span class="rm-card-icon" aria-hidden="true">
+			<Icon icon={entry.icon} color="var(--accent-regular)" size="1.35rem" gradient />
+		</span>
+		<div class="rm-card-heading">
+			<p class="rm-card-year">{entry.year}</p>
+			<h4 class="rm-card-title">{entry.title}</h4>
+			{entry.organization && <p class="rm-card-org">{entry.organization}</p>}
+		</div>
+	</header>
+
+	<p class="rm-card-desc">{entry.description}</p>
+
+	{entry.tags && entry.tags.length > 0 && (
+		<ul class="rm-card-tags">
+			{entry.tags.map((t) => <li>{t}</li>)}
+		</ul>
+	)}
+
+	{entry.href && (
+		<a class="rm-card-cta" href={entry.href}>
+			View Details <span aria-hidden="true">→</span>
+		</a>
+	)}
+</article>
+
