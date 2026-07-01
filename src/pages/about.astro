@@ -114,10 +114,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 			<section class="how-i-think" aria-labelledby="how-i-think-title">
 				<header class="think-header">
-					<h2 id="how-i-think-title" class="think-title">How I Think</h2>
-					<p class="think-subtitle">
+					<p class="think-eyebrow">How I Think</p>
+					<h2 id="how-i-think-title" class="think-title">
 						The principles that guide every system I build.
-					</p>
+					</h2>
 				</header>
 
 				<ol class="think-grid">
@@ -546,21 +546,24 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 		gap: 0.6rem;
 	}
 
+	.think-eyebrow {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: var(--text-base);
+		letter-spacing: 0.24em;
+		text-transform: uppercase;
+		color: var(--accent-regular);
+	}
+
 	.think-title {
 		margin: 0;
 		font-family: var(--font-brand);
-		font-size: clamp(var(--text-2xl), 3vw, var(--text-3xl));
-		line-height: 1.2;
+		font-size: clamp(var(--text-2xl), 3.6vw, var(--text-4xl));
+		line-height: 1.15;
 		color: var(--gray-0);
 		font-weight: 600;
 	}
 
-	.think-subtitle {
-		margin: 0;
-		color: var(--gray-300);
-		font-size: var(--text-md);
-		line-height: 1.6;
-	}
 
 	.think-grid {
 		list-style: none;
