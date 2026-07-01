@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Migrate article content from mahdi.sadrn.com into src/content/work."""
+"""Migrate article content from mahdi.sadrn.com into src/content/blog."""
 
 from __future__ import annotations
 
@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup, NavigableString, Tag
 
 BASE = "https://mahdi.sadrn.com"
 ROOT = Path(__file__).resolve().parents[1]
-WORK_DIR = ROOT / "src" / "content" / "work"
+WORK_DIR = ROOT / "src" / "content" / "blog"
 
 STOCK_IMAGES = [
     "/assets/stock-1.jpg",

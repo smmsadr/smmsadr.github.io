@@ -12,9 +12,9 @@ const baseSchema = z.object({
 });
 
 export const collections = {
-	work: defineCollection({
-		// Load Markdown files in the src/content/work directory.
-		loader: glob({ base: './src/content/work', pattern: '**/*.md' }),
+	blog: defineCollection({
+		// Load Markdown files in the src/content/blog directory.
+		loader: glob({ base: './src/content/blog', pattern: '**/*.md' }),
 		schema: baseSchema,
 	}),
 	experience: defineCollection({
