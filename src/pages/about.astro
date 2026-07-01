@@ -111,6 +111,67 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 					</li>
 				</ul>
 			</section>
+
+			<section class="how-i-think" aria-labelledby="how-i-think-title">
+				<header class="think-header">
+					<h2 id="how-i-think-title" class="think-title">How I Think</h2>
+					<p class="think-subtitle">
+						The principles that guide every system I build.
+					</p>
+				</header>
+
+				<ol class="think-grid">
+					<li class="think-card" tabindex="0">
+						<div class="think-icon" aria-hidden="true">
+							<Icon icon="moon-stars" color="var(--accent-regular)" size="1.5rem" gradient />
+						</div>
+						<h3 class="think-card-title">Curiosity</h3>
+						<p class="think-card-desc">
+							I begin by asking better questions before searching for better answers.
+						</p>
+					</li>
+
+					<li class="think-card" tabindex="0">
+						<div class="think-icon" aria-hidden="true">
+							<Icon icon="strategy" color="var(--accent-regular)" size="1.5rem" gradient />
+						</div>
+						<h3 class="think-card-title">Systems Thinking</h3>
+						<p class="think-card-desc">
+							Every component matters, but interactions matter even more.
+						</p>
+					</li>
+
+					<li class="think-card" tabindex="0">
+						<div class="think-icon" aria-hidden="true">
+							<Icon icon="calculator" color="var(--accent-regular)" size="1.5rem" gradient />
+						</div>
+						<h3 class="think-card-title">Mathematics</h3>
+						<p class="think-card-desc">
+							Good models simplify reality without losing truth.
+						</p>
+					</li>
+
+					<li class="think-card" tabindex="0">
+						<div class="think-icon" aria-hidden="true">
+							<Icon icon="code" color="var(--accent-regular)" size="1.5rem" gradient />
+						</div>
+						<h3 class="think-card-title">Engineering</h3>
+						<p class="think-card-desc">
+							Ideas only matter when they become reliable systems.
+						</p>
+					</li>
+
+					<li class="think-card" tabindex="0">
+						<div class="think-icon" aria-hidden="true">
+							<Icon icon="rocket-launch" color="var(--accent-regular)" size="1.5rem" gradient />
+						</div>
+						<h3 class="think-card-title">Continuous Learning</h3>
+						<p class="think-card-desc">
+							Every project is another opportunity to improve.
+						</p>
+					</li>
+				</ol>
+			</section>
 			<section>
 				<h2 class="section-title">Work Experience</h2>
 				<div class="content">
@@ -470,6 +531,161 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 		}
 	}
 
+	/* -------- How I Think (principles grid) -------- */
+
+	.how-i-think {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+	}
+
+	.think-header {
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
+	}
+
+	.think-title {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: clamp(var(--text-2xl), 3vw, var(--text-3xl));
+		line-height: 1.2;
+		color: var(--gray-0);
+		font-weight: 600;
+	}
+
+	.think-subtitle {
+		margin: 0;
+		color: var(--gray-300);
+		font-size: var(--text-md);
+		line-height: 1.6;
+	}
+
+	.think-grid {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 1.15rem;
+	}
+
+	@media (min-width: 40em) {
+		.think-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (min-width: 60em) {
+		.think-grid {
+			grid-template-columns: repeat(6, 1fr);
+		}
+		.think-card {
+			grid-column: span 2;
+		}
+		.think-card:nth-child(4) {
+			grid-column: 2 / span 2;
+		}
+		.think-card:nth-child(5) {
+			grid-column: 4 / span 2;
+		}
+	}
+
+	.think-card {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 0.75rem;
+		padding: 1.5rem;
+		border: 1px solid hsla(210, 80%, 70%, 0.14);
+		border-radius: 1.25rem;
+		background: linear-gradient(
+			180deg,
+			hsla(var(--gray-999-basis), 0.55),
+			hsla(var(--gray-999-basis), 0.25)
+		);
+		backdrop-filter: blur(22px);
+		-webkit-backdrop-filter: blur(22px);
+		box-shadow: var(--shadow-sm);
+		overflow: hidden;
+		cursor: default;
+		transition:
+			transform var(--theme-transition),
+			border-color var(--theme-transition),
+			box-shadow var(--theme-transition);
+	}
+
+	.think-card::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		background: radial-gradient(
+			circle at 85% -10%,
+			hsla(187, 85%, 53%, 0.16),
+			transparent 55%
+		);
+		opacity: 0;
+		transition: opacity var(--theme-transition);
+		pointer-events: none;
+	}
+
+	.think-card:hover,
+	.think-card:focus-visible,
+	.think-card:focus-within {
+		transform: translateY(-3px);
+		border-color: hsla(187, 85%, 53%, 0.42);
+		box-shadow:
+			var(--shadow-md),
+			0 0 24px -8px hsla(187, 85%, 53%, 0.45);
+		outline: none;
+	}
+
+	.think-card:hover::before,
+	.think-card:focus-visible::before,
+	.think-card:focus-within::before {
+		opacity: 1;
+	}
+
+	.think-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 2.5rem;
+		height: 2.5rem;
+		border-radius: 0.75rem;
+		background: hsla(187, 85%, 53%, 0.10);
+		border: 1px solid hsla(187, 85%, 53%, 0.22);
+	}
+
+	.think-card-title {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: var(--text-md);
+		line-height: 1.2;
+		color: var(--gray-0);
+		font-weight: 600;
+	}
+
+	.think-card-desc {
+		margin: 0;
+		color: var(--gray-300);
+		font-size: var(--text-sm);
+		line-height: 1.55;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.think-card,
+		.think-card::before {
+			transition: none !important;
+		}
+		.think-card:hover,
+		.think-card:focus-visible,
+		.think-card:focus-within {
+			transform: none;
+		}
+	}
+
 	/* -------- Rest of page (unchanged) -------- */
 
 
@@ -512,11 +728,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 		}
 
 		.about > .about-hero,
-		.about > .my-story {
+		.about > .my-story,
+		.about > .how-i-think {
 			grid-column: 1 / -1;
 		}
 
-		section:not(.about-hero):not(.my-story) {
+		section:not(.about-hero):not(.my-story):not(.how-i-think) {
 			display: contents;
 			font-size: var(--text-lg);
 		}
