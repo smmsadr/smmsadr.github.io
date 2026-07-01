@@ -957,13 +957,18 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 		.about > .my-story,
 		.about > .how-i-think,
 		.about > .capabilities,
-		.about > .rm-timeline {
+		.about > :global(.jr) {
 			grid-column: 1 / -1;
 		}
 
-		section:not(.about-hero):not(.my-story):not(.how-i-think):not(.capabilities):not(.rm-timeline) {
+		section:not(.about-hero):not(.my-story):not(.how-i-think):not(.capabilities) {
 			display: contents;
 			font-size: var(--text-lg);
+		}
+
+		.about > :global(.jr) {
+			display: block;
+			font-size: initial;
 		}
 	}
 </style>

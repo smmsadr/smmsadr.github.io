@@ -1,23 +1,20 @@
 ---
+import { iconPaths } from './IconPaths';
 import { timelineData } from '../data/timeline';
-import TimelineNode from './TimelineNode.astro';
-import TimelineCard from './TimelineCard.astro';
 
-// ---------------------------------------------------------------
-// Compute node positions and a smooth cubic-Bezier path server-side
-// so the SVG is fully rendered without JS.
-// ---------------------------------------------------------------
 type Pt = { x: number; y: number };
 
-const N = timelineData.length;
+const CANVAS_W = 1320;
+const CANVAS_H = 460;
+const CARD_TOP = 540;
 
-// Gentle vertical wave for the horizontal roadmap.
-const wave = [-18, 14, -14, 18, -16, 12, -18, 14, -12];
-
+// Snaking premium path: Today (left) -> 2001 (right).
 const points: Pt[] = timelineData.map((_, i) => ({
-	x: 6 + (i * (88 / Math.max(N - 1, 1))),
-	y: 50 + (wave[i % wave.length] ?? 0),
+	x: 88 + i * ((CANVAS_W - 176) / Math.max(timelineData.length - 1, 1)),
+	y: [126, 282, 142, 296, 152, 286, 154, 278, 160][i] ?? 180,
 }));
+
+const iconMap = Object.fromEntries(timelineData.map((d) => [d.id, iconPaths[d.icon]]));
 
 function smoothPath(pts: Pt[]): string {
 	if (pts.length < 2) return '';
@@ -39,79 +36,211 @@ function smoothPath(pts: Pt[]): string {
 const pathD = smoothPath(points);
 ---
 
-<section class="rm-timeline" aria-labelledby="rm-title" data-timeline>
-	<header class="rm-header">
-		<p class="rm-eyebrow">Journey</p>
-		<h2 id="rm-title" class="rm-title">Experience &amp; Education</h2>
-		<p class="rm-sub">
-			A roadmap from today back to my first steps in physics — click any milestone to open it.
+<section class="jr" aria-labelledby="jr-title" data-journey>
+	<div class="jr-left">
+		<p class="jr-eyebrow">Journey</p>
+		<h2 id="jr-title" class="jr-title">Experience &amp;<br />Education</h2>
+		<p class="jr-sub">
+			A roadmap from today back to the beginning of my scientific and engineering journey.
 		</p>
-	</header>
+		<p class="jr-help">Click any milestone to explore that chapter.</p>
+	</div>
 
-	<div class="rm-viewport">
-		<div class="rm-track" data-track>
+	<div class="jr-right">
+		<div class="jr-roadmap" data-roadmap>
 			<svg
-				class="rm-svg"
-				viewBox="0 0 100 100"
-				preserveAspectRatio="none"
+				class="jr-svg"
+				viewBox={`0 0 ${CANVAS_W} ${CANVAS_H}`}
+				preserveAspectRatio="xMidYMid meet"
 				aria-hidden="true"
-				focusable="false"
 			>
 				<defs>
-					<linearGradient id="rmPathGrad" x1="0" y1="0" x2="1" y2="0">
-						<stop offset="0%"   stop-color="hsla(187, 85%, 60%, 0.95)" />
-						<stop offset="50%"  stop-color="hsla(210, 85%, 65%, 0.75)" />
-						<stop offset="100%" stop-color="hsla(265, 80%, 70%, 0.55)" />
+					<linearGradient id="jrPathGrad" x1="0" y1="0" x2="1" y2="0">
+						<stop offset="0%" stop-color="hsla(187, 85%, 60%, 0.95)" />
+						<stop offset="55%" stop-color="hsla(210, 85%, 65%, 0.8)" />
+						<stop offset="100%" stop-color="hsla(265, 80%, 70%, 0.65)" />
 					</linearGradient>
+					<filter id="jrPathGlow" x="-30%" y="-30%" width="160%" height="160%">
+						<feGaussianBlur stdDeviation="2.5" result="blur" />
+						<feMerge>
+							<feMergeNode in="blur" />
+							<feMergeNode in="SourceGraphic" />
+						</feMerge>
+					</filter>
 				</defs>
-				<path
-					class="rm-path"
-					d={pathD}
-					fill="none"
-					stroke="url(#rmPathGrad)"
-					stroke-width="1.6"
-					vector-effect="non-scaling-stroke"
-					stroke-linecap="round"
-				/>
+				<path class="jr-path-glow" d={pathD} fill="none" />
+				<path class="jr-path" d={pathD} fill="none" />
 			</svg>
 
+			<div class="jr-mobile-rail" aria-hidden="true"></div>
+
 			{
-				timelineData.map((entry, i) => (
-					<TimelineNode entry={entry} index={i} x={points[i].x} y={points[i].y} />
-				))
+				timelineData.map((entry, i) => {
+					const p = points[i];
+					return (
+						<button
+							type="button"
+							class:list={['jr-node', { 'is-current': entry.current }]}
+							data-node-id={entry.id}
+							data-index={i}
+							style={`--x:${p.x}px;--y:${p.y}px;--i:${i};`}
+							aria-controls="jr-card"
+							aria-expanded="false"
+							aria-label={`${entry.year}: ${entry.title}${entry.organization ? `, ${entry.organization}` : ''}`}
+						>
+							<span class="jr-year">{entry.year}</span>
+							<span class="jr-dot" aria-hidden="true"></span>
+						</button>
+					);
+				})
 			}
+
+			<div class="jr-connector" aria-hidden="true"></div>
 		</div>
 
-		<div class="rm-cards" data-cards>
-			{timelineData.map((entry) => <TimelineCard entry={entry} />)}
+		<article class="jr-card" id="jr-card" role="region" aria-live="polite">
+			<header class="jr-card-head">
+				<span class="jr-card-icon" data-card-icon aria-hidden="true"></span>
+				<div class="jr-card-heading">
+					<p class="jr-card-year" data-card-year></p>
+					<h3 class="jr-card-title" data-card-title></h3>
+					<p class="jr-card-org" data-card-org></p>
+				</div>
+			</header>
 
-			<p class="rm-hint" data-hint>
-				Select a milestone above to see details.
-			</p>
-		</div>
+			<p class="jr-card-desc" data-card-desc></p>
+			<ul class="jr-card-tags" data-card-tags></ul>
+			<a class="jr-card-cta" data-card-cta hidden href="#">
+				View Details <span aria-hidden="true">→</span>
+			</a>
+		</article>
 	</div>
 </section>
 
-<script>
-	type NodeEl = HTMLButtonElement;
+<script define:vars={{ journey: timelineData, icons: iconMap, canvasHeight: CANVAS_H, cardTop: CARD_TOP }}>
+	const roots = document.querySelectorAll('[data-journey]');
 
-	function initTimeline(root: HTMLElement) {
-		const path = root.querySelector<SVGPathElement>('.rm-path');
-		const nodes = Array.from(root.querySelectorAll<NodeEl>('.rm-node'));
-		const cards = Array.from(root.querySelectorAll<HTMLElement>('.rm-card'));
-		const hint = root.querySelector<HTMLElement>('[data-hint]');
+	for (const root of roots) {
+		const roadmap = root.querySelector('.jr-roadmap');
+		const path = root.querySelector('.jr-path');
+		const nodes = Array.from(root.querySelectorAll('.jr-node'));
+		const connector = root.querySelector('.jr-connector');
+
+		const yearEl = root.querySelector('[data-card-year]');
+		const titleEl = root.querySelector('[data-card-title]');
+		const orgEl = root.querySelector('[data-card-org]');
+		const descEl = root.querySelector('[data-card-desc]');
+		const tagsEl = root.querySelector('[data-card-tags]');
+		const ctaEl = root.querySelector('[data-card-cta]');
+		const iconEl = root.querySelector('[data-card-icon]');
 		const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-		// Prime the SVG stroke for the "draw-in" animation.
+		const renderIcon = (id) => {
+			const iconPath = icons[id] || '';
+			return `
+			<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 256 256" aria-hidden="true" stroke="url(#jrIconGrad)" fill="url(#jrIconGrad)" style="width:1.35rem;height:1.35rem;">
+				<defs>
+					<linearGradient id="jrIconGrad" x1="23" x2="235" y1="43" y2="202" gradientUnits="userSpaceOnUse">
+						<stop stop-color="var(--gradient-stop-1)" />
+						<stop offset=".5" stop-color="var(--gradient-stop-2)" />
+						<stop offset="1" stop-color="var(--gradient-stop-3)" />
+					</linearGradient>
+				</defs>
+				<g>${iconPath}</g>
+			</svg>`;
+		};
+
+		const updateCard = (item) => {
+			if (!yearEl || !titleEl || !orgEl || !descEl || !tagsEl || !iconEl) return;
+
+			root.classList.remove('is-card-open');
+			void root.offsetWidth;
+
+			yearEl.textContent = item.year;
+			titleEl.textContent = item.title;
+			orgEl.textContent = item.organization || '';
+			orgEl.hidden = !item.organization;
+			descEl.textContent = item.description;
+			iconEl.innerHTML = renderIcon(item.id);
+
+			tagsEl.innerHTML = '';
+			for (const tag of item.tags || []) {
+				const li = document.createElement('li');
+				li.textContent = tag;
+				tagsEl.appendChild(li);
+			}
+
+			if (ctaEl) {
+				if (item.href) {
+					ctaEl.hidden = false;
+					ctaEl.href = item.href;
+				} else {
+					ctaEl.hidden = true;
+				}
+			}
+
+			root.classList.add('is-card-open');
+		};
+
+		const updateConnector = (button) => {
+			if (!roadmap || !connector || !button) return;
+			const rRect = roadmap.getBoundingClientRect();
+			const bRect = button.getBoundingClientRect();
+			const x = bRect.left + bRect.width / 2 - rRect.left;
+			const y = bRect.top + bRect.height / 2 - rRect.top;
+
+			connector.style.setProperty('--cx', `${x}px`);
+			connector.style.setProperty('--cy', `${y + 18}px`);
+			connector.style.setProperty('--ch', `${Math.max(cardTop - (y + 18), 28)}px`);
+			connector.classList.add('is-on');
+		};
+
+		const activate = (index) => {
+			const item = journey[index];
+			const node = nodes[index];
+			if (!item || !node) return;
+
+			nodes.forEach((n) => {
+				n.classList.remove('is-active');
+				n.setAttribute('aria-expanded', 'false');
+			});
+
+			node.classList.add('is-active');
+			node.setAttribute('aria-expanded', 'true');
+			updateCard(item);
+			updateConnector(node);
+		};
+
+		nodes.forEach((node, idx) => {
+			node.addEventListener('click', () => activate(idx));
+			node.addEventListener('keydown', (event) => {
+				const key = event.key;
+				if (key === 'ArrowRight' || key === 'ArrowDown') {
+					event.preventDefault();
+					nodes[(idx + 1) % nodes.length]?.focus();
+				} else if (key === 'ArrowLeft' || key === 'ArrowUp') {
+					event.preventDefault();
+					nodes[(idx - 1 + nodes.length) % nodes.length]?.focus();
+				} else if (key === 'Home') {
+					event.preventDefault();
+					nodes[0]?.focus();
+				} else if (key === 'End') {
+					event.preventDefault();
+					nodes[nodes.length - 1]?.focus();
+				} else if (key === 'Enter' || key === ' ') {
+					event.preventDefault();
+					activate(idx);
+				}
+			});
+		});
+
 		if (path) {
 			try {
 				const len = path.getTotalLength();
-				if (len > 0) {
-					path.style.strokeDasharray = `${len}`;
-					path.style.strokeDashoffset = `${len}`;
-				}
+				path.style.strokeDasharray = `${len}`;
+				path.style.strokeDashoffset = `${len}`;
 			} catch {
-				/* getTotalLength unavailable in some environments — silently ignore. */
+				/* no-op */
 			}
 		}
 
@@ -123,96 +252,47 @@ const pathD = smoothPath(points);
 		if (prefersReduced || !('IntersectionObserver' in window)) {
 			reveal();
 		} else {
-			const io = new IntersectionObserver(
+			const observer = new IntersectionObserver(
 				(entries) => {
-					entries.forEach((e) => {
-						if (e.isIntersecting) {
+					for (const entry of entries) {
+						if (entry.isIntersecting) {
 							reveal();
-							io.disconnect();
+							observer.disconnect();
+							break;
 						}
-					});
+					}
 				},
-				{ threshold: 0.15, rootMargin: '0px 0px -10% 0px' },
+				{ threshold: 0.2, rootMargin: '0px 0px -10% 0px' },
 			);
-			io.observe(root);
+			observer.observe(root);
 		}
 
-		const closeAll = () => {
-			nodes.forEach((n) => {
-				n.classList.remove('is-active');
-				n.setAttribute('aria-expanded', 'false');
-			});
-			cards.forEach((c) => {
-				c.classList.remove('is-open');
-				c.hidden = true;
-			});
-			if (hint) hint.hidden = false;
-		};
-
-		const activate = (id: string, node: NodeEl) => {
-			const alreadyActive = node.classList.contains('is-active');
-			closeAll();
-			if (alreadyActive) return;
-			node.classList.add('is-active');
-			node.setAttribute('aria-expanded', 'true');
-			const card = cards.find((c) => c.dataset.cardId === id);
-			if (card) {
-				card.hidden = false;
-				// force reflow so the transition triggers reliably
-				void card.offsetWidth;
-				card.classList.add('is-open');
-			}
-			if (hint) hint.hidden = true;
-		};
-
-		nodes.forEach((n) => {
-			n.addEventListener('click', () => {
-				const id = n.dataset.nodeId;
-				if (id) activate(id, n);
-			});
-			n.addEventListener('keydown', (e) => {
-				const idx = nodes.indexOf(n);
-				if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-					e.preventDefault();
-					nodes[(idx + 1) % nodes.length]?.focus();
-				} else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-					e.preventDefault();
-					nodes[(idx - 1 + nodes.length) % nodes.length]?.focus();
-				} else if (e.key === 'Home') {
-					e.preventDefault();
-					nodes[0]?.focus();
-				} else if (e.key === 'End') {
-					e.preventDefault();
-					nodes[nodes.length - 1]?.focus();
-				} else if (e.key === 'Escape') {
-					e.preventDefault();
-					closeAll();
-					n.focus();
-				}
-			});
+		window.addEventListener('resize', () => {
+			const active = root.querySelector('.jr-node.is-active');
+			if (active) updateConnector(active);
 		});
-	}
 
-	document.querySelectorAll<HTMLElement>('[data-timeline]').forEach(initTimeline);
+		activate(0);
+	}
 </script>
 
 <style>
-	/* ---------------- Header ---------------- */
-
-	.rm-timeline {
-		position: relative;
-		display: flex;
-		flex-direction: column;
+	.jr {
+		display: grid;
+		grid-template-columns: minmax(16rem, 30%) minmax(0, 70%);
 		gap: 2rem;
+		align-items: start;
 	}
 
-	.rm-header {
+	.jr-left {
+		position: sticky;
+		top: 6rem;
 		display: flex;
 		flex-direction: column;
-		gap: 0.6rem;
+		gap: 0.8rem;
 	}
 
-	.rm-eyebrow {
+	.jr-eyebrow {
 		margin: 0;
 		font-family: var(--font-brand);
 		font-size: var(--text-base);
@@ -221,397 +301,427 @@ const pathD = smoothPath(points);
 		color: var(--accent-regular);
 	}
 
-	.rm-title {
+	.jr-title {
 		margin: 0;
 		font-family: var(--font-brand);
-		font-size: clamp(var(--text-2xl), 3.6vw, var(--text-4xl));
-		line-height: 1.15;
+		font-size: clamp(var(--text-3xl), 3.4vw, var(--text-5xl));
+		line-height: 1.05;
 		color: var(--gray-0);
 		font-weight: 600;
 	}
 
-	.rm-sub {
+	.jr-sub {
 		margin: 0;
 		color: var(--gray-300);
 		font-size: var(--text-md);
-		line-height: 1.6;
+		line-height: 1.65;
+		max-width: 36ch;
 	}
 
-	/* ---------------- Viewport & track (mobile default) ---------------- */
+	.jr-help {
+		margin: 0.15rem 0 0;
+		font-size: var(--text-sm);
+		color: var(--gray-400);
+	}
 
-	.rm-viewport {
+	.jr-right {
 		position: relative;
 		display: flex;
 		flex-direction: column;
-		gap: 1.5rem;
+		gap: 1rem;
 	}
 
-	.rm-track {
+	.jr-roadmap {
 		position: relative;
-		display: flex;
-		flex-direction: column;
-		gap: 0.85rem;
-		padding-left: 2.75rem;
+		width: min(1320px, 100%);
+		height: 620px;
+		margin-inline: auto;
 	}
 
-	.rm-track::before {
-		content: '';
+	.jr-svg {
 		position: absolute;
-		top: 0.75rem;
-		bottom: 0.75rem;
-		left: 1.5rem;
-		width: 1px;
-		background: linear-gradient(
-			180deg,
-			transparent,
-			hsla(187, 85%, 60%, 0.4) 12%,
-			hsla(210, 85%, 65%, 0.4) 55%,
-			hsla(265, 80%, 70%, 0.4) 88%,
-			transparent
-		);
+		inset: 0;
+		width: 100%;
+		height: 460px;
 	}
 
-	.rm-svg {
-		display: none;
+	.jr-path-glow {
+		stroke: url(#jrPathGrad);
+		stroke-width: 5.5;
+		opacity: 0.26;
+		filter: url(#jrPathGlow);
+		stroke-linecap: round;
 	}
 
-	/* ---------------- Nodes ---------------- */
+	.jr-path {
+		stroke: url(#jrPathGrad);
+		stroke-width: 2.2;
+		stroke-linecap: round;
+		transition: stroke-dashoffset 1.9s ease-out;
+	}
 
-	.rm-node {
-		position: relative;
-		display: inline-flex;
-		align-items: center;
-		gap: 0.85rem;
-		margin: 0;
-		padding: 0.15rem 0;
+	.jr-node {
+		position: absolute;
+		left: var(--x);
+		top: var(--y);
+		transform: translate(-50%, -50%) scale(0.95);
 		border: 0;
 		background: transparent;
-		color: inherit;
+		padding: 0;
 		cursor: pointer;
-		font-family: var(--font-brand);
-		text-align: left;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.55rem;
 		opacity: 0;
-		transform: translateY(6px);
 		transition:
-			opacity 0.45s ease,
+			opacity 0.55s ease,
 			transform 0.45s ease;
-		transition-delay: calc(var(--i, 0) * 60ms + 150ms);
+		transition-delay: calc(var(--i) * 80ms + 180ms);
 	}
 
-	.rm-node:focus-visible {
+	.jr-year {
+		font-family: var(--font-brand);
+		font-size: 0.84rem;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: var(--gray-200);
+		white-space: nowrap;
+	}
+
+	.jr-dot {
+		position: relative;
+		width: 2.15rem;
+		height: 2.15rem;
+		border-radius: 999rem;
+		background: radial-gradient(circle at 40% 30%, hsla(187, 85%, 70%, 0.6), hsla(187, 85%, 45%, 0.25));
+		border: 1px solid hsla(187, 85%, 68%, 0.62);
+		box-shadow:
+			0 0 0 6px hsla(var(--gray-999-basis), 0.62),
+			0 0 24px -2px hsla(187, 85%, 65%, 0.7),
+			0 0 38px -8px hsla(265, 80%, 70%, 0.6);
+		transition:
+			transform var(--theme-transition),
+			box-shadow var(--theme-transition),
+			border-color var(--theme-transition);
+	}
+
+	.jr-dot::before {
+		content: '';
+		position: absolute;
+		inset: 28%;
+		border-radius: 999rem;
+		background: hsla(187, 85%, 82%, 0.95);
+	}
+
+	.jr-node:hover .jr-dot,
+	.jr-node:focus-visible .jr-dot {
+		transform: scale(1.11);
+		border-color: hsla(187, 85%, 82%, 0.95);
+		box-shadow:
+			0 0 0 6px hsla(var(--gray-999-basis), 0.62),
+			0 0 28px 0 hsla(187, 85%, 68%, 0.95),
+			0 0 45px -6px hsla(265, 80%, 72%, 0.75);
+	}
+
+	.jr-node:focus-visible {
 		outline: none;
 	}
 
-	.rm-dot {
-		position: relative;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		width: 2.25rem;
-		height: 2.25rem;
-		border-radius: 999rem;
-		background: hsla(187, 85%, 53%, 0.10);
-		border: 1px solid hsla(187, 85%, 53%, 0.4);
+	.jr-node:focus-visible .jr-dot {
 		box-shadow:
-			0 0 0 4px hsla(var(--gray-999-basis), 0.6),
-			0 0 14px -4px hsla(187, 85%, 60%, 0.5);
-		transition:
-			transform var(--theme-transition),
-			background var(--theme-transition),
-			border-color var(--theme-transition),
-			box-shadow var(--theme-transition);
+			0 0 0 6px hsla(var(--gray-999-basis), 0.62),
+			0 0 0 9px hsla(187, 85%, 70%, 0.5),
+			0 0 30px 0 hsla(187, 85%, 70%, 0.95),
+			0 0 46px -6px hsla(265, 80%, 72%, 0.75);
 	}
 
-	.rm-node-year {
-		font-size: var(--text-sm);
-		letter-spacing: 0.14em;
-		text-transform: uppercase;
-		color: var(--gray-200);
-	}
-
-	.rm-node:hover .rm-dot,
-	.rm-node:focus-visible .rm-dot {
-		transform: scale(1.08);
-		background: hsla(187, 85%, 53%, 0.2);
-		border-color: hsla(187, 85%, 65%, 0.6);
+	.jr-node.is-active .jr-dot {
+		border-color: hsla(187, 85%, 84%, 0.98);
 		box-shadow:
-			0 0 0 4px hsla(var(--gray-999-basis), 0.6),
-			0 0 24px -4px hsla(187, 85%, 65%, 0.75);
+			0 0 0 6px hsla(var(--gray-999-basis), 0.62),
+			0 0 34px 0 hsla(187, 85%, 72%, 0.95),
+			0 0 52px -4px hsla(265, 80%, 74%, 0.88);
 	}
 
-	.rm-node:focus-visible .rm-dot {
-		box-shadow:
-			0 0 0 4px hsla(var(--gray-999-basis), 0.6),
-			0 0 0 6px hsla(187, 85%, 65%, 0.55),
-			0 0 24px -4px hsla(187, 85%, 65%, 0.75);
-	}
-
-	.rm-node.is-active .rm-dot {
-		background: hsla(187, 85%, 53%, 0.3);
-		border-color: hsla(187, 85%, 75%, 0.8);
-		box-shadow:
-			0 0 0 4px hsla(var(--gray-999-basis), 0.6),
-			0 0 28px -2px hsla(187, 85%, 70%, 0.85);
-	}
-
-	.rm-node.is-active .rm-dot::after {
+	.jr-node.is-active .jr-dot::after {
 		content: '';
 		position: absolute;
-		inset: -6px;
+		inset: -8px;
 		border-radius: 999rem;
-		border: 1px solid hsla(187, 85%, 70%, 0.6);
-		animation: rm-pulse 2.4s ease-out infinite;
+		border: 1px solid hsla(187, 85%, 70%, 0.72);
+		animation: jr-pulse 2.4s ease-out infinite;
+	}
+
+	@keyframes jr-pulse {
+		0% { transform: scale(1); opacity: 0.9; }
+		100% { transform: scale(1.62); opacity: 0; }
+	}
+
+	.jr.is-revealed .jr-node {
+		opacity: 1;
+		transform: translate(-50%, -50%) scale(1);
+	}
+
+	.jr-connector {
+		position: absolute;
+		left: var(--cx, 0px);
+		top: var(--cy, 0px);
+		width: 1px;
+		height: var(--ch, 0px);
+		opacity: 0;
+		transform: translateX(-50%);
+		background: linear-gradient(
+			180deg,
+			hsla(187, 85%, 72%, 0.75),
+			hsla(210, 85%, 68%, 0.55),
+			hsla(265, 80%, 72%, 0.35),
+			transparent
+		);
+		box-shadow: 0 0 14px hsla(187, 85%, 70%, 0.5);
+		transition: opacity 0.35s ease;
 		pointer-events: none;
 	}
 
-	.rm-node.is-current .rm-dot {
-		background: hsla(265, 80%, 65%, 0.16);
-		border-color: hsla(265, 80%, 75%, 0.55);
-	}
-
-	@keyframes rm-pulse {
-		0%   { transform: scale(1);   opacity: 0.8; }
-		100% { transform: scale(1.7); opacity: 0;   }
-	}
-
-	.rm-timeline.is-revealed .rm-node {
+	.jr-connector.is-on {
 		opacity: 1;
-		transform: translateY(0);
 	}
 
-	/* ---------------- Cards ---------------- */
-
-	.rm-cards {
-		position: relative;
-	}
-
-	.rm-hint {
-		margin: 0;
-		color: var(--gray-400);
-		font-size: var(--text-sm);
-		text-align: center;
-		padding: 1rem 0;
-	}
-
-	.rm-card {
-		display: flex;
-		flex-direction: column;
-		gap: 0.85rem;
-		padding: 1.4rem 1.5rem;
-		border: 1px solid hsla(210, 80%, 70%, 0.2);
-		border-radius: 1.25rem;
+	.jr-card {
+		position: absolute;
+		top: 510px;
+		left: 50%;
+		transform: translateX(-50%) translateY(12px);
+		width: min(700px, calc(100% - 1.25rem));
+		padding: 1.6rem 1.7rem;
+		border-radius: 1.2rem;
+		border: 1px solid hsla(210, 80%, 70%, 0.24);
 		background: linear-gradient(
 			180deg,
-			hsla(var(--gray-999-basis), 0.6),
-			hsla(var(--gray-999-basis), 0.3)
+			hsla(var(--gray-999-basis), 0.64),
+			hsla(var(--gray-999-basis), 0.28)
 		);
-		backdrop-filter: blur(22px);
-		-webkit-backdrop-filter: blur(22px);
+		backdrop-filter: blur(24px);
+		-webkit-backdrop-filter: blur(24px);
 		box-shadow:
 			var(--shadow-md),
-			0 0 32px -14px hsla(187, 85%, 55%, 0.55);
-		opacity: 0;
-		transform: translateY(10px);
+			0 0 40px -14px hsla(187, 85%, 64%, 0.52);
+		opacity: 0.82;
+		filter: blur(1.5px);
 		transition:
-			opacity 0.35s ease,
-			transform 0.35s ease;
+			opacity 0.34s ease,
+			transform 0.34s ease,
+			filter 0.34s ease;
 	}
 
-	.rm-card.is-open {
+	.jr.is-card-open .jr-card {
 		opacity: 1;
-		transform: translateY(0);
+		transform: translateX(-50%) translateY(0);
+		filter: blur(0);
 	}
 
-	.rm-card[hidden] {
-		display: none;
-	}
-
-	.rm-card-head {
+	.jr-card-head {
 		display: flex;
-		gap: 0.9rem;
+		gap: 0.85rem;
 		align-items: flex-start;
 	}
 
-	.rm-card-icon {
+	.jr-card-icon {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		width: 2.4rem;
-		height: 2.4rem;
+		width: 2.5rem;
+		height: 2.5rem;
 		border-radius: 0.75rem;
 		background: hsla(187, 85%, 53%, 0.10);
-		border: 1px solid hsla(187, 85%, 53%, 0.28);
+		border: 1px solid hsla(187, 85%, 53%, 0.3);
 		flex-shrink: 0;
 	}
 
-	.rm-card-heading {
+	.jr-card-heading {
 		display: flex;
 		flex-direction: column;
 		gap: 0.15rem;
 	}
 
-	.rm-card-year {
+	.jr-card-year {
 		margin: 0;
 		font-family: var(--font-brand);
 		font-size: var(--text-sm);
-		letter-spacing: 0.16em;
+		letter-spacing: 0.17em;
 		text-transform: uppercase;
 		color: var(--accent-regular);
 	}
 
-	.rm-card-title {
+	.jr-card-title {
 		margin: 0;
 		font-family: var(--font-brand);
-		font-size: var(--text-lg);
+		font-size: var(--text-xl);
+		line-height: 1.2;
 		color: var(--gray-0);
 		font-weight: 600;
-		line-height: 1.2;
 	}
 
-	.rm-card-org {
+	.jr-card-org {
 		margin: 0;
 		color: var(--gray-300);
 		font-size: var(--text-sm);
 	}
 
-	.rm-card-desc {
-		margin: 0;
+	.jr-card-desc {
+		margin: 0.8rem 0 0;
 		color: var(--gray-200);
 		font-size: var(--text-base);
-		line-height: 1.6;
+		line-height: 1.62;
 	}
 
-	.rm-card-tags {
+	.jr-card-tags {
 		list-style: none;
-		margin: 0;
 		padding: 0;
+		margin: 0.9rem 0 0;
 		display: flex;
 		flex-wrap: wrap;
 		gap: 0.4rem;
 	}
 
-	.rm-card-tags li {
-		font-size: 0.75rem;
+	.jr-card-tags li {
+		font-size: 0.74rem;
 		letter-spacing: 0.04em;
 		color: var(--gray-100);
-		padding: 0.3rem 0.65rem;
-		border: 1px solid hsla(187, 85%, 53%, 0.28);
+		padding: 0.28rem 0.65rem;
 		border-radius: 999rem;
-		background: hsla(187, 85%, 53%, 0.06);
+		border: 1px solid hsla(187, 85%, 53%, 0.32);
+		background: hsla(187, 85%, 53%, 0.07);
 	}
 
-	.rm-card-cta {
-		align-self: flex-start;
+	.jr-card-cta {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		margin-top: 0.9rem;
 		color: var(--accent-regular);
 		text-decoration: none;
 		font-size: var(--text-sm);
-		border-bottom: 1px solid transparent;
-		transition: border-color var(--theme-transition);
 	}
 
-	.rm-card-cta:hover,
-	.rm-card-cta:focus-visible {
-		border-color: var(--accent-regular);
+	.jr-card-cta:hover,
+	.jr-card-cta:focus-visible {
+		text-decoration: underline;
 	}
 
-	/* ---------------- Path animation ---------------- */
-
-	.rm-path {
-		transition: stroke-dashoffset 1.8s ease-out;
+	.jr-mobile-rail {
+		display: none;
 	}
 
-	/* ---------------- Tablet ---------------- */
-
-	@media (min-width: 45em) {
-		.rm-track {
-			gap: 1rem;
-			padding-left: 3rem;
+	@media (max-width: 70em) {
+		.jr {
+			grid-template-columns: 1fr;
+			gap: 1.4rem;
 		}
 
-		.rm-track::before {
-			left: 1.65rem;
+		.jr-left {
+			position: static;
+		}
+
+		.jr-roadmap {
+			height: 640px;
 		}
 	}
 
-	/* ---------------- Desktop horizontal roadmap ---------------- */
-
-	@media (min-width: 60em) {
-		.rm-track {
-			display: block;
-			padding: 1.5rem 0 2.75rem;
-			height: 16rem;
+	@media (max-width: 60em) {
+		.jr-roadmap {
+			height: auto;
+			padding-left: 2.6rem;
+			padding-bottom: 0.4rem;
 		}
 
-		.rm-track::before {
+		.jr-svg,
+		.jr-connector {
 			display: none;
 		}
 
-		.rm-svg {
+		.jr-mobile-rail {
 			display: block;
 			position: absolute;
-			inset: 0;
+			top: 0.8rem;
+			bottom: 0.4rem;
+			left: 1.45rem;
+			width: 1px;
+			background: linear-gradient(
+				180deg,
+				transparent,
+				hsla(187, 85%, 60%, 0.42) 15%,
+				hsla(210, 85%, 65%, 0.42) 50%,
+				hsla(265, 80%, 70%, 0.42) 85%,
+				transparent
+			);
+		}
+
+		.jr-node {
+			position: relative;
+			left: auto;
+			top: auto;
+			transform: translateY(6px);
+			flex-direction: row;
+			justify-content: flex-start;
+			gap: 0.75rem;
+			margin: 0.62rem 0;
+		}
+
+		.jr.is-revealed .jr-node {
+			transform: translateY(0);
+		}
+
+		.jr-year {
+			order: 2;
+		}
+
+		.jr-card {
+			position: relative;
+			top: auto;
+			left: auto;
+			transform: translateY(10px);
 			width: 100%;
-			height: 100%;
-			overflow: visible;
+			margin-top: 0.7rem;
 		}
 
-		.rm-node {
-			position: absolute;
-			left: var(--x);
-			top: var(--y);
-			flex-direction: column;
-			align-items: center;
-			gap: 0;
-			padding: 0;
-			transform: translate(-50%, -50%) scale(0.9);
-		}
-
-		.rm-timeline.is-revealed .rm-node {
-			transform: translate(-50%, -50%) scale(1);
-		}
-
-		.rm-dot {
-			width: 2.6rem;
-			height: 2.6rem;
-		}
-
-		.rm-node-year {
-			position: absolute;
-			top: calc(100% + 0.5rem);
-			font-size: 0.7rem;
-			white-space: nowrap;
-		}
-
-		.rm-cards {
-			min-height: 12rem;
-			margin-top: 0.5rem;
-		}
-
-		.rm-card {
-			padding: 1.75rem 2rem;
+		.jr.is-card-open .jr-card {
+			transform: translateY(0);
 		}
 	}
 
-	/* ---------------- Reduced motion ---------------- */
-
 	@media (prefers-reduced-motion: reduce) {
-		.rm-node,
-		.rm-card {
-			opacity: 1 !important;
-			transform: none !important;
+		.jr-path,
+		.jr-node,
+		.jr-card,
+		.jr-dot {
 			transition: none !important;
 		}
-		@media (min-width: 60em) {
-			.rm-node {
-				transform: translate(-50%, -50%) !important;
+
+		.jr-node,
+		.jr.is-revealed .jr-node {
+			opacity: 1 !important;
+			transform: translate(-50%, -50%) !important;
+		}
+
+		@media (max-width: 60em) {
+			.jr-node,
+			.jr.is-revealed .jr-node {
+				transform: none !important;
 			}
 		}
-		.rm-path {
+
+		.jr-path {
 			stroke-dashoffset: 0 !important;
-			transition: none !important;
 		}
-		.rm-node.is-active .rm-dot::after {
+
+		.jr-node.is-active .jr-dot::after {
 			animation: none;
+		}
+
+		.jr-card {
+			filter: none;
+			opacity: 1;
 		}
 	}
 </style>

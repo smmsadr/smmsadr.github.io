@@ -35,8 +35,8 @@ export const timelineData: TimelineEntry[] = [
 		organization: 'University of Malaya',
 		icon: 'rocket-launch',
 		description:
-			'Research in Hybrid Quantum Machine Learning, quantum classification, and optimization.',
-		tags: ['QML', 'Quantum Classification', 'Optimization'],
+			'Researching Hybrid Quantum Machine Learning, optimization, protein interaction prediction, and quantum classification.',
+		tags: ['Quantum Computing', 'QML', 'Optimization', 'Python'],
 	},
 	{
 		id: 'y2021',
