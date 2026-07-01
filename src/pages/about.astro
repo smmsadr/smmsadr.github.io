@@ -182,13 +182,85 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 					<p><strong>IT Manager</strong>, Materials and Energy Research Center, January 2008 - March 2010</p>
 				</div>
 			</section>
-			<section>
-				<h2 class="section-title">Skills</h2>
-				<div class="content">
-					<p><strong>Computer Science:</strong> Python, Fortran 95, Subversion, Oracle SQL Developer, Ajax, PHP, and XML Schema.</p>
-					<p><strong>Information Technology:</strong> Linux administration, network engineering, Debian, Red Hat, SUSE, Bash scripting, VMware ESX, clusters, Postfix, Apache, Asterisk, Samba, Oracle Database, MySQL, SQL, and Joomla.</p>
-					<p><strong>Physics:</strong> Condensed matter physics, quantum physics, solid state physics, statistical physics, nanotechnology, computational physics, scientific computing, simulation, Monte Carlo simulation, molecular dynamics, and Mathematica.</p>
-				</div>
+			<section class="capabilities" aria-labelledby="capabilities-title">
+				<header class="cap-header">
+					<p class="cap-eyebrow">Capabilities</p>
+					<h2 id="capabilities-title" class="cap-title">
+						Technologies, research areas, and engineering practices I use daily.
+					</h2>
+				</header>
+
+				<ol class="cap-grid">
+					<li class="cap-card">
+						<div class="cap-icon" aria-hidden="true">
+							<Icon icon="code" color="var(--accent-regular)" size="1.5rem" gradient />
+						</div>
+						<h3 class="cap-card-title">Programming</h3>
+						<ul class="cap-tags">
+							<li>Python</li>
+							<li>SQL</li>
+							<li>JavaScript</li>
+							<li>Fortran</li>
+						</ul>
+					</li>
+
+					<li class="cap-card">
+						<div class="cap-icon" aria-hidden="true">
+							<Icon icon="cpu" color="var(--accent-regular)" size="1.5rem" gradient />
+						</div>
+						<h3 class="cap-card-title">Artificial Intelligence</h3>
+						<ul class="cap-tags">
+							<li>Machine Learning</li>
+							<li>LLMs</li>
+							<li>LangGraph</li>
+							<li>Optimization</li>
+							<li>Hybrid AI</li>
+						</ul>
+					</li>
+
+					<li class="cap-card">
+						<div class="cap-icon" aria-hidden="true">
+							<Icon icon="calculator" color="var(--accent-regular)" size="1.5rem" gradient />
+						</div>
+						<h3 class="cap-card-title">Mathematical Computing</h3>
+						<ul class="cap-tags">
+							<li>Pyomo</li>
+							<li>GAMS</li>
+							<li>CPLEX</li>
+							<li>IPOPT</li>
+							<li>SciPy</li>
+							<li>NumPy</li>
+							<li>Polars</li>
+						</ul>
+					</li>
+
+					<li class="cap-card">
+						<div class="cap-icon" aria-hidden="true">
+							<Icon icon="terminal-window" color="var(--accent-regular)" size="1.5rem" gradient />
+						</div>
+						<h3 class="cap-card-title">Cloud &amp; Engineering</h3>
+						<ul class="cap-tags">
+							<li>Linux</li>
+							<li>Docker</li>
+							<li>AWS</li>
+							<li>GitHub Actions</li>
+							<li>FastAPI</li>
+						</ul>
+					</li>
+
+					<li class="cap-card">
+						<div class="cap-icon" aria-hidden="true">
+							<Icon icon="atom" color="var(--accent-regular)" size="1.5rem" gradient />
+						</div>
+						<h3 class="cap-card-title">Research</h3>
+						<ul class="cap-tags">
+							<li>Quantum Computing</li>
+							<li>Scientific Computing</li>
+							<li>Simulation</li>
+							<li>Optimization Theory</li>
+						</ul>
+					</li>
+				</ol>
 			</section>
 			<section>
 				<h2 class="section-title">Education</h2>
@@ -689,6 +761,170 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 		}
 	}
 
+	/* -------- Capabilities (skills grid) -------- */
+
+	.capabilities {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+	}
+
+	.cap-header {
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
+	}
+
+	.cap-eyebrow {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: var(--text-base);
+		letter-spacing: 0.24em;
+		text-transform: uppercase;
+		color: var(--accent-regular);
+	}
+
+	.cap-title {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: clamp(var(--text-2xl), 3.6vw, var(--text-4xl));
+		line-height: 1.15;
+		color: var(--gray-0);
+		font-weight: 600;
+	}
+
+	.cap-grid {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 1.15rem;
+	}
+
+	@media (min-width: 40em) {
+		.cap-grid {
+			grid-template-columns: repeat(2, 1fr);
+		}
+	}
+
+	@media (min-width: 60em) {
+		.cap-grid {
+			grid-template-columns: repeat(6, 1fr);
+		}
+		.cap-card {
+			grid-column: span 2;
+		}
+		.cap-card:nth-child(4) {
+			grid-column: 2 / span 2;
+		}
+		.cap-card:nth-child(5) {
+			grid-column: 4 / span 2;
+		}
+	}
+
+	.cap-card {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 0.9rem;
+		padding: 1.5rem;
+		border: 1px solid hsla(210, 80%, 70%, 0.14);
+		border-radius: 1.25rem;
+		background: linear-gradient(
+			180deg,
+			hsla(var(--gray-999-basis), 0.55),
+			hsla(var(--gray-999-basis), 0.25)
+		);
+		backdrop-filter: blur(22px);
+		-webkit-backdrop-filter: blur(22px);
+		box-shadow: var(--shadow-sm);
+		overflow: hidden;
+		transition:
+			transform var(--theme-transition),
+			border-color var(--theme-transition),
+			box-shadow var(--theme-transition);
+	}
+
+	.cap-card::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+		background: radial-gradient(
+			circle at 85% -10%,
+			hsla(187, 85%, 53%, 0.14),
+			transparent 55%
+		);
+		opacity: 0;
+		transition: opacity var(--theme-transition);
+	}
+
+	.cap-card:hover,
+	.cap-card:focus-within {
+		transform: translateY(-3px);
+		border-color: hsla(187, 85%, 53%, 0.42);
+		box-shadow:
+			var(--shadow-md),
+			0 0 24px -8px hsla(187, 85%, 53%, 0.45);
+	}
+
+	.cap-card:hover::before,
+	.cap-card:focus-within::before {
+		opacity: 1;
+	}
+
+	.cap-icon {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 2.5rem;
+		height: 2.5rem;
+		border-radius: 0.75rem;
+		background: hsla(187, 85%, 53%, 0.10);
+		border: 1px solid hsla(187, 85%, 53%, 0.22);
+	}
+
+	.cap-card-title {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: var(--text-md);
+		line-height: 1.2;
+		color: var(--gray-0);
+		font-weight: 600;
+	}
+
+	.cap-tags {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+	}
+
+	.cap-tags li {
+		font-size: 0.78rem;
+		letter-spacing: 0.04em;
+		color: var(--gray-200);
+		padding: 0.32rem 0.65rem;
+		border: 1px solid hsla(210, 80%, 70%, 0.18);
+		border-radius: 999rem;
+		background: hsla(var(--gray-999-basis), 0.35);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.cap-card,
+		.cap-card::before {
+			transition: none !important;
+		}
+		.cap-card:hover,
+		.cap-card:focus-within {
+			transform: none;
+		}
+	}
+
 	/* -------- Rest of page (unchanged) -------- */
 
 
@@ -732,11 +968,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
 		.about > .about-hero,
 		.about > .my-story,
-		.about > .how-i-think {
+		.about > .how-i-think,
+		.about > .capabilities {
 			grid-column: 1 / -1;
 		}
 
-		section:not(.about-hero):not(.my-story):not(.how-i-think) {
+		section:not(.about-hero):not(.my-story):not(.how-i-think):not(.capabilities) {
 			display: contents;
 			font-size: var(--text-lg);
 		}
