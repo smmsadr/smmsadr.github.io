@@ -15,13 +15,13 @@
 			<div class="why-body stack gap-3">
 				<p>
 					Long before I built optimization engines or studied quantum information, I was learning
-					to descend. Technical diving taught me that depth is not danger — it’s discipline. You
-					plan for pressure, for uncertainty, for the moment when instinct is not enough.
+					to descend. Technical diving taught me that depth is a discipline — you plan for
+					pressure, uncertainty, and the moment instinct is not enough.
 				</p>
 				<p>
-					I bring the same mindset to computation. Quantitative engineering, Hybrid AI, and
-					decision optimization are, at heart, the same practice: staying calm inside complexity,
-					mapping what can be measured, and trusting the model only as far as the model earns it.
+					I bring the same mindset to computation. Quantitative modeling, Hybrid AI, and decision
+					intelligence are, at heart, one practice:q staying calm inside complexity and trusting
+					the model only as far as it has earned.
 				</p>
 				<p>
 					Quantum computing is the next descent. Different physics, same instinct — go deeper,
@@ -88,14 +88,142 @@
 
 					<!-- Nodes -->
 					<g class="nodes" fill="#7dd3fc">
-						<circle cx="60" cy="170" r="3.5" />
+						<circle cx="60"  cy="170" r="3.5" />
 						<circle cx="120" cy="130" r="3" />
 						<circle cx="220" cy="260" r="4" />
 						<circle cx="260" cy="240" r="3" />
-						<circle cx="80" cy="300" r="3" />
+						<circle cx="80"  cy="300" r="3" />
 						<circle cx="300" cy="320" r="4" />
 						<circle cx="180" cy="400" r="3" />
 						<circle cx="340" cy="360" r="3.5" />
+					</g>
+
+					<!-- Quantum Neural Network (top-left, 3-5-4 topology, gently faded) -->
+					<g class="qnn" aria-hidden="true"
+						transform="translate(15 84) scale(0.7) translate(-100 -210)">
+						<!-- Inter-layer connections (parameterized couplings) -->
+						<g class="qnn-conns"
+							fill="none"
+							stroke="rgba(125,211,252,0.55)"
+							stroke-width="0.9"
+							stroke-linecap="round">
+							<!-- L0 (3) -> L1 (5) -->
+							<line x1="100" y1="210" x2="210" y2="210" />
+							<line x1="100" y1="210" x2="210" y2="245" />
+							<line x1="100" y1="210" x2="210" y2="280" />
+							<line x1="100" y1="210" x2="210" y2="315" />
+							<line x1="100" y1="210" x2="210" y2="350" />
+							<line x1="100" y1="280" x2="210" y2="210" />
+							<line x1="100" y1="280" x2="210" y2="245" />
+							<line x1="100" y1="280" x2="210" y2="280" />
+							<line x1="100" y1="280" x2="210" y2="315" />
+							<line x1="100" y1="280" x2="210" y2="350" />
+							<line x1="100" y1="350" x2="210" y2="210" />
+							<line x1="100" y1="350" x2="210" y2="245" />
+							<line x1="100" y1="350" x2="210" y2="280" />
+							<line x1="100" y1="350" x2="210" y2="315" />
+							<line x1="100" y1="350" x2="210" y2="350" />
+							<!-- L1 (5) -> L2 (4) -->
+							<line x1="210" y1="210" x2="320" y2="210" />
+							<line x1="210" y1="210" x2="320" y2="257" />
+							<line x1="210" y1="210" x2="320" y2="303" />
+							<line x1="210" y1="210" x2="320" y2="350" />
+							<line x1="210" y1="245" x2="320" y2="210" />
+							<line x1="210" y1="245" x2="320" y2="257" />
+							<line x1="210" y1="245" x2="320" y2="303" />
+							<line x1="210" y1="245" x2="320" y2="350" />
+							<line x1="210" y1="280" x2="320" y2="210" />
+							<line x1="210" y1="280" x2="320" y2="257" />
+							<line x1="210" y1="280" x2="320" y2="303" />
+							<line x1="210" y1="280" x2="320" y2="350" />
+							<line x1="210" y1="315" x2="320" y2="210" />
+							<line x1="210" y1="315" x2="320" y2="257" />
+							<line x1="210" y1="315" x2="320" y2="303" />
+							<line x1="210" y1="315" x2="320" y2="350" />
+							<line x1="210" y1="350" x2="320" y2="210" />
+							<line x1="210" y1="350" x2="320" y2="257" />
+							<line x1="210" y1="350" x2="320" y2="303" />
+							<line x1="210" y1="350" x2="320" y2="350" />
+						</g>
+
+						<!-- Qubit nodes (mini Bloch-sphere styling) -->
+						<g class="qnn-nodes">
+							<!-- Layer 0 (3 qubits) -->
+							<g class="qnn-node" transform="translate(100 210)">
+								<circle r="5.6" fill="rgba(10,20,40,0.78)" stroke="#7dd3fc" stroke-width="1" />
+								<ellipse rx="5.6" ry="1.9" fill="none" stroke="rgba(168,85,247,0.55)" stroke-width="0.5" />
+								<ellipse rx="1.9" ry="5.6" fill="none" stroke="rgba(168,85,247,0.35)" stroke-width="0.5" />
+								<circle r="1.05" fill="#c4b5fd" />
+							</g>
+							<g class="qnn-node" transform="translate(100 280)">
+								<circle r="5.6" fill="rgba(10,20,40,0.78)" stroke="#7dd3fc" stroke-width="1" />
+								<ellipse rx="5.6" ry="1.9" fill="none" stroke="rgba(168,85,247,0.55)" stroke-width="0.5" />
+								<ellipse rx="1.9" ry="5.6" fill="none" stroke="rgba(168,85,247,0.35)" stroke-width="0.5" />
+								<circle r="1.05" fill="#c4b5fd" />
+							</g>
+							<g class="qnn-node" transform="translate(100 350)">
+								<circle r="5.6" fill="rgba(10,20,40,0.78)" stroke="#7dd3fc" stroke-width="1" />
+								<ellipse rx="5.6" ry="1.9" fill="none" stroke="rgba(168,85,247,0.55)" stroke-width="0.5" />
+								<ellipse rx="1.9" ry="5.6" fill="none" stroke="rgba(168,85,247,0.35)" stroke-width="0.5" />
+								<circle r="1.05" fill="#c4b5fd" />
+							</g>
+							<!-- Layer 1 (5 qubits) -->
+							<g class="qnn-node" transform="translate(210 210)">
+								<circle r="5.6" fill="rgba(10,20,40,0.78)" stroke="#7dd3fc" stroke-width="1" />
+								<ellipse rx="5.6" ry="1.9" fill="none" stroke="rgba(168,85,247,0.55)" stroke-width="0.5" />
+								<ellipse rx="1.9" ry="5.6" fill="none" stroke="rgba(168,85,247,0.35)" stroke-width="0.5" />
+								<circle r="1.05" fill="#c4b5fd" />
+							</g>
+							<g class="qnn-node" transform="translate(210 245)">
+								<circle r="5.6" fill="rgba(10,20,40,0.78)" stroke="#7dd3fc" stroke-width="1" />
+								<ellipse rx="5.6" ry="1.9" fill="none" stroke="rgba(168,85,247,0.55)" stroke-width="0.5" />
+								<ellipse rx="1.9" ry="5.6" fill="none" stroke="rgba(168,85,247,0.35)" stroke-width="0.5" />
+								<circle r="1.05" fill="#c4b5fd" />
+							</g>
+							<g class="qnn-node" transform="translate(210 280)">
+								<circle r="5.6" fill="rgba(10,20,40,0.78)" stroke="#7dd3fc" stroke-width="1" />
+								<ellipse rx="5.6" ry="1.9" fill="none" stroke="rgba(168,85,247,0.55)" stroke-width="0.5" />
+								<ellipse rx="1.9" ry="5.6" fill="none" stroke="rgba(168,85,247,0.35)" stroke-width="0.5" />
+								<circle r="1.05" fill="#c4b5fd" />
+							</g>
+							<g class="qnn-node" transform="translate(210 315)">
+								<circle r="5.6" fill="rgba(10,20,40,0.78)" stroke="#7dd3fc" stroke-width="1" />
+								<ellipse rx="5.6" ry="1.9" fill="none" stroke="rgba(168,85,247,0.55)" stroke-width="0.5" />
+								<ellipse rx="1.9" ry="5.6" fill="none" stroke="rgba(168,85,247,0.35)" stroke-width="0.5" />
+								<circle r="1.05" fill="#c4b5fd" />
+							</g>
+							<g class="qnn-node" transform="translate(210 350)">
+								<circle r="5.6" fill="rgba(10,20,40,0.78)" stroke="#7dd3fc" stroke-width="1" />
+								<ellipse rx="5.6" ry="1.9" fill="none" stroke="rgba(168,85,247,0.55)" stroke-width="0.5" />
+								<ellipse rx="1.9" ry="5.6" fill="none" stroke="rgba(168,85,247,0.35)" stroke-width="0.5" />
+								<circle r="1.05" fill="#c4b5fd" />
+							</g>
+							<!-- Layer 2 (4 qubits) -->
+							<g class="qnn-node" transform="translate(320 210)">
+								<circle r="5.6" fill="rgba(10,20,40,0.78)" stroke="#7dd3fc" stroke-width="1" />
+								<ellipse rx="5.6" ry="1.9" fill="none" stroke="rgba(168,85,247,0.55)" stroke-width="0.5" />
+								<ellipse rx="1.9" ry="5.6" fill="none" stroke="rgba(168,85,247,0.35)" stroke-width="0.5" />
+								<circle r="1.05" fill="#c4b5fd" />
+							</g>
+							<g class="qnn-node" transform="translate(320 257)">
+								<circle r="5.6" fill="rgba(10,20,40,0.78)" stroke="#7dd3fc" stroke-width="1" />
+								<ellipse rx="5.6" ry="1.9" fill="none" stroke="rgba(168,85,247,0.55)" stroke-width="0.5" />
+								<ellipse rx="1.9" ry="5.6" fill="none" stroke="rgba(168,85,247,0.35)" stroke-width="0.5" />
+								<circle r="1.05" fill="#c4b5fd" />
+							</g>
+							<g class="qnn-node" transform="translate(320 303)">
+								<circle r="5.6" fill="rgba(10,20,40,0.78)" stroke="#7dd3fc" stroke-width="1" />
+								<ellipse rx="5.6" ry="1.9" fill="none" stroke="rgba(168,85,247,0.55)" stroke-width="0.5" />
+								<ellipse rx="1.9" ry="5.6" fill="none" stroke="rgba(168,85,247,0.35)" stroke-width="0.5" />
+								<circle r="1.05" fill="#c4b5fd" />
+							</g>
+							<g class="qnn-node" transform="translate(320 350)">
+								<circle r="5.6" fill="rgba(10,20,40,0.78)" stroke="#7dd3fc" stroke-width="1" />
+								<ellipse rx="5.6" ry="1.9" fill="none" stroke="rgba(168,85,247,0.55)" stroke-width="0.5" />
+								<ellipse rx="1.9" ry="5.6" fill="none" stroke="rgba(168,85,247,0.35)" stroke-width="0.5" />
+								<circle r="1.05" fill="#c4b5fd" />
+							</g>
+						</g>
 					</g>
 
 					<!-- Quantum-inspired geometry: rotating orbit -->
@@ -112,6 +240,56 @@
 						<circle cx="0" cy="-26" r="2.5" fill="#7dd3fc" />
 						<circle cx="22" cy="14" r="2.5" fill="#a855f7" />
 						<circle cx="-22" cy="14" r="2.5" fill="#22d3ee" />
+					</g>
+
+					<!-- Technical diver with twin tanks -->
+					<g class="diver" transform="translate(40 335)">
+						<g class="diver-body">
+							<!-- Twin tanks: horizontal, mounted on the back -->
+							<!-- Rear tank -->
+							<rect x="6" y="-12" width="24" height="5" rx="2.5"
+								fill="rgba(160,185,210,0.35)"
+								stroke="rgba(210,230,250,0.6)" stroke-width="0.6" />
+							<!-- Front tank (slightly offset for twin-set depth) -->
+							<rect x="8" y="-8" width="24" height="5" rx="2.5"
+								fill="rgba(180,205,230,0.45)"
+								stroke="rgba(220,235,250,0.75)" stroke-width="0.6" />
+							<!-- Tank valves (right end) -->
+							<line x1="30" y1="-12" x2="30" y2="-8"
+								stroke="rgba(220,235,250,0.75)" stroke-width="0.8" />
+							<line x1="32" y1="-8"  x2="32" y2="-3"
+								stroke="rgba(220,235,250,0.75)" stroke-width="0.8" />
+							<!-- Manifold band connecting tank ends -->
+							<line x1="8" y1="-7" x2="32" y2="-7"
+								stroke="rgba(220,235,250,0.35)" stroke-width="0.4" />
+							<!-- Regulator hose from tank valve to mask -->
+							<path d="M32 -3 C 34 -1, 36 -1, 38 -1"
+								fill="none" stroke="rgba(210,230,250,0.55)" stroke-width="0.8" />
+							<!-- Torso -->
+							<path d="M6 -6 C 18 -8, 28 -4, 34 2 C 36 4, 36 8, 34 10 C 24 10, 14 6, 6 4 Z"
+								fill="rgba(140,170,210,0.55)"
+								stroke="rgba(200,220,240,0.65)" stroke-width="0.6" />
+							<!-- Head + mask -->
+							<circle cx="38" cy="0" r="4"
+								fill="rgba(180,210,240,0.75)"
+								stroke="rgba(220,235,250,0.8)" stroke-width="0.6" />
+							<circle cx="39.3" cy="-0.4" r="1.4" fill="rgba(255,255,255,0.75)" />
+							<!-- Arm extended forward -->
+							<path d="M18 2 C 24 8, 28 11, 32 15"
+								fill="none" stroke="rgba(200,220,240,0.6)"
+								stroke-width="1.2" stroke-linecap="round" />
+							<!-- Rear leg + fin (closer to body) -->
+							<path d="M-1 4 C -5 8, -20 12, -26 14 L -24 18 C -16 18, -8 15, 0 10 Z"
+								fill="rgba(140,170,210,0.55)"
+								stroke="rgba(200,220,240,0.6)" stroke-width="0.6" />
+						</g>
+						<!-- Rising bubbles -->
+						<g class="bubbles" fill="rgba(210,235,255,0.75)">
+							<circle cx="42" cy="-4"  r="1.1" />
+							<circle cx="45" cy="-12" r="0.8" />
+							<circle cx="43" cy="-20" r="1.3" />
+							<circle cx="47" cy="-28" r="0.7" />
+						</g>
 					</g>
 				</svg>
 
@@ -147,18 +325,22 @@
 
 	.why-title {
 		margin: 0;
-		font-size: clamp(var(--text-2xl), 3.6vw, var(--text-4xl));
-		line-height: 1.15;
+		font-size: clamp(var(--text-xl), 3vw, var(--text-3xl));
+		line-height: 1.2;
 		color: var(--gray-0);
-		max-width: 22ch;
+		max-width: 26ch;
 	}
 
 	.why-body p {
 		margin: 0;
 		color: var(--gray-300);
 		font-size: var(--text-md);
-		line-height: 1.7;
+		line-height: 1.8;
 		max-width: 60ch;
+	}
+
+	.why-body p + p {
+		margin-top: 1.15rem;
 	}
 
 	/* Visual */
@@ -218,12 +400,18 @@
 		filter: drop-shadow(0 0 6px rgba(56, 189, 248, 0.35));
 	}
 
+	/* Quantum Neural Network */
+	.qnn {
+		opacity: 0;
+		animation: fadeInMuted 1.4s ease-out 1.2s forwards;
+	}
+
+	/* Classical network flow (restored) */
 	.network path {
 		stroke-dasharray: 220;
 		stroke-dashoffset: 220;
 		animation: draw 4s ease-out 0.8s forwards;
 	}
-
 	.network path:nth-child(2) { animation-delay: 1.1s; }
 	.network path:nth-child(3) { animation-delay: 1.4s; }
 	.network path:nth-child(4) { animation-delay: 1.7s; }
@@ -232,7 +420,6 @@
 		opacity: 0;
 		animation: pop 0.6s ease-out forwards;
 	}
-
 	.nodes circle:nth-child(1) { animation-delay: 1.0s; }
 	.nodes circle:nth-child(2) { animation-delay: 1.2s; }
 	.nodes circle:nth-child(3) { animation-delay: 1.4s; }
@@ -241,6 +428,36 @@
 	.nodes circle:nth-child(6) { animation-delay: 2.0s; }
 	.nodes circle:nth-child(7) { animation-delay: 2.2s; }
 	.nodes circle:nth-child(8) { animation-delay: 2.4s; }
+
+	.qnn-conns line {
+		stroke-dasharray: 3 6;
+		stroke-dashoffset: 0;
+		animation: qnn-flow 3.6s linear infinite;
+	}
+	.qnn-conns line:nth-child(3n)   { animation-delay: -0.6s; }
+	.qnn-conns line:nth-child(3n+1) { animation-delay: -1.4s; }
+	.qnn-conns line:nth-child(3n+2) { animation-delay: -2.3s; }
+
+	.qnn-nodes {
+		filter: drop-shadow(0 0 3px rgba(56, 189, 248, 0.35));
+	}
+
+	.qnn-node > circle:first-child {
+		transform-box: fill-box;
+		transform-origin: center;
+		animation: qnn-glow 3.6s ease-in-out infinite;
+	}
+	.qnn-node:nth-child(2) > circle:first-child { animation-delay: -0.7s; }
+	.qnn-node:nth-child(3) > circle:first-child { animation-delay: -1.4s; }
+	.qnn-node:nth-child(4) > circle:first-child { animation-delay: -2.1s; }
+	.qnn-node:nth-child(5) > circle:first-child { animation-delay: -0.4s; }
+	.qnn-node:nth-child(6) > circle:first-child { animation-delay: -1.1s; }
+	.qnn-node:nth-child(7) > circle:first-child { animation-delay: -1.8s; }
+	.qnn-node:nth-child(8) > circle:first-child { animation-delay: -2.5s; }
+	.qnn-node:nth-child(9) > circle:first-child { animation-delay: -3.1s; }
+	.qnn-node:nth-child(10) > circle:first-child { animation-delay: -0.9s; }
+	.qnn-node:nth-child(11) > circle:first-child { animation-delay: -1.6s; }
+	.qnn-node:nth-child(12) > circle:first-child { animation-delay: -2.4s; }
 
 	.qorbit {
 		transform-box: fill-box;
@@ -264,6 +481,25 @@
 	.depth-lines line:nth-child(3) { animation-delay: 0.4s; }
 	.depth-lines line:nth-child(4) { animation-delay: 0.55s; }
 
+	/* Diver: gentle bob */
+	.diver .diver-body {
+		transform-box: fill-box;
+		transform-origin: center;
+		animation: diver-bob 7s ease-in-out infinite;
+	}
+
+	/* Diver bubbles: slow upward drift */
+	.diver .bubbles circle {
+		transform-box: fill-box;
+		transform-origin: center;
+		animation: bubble-up 4.5s ease-out infinite;
+		opacity: 0;
+	}
+	.diver .bubbles circle:nth-child(1) { animation-delay: 0.0s; }
+	.diver .bubbles circle:nth-child(2) { animation-delay: 1.2s; }
+	.diver .bubbles circle:nth-child(3) { animation-delay: 2.4s; }
+	.diver .bubbles circle:nth-child(4) { animation-delay: 3.4s; }
+
 	@keyframes draw {
 		to { stroke-dashoffset: 0; }
 	}
@@ -286,13 +522,46 @@
 		to { opacity: 1; }
 	}
 
+	@keyframes qnn-flow {
+		to { stroke-dashoffset: -18; }
+	}
+
+	@keyframes qnn-glow {
+		0%, 100% { opacity: 0.72; }
+		50%      { opacity: 1; }
+	}
+
+	@keyframes fadeInMuted {
+		to { opacity: 0.88; }
+	}
+
+	@keyframes diver-bob {
+		0%, 100% { transform: translate(0, 0); }
+		50%      { transform: translate(0, -3px); }
+	}
+
+	@keyframes bubble-up {
+		0%   { opacity: 0; transform: translate(0, 0) scale(0.9); }
+		20%  { opacity: 0.85; }
+		100% { opacity: 0; transform: translate(-2px, -22px) scale(1.05); }
+	}
+
 	@media (prefers-reduced-motion: reduce) {
+		.qnn {
+			animation: none !important;
+			opacity: 0.88 !important;
+		}
+
 		.opt-curve,
 		.network path,
 		.nodes circle,
 		.qorbit,
 		.qtri,
-		.depth-lines line {
+		.depth-lines line,
+		.diver .diver-body,
+		.diver .bubbles circle,
+		.qnn-conns line,
+		.qnn-node > circle:first-child {
 			animation: none !important;
 			opacity: 1 !important;
 			stroke-dashoffset: 0 !important;

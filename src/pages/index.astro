@@ -38,7 +38,7 @@ const publications = (await getCollection('publications'))
 				<div class="hero-content">
 					<Hero
 						title="Exploring Deep Systems"
-						tagline="I design computational systems that transform uncertainty into actionable decisions through mathematical modeling, optimization, Agentic AI, and Quantum Computing."
+						tagline="I design computational systems that transform uncertainty into actionable decisions through quantitative modeling, optimization, Hybrid & Agentic AI, and Quantum Computing."
 						align="start"
 					>
 						<div class="cta-buttons">
@@ -51,6 +51,10 @@ const publications = (await getCollection('publications'))
 								<Icon icon="download" size="1.2em" />
 							</a>
 						</div>
+						<a class="scroll-indicator" href="#why-deep-title" aria-label="Scroll to explore">
+							<span>Scroll to explore</span>
+							<span class="scroll-arrow" aria-hidden="true">↓</span>
+						</a>
 					</Hero>
 				</div>
 
@@ -178,14 +182,15 @@ const publications = (await getCollection('publications'))
 		white-space: normal;
 		font-size: var(--text-5xl);
 		line-height: 1.1;
-		margin-bottom: 0.5rem;
+		margin-bottom: 1.25rem;
 	}
 
 	.hero :global(.tagline) {
 		max-width: 50ch;
 		font-size: var(--text-lg);
 		color: var(--gray-300);
-		margin-bottom: 2rem;
+		line-height: 1.55;
+		margin-bottom: 2.75rem;
 	}
 
 	.hero {
@@ -203,7 +208,7 @@ const publications = (await getCollection('publications'))
 		display: flex;
 		flex-direction: column;
 		gap: 1rem;
-		margin-top: 2rem;
+		margin-top: 0.5rem;
 	}
 
 	.cta-secondary {
@@ -238,6 +243,42 @@ const publications = (await getCollection('publications'))
 		}
 	}
 
+	.scroll-indicator {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.6rem;
+		margin-top: 2.75rem;
+		padding: 0.4rem 0.15rem;
+		color: var(--gray-400);
+		font-size: var(--text-sm);
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+		text-decoration: none;
+		width: max-content;
+		opacity: 0.85;
+		transition: color var(--theme-transition), opacity var(--theme-transition);
+	}
+
+	.scroll-indicator:hover,
+	.scroll-indicator:focus-visible {
+		color: var(--gray-100);
+		opacity: 1;
+	}
+
+	.scroll-arrow {
+		display: inline-block;
+		animation: scroll-hint 2.4s ease-in-out infinite;
+	}
+
+	@keyframes scroll-hint {
+		0%, 100% { transform: translateY(0); opacity: 0.7; }
+		50%      { transform: translateY(4px); opacity: 1; }
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.scroll-arrow { animation: none; }
+	}
+
 	@media (min-width: 50em) {
 		.cta-buttons {
 			flex-direction: row;
@@ -247,6 +288,11 @@ const publications = (await getCollection('publications'))
 		.cta-secondary {
 			padding: 1.125rem 2.5rem;
 			font-size: var(--text-xl);
+		}
+
+		.scroll-indicator {
+			margin-top: 3.5rem;
+			font-size: var(--text-base);
 		}
 	}
 
