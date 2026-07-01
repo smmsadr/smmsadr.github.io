@@ -4,19 +4,24 @@ import Icon from './Icon.astro';
 
 <section class="box skills">
 	<div class="stack gap-2 lg:gap-4">
-		<Icon icon="terminal-window" color="var(--accent-regular)" size="2.5rem" gradient />
-		<h2>Computer Science</h2>
-		<p>Python, Fortran, PHP, SQL, XML, and practical software development.</p>
+		<Icon icon="calculator" color="var(--accent-regular)" size="2.5rem" gradient />
+		<h2>Quantitative Engineering</h2>
+		<p>Designing analytical systems that turn noisy signals into measurable, actionable decisions.</p>
 	</div>
 	<div class="stack gap-2 lg:gap-4">
-		<Icon icon="trophy" color="var(--accent-regular)" size="2.5rem" gradient />
-		<h2>Information Technology</h2>
-		<p>Linux administration, networks, virtualization, databases, web servers, and automation.</p>
+		<Icon icon="cpu" color="var(--accent-regular)" size="2.5rem" gradient />
+		<h2>Hybrid AI & Agentic AI</h2>
+		<p>Combining statistical learning, domain logic, and human judgment to build models that behave in reality.</p>
 	</div>
 	<div class="stack gap-2 lg:gap-4">
-		<Icon icon="strategy" color="var(--accent-regular)" size="2.5rem" gradient />
-		<h2>Physics</h2>
-		<p>Condensed matter, quantum physics, computational physics, simulation, and scientific computing.</p>
+		<Icon icon="chart-line-up" color="var(--accent-regular)" size="2.5rem" gradient />
+		<h2>Optimization &amp; Decision Systems</h2>
+		<p>Building engines that allocate resources, manage uncertainty, and improve outcomes under real constraints.</p>
+	</div>
+	<div class="stack gap-2 lg:gap-4">
+		<Icon icon="atom" color="var(--accent-regular)" size="2.5rem" gradient />
+		<h2>Quantum Computing</h2>
+		<p>Exploring quantum algorithms and quantum-enhanced learning where physics meets practical computation.</p>
 	</div>
 </section>
 
@@ -51,12 +56,12 @@ import Icon from './Icon.astro';
 
 		.skills {
 			display: grid;
-			grid-template-columns: repeat(3, 1fr);
+			grid-template-columns: repeat(4, 1fr);
 			gap: 5rem;
 		}
 
 		.skills h2 {
-			font-size: var(--text-2xl);
+			font-size: var(--text-xl);
 		}
 	}
 </style>
