@@ -1,26 +1,56 @@
 ---
 import ContactCTA from '../components/ContactCTA.astro';
-import Hero from '../components/Hero.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout
 	title="About | Sayed Mohammad Mahdi Sadrnezhaad"
-	description="About Sayed Mohammad Mahdi Sadrnezhaad, Linux specialist and physicist."
+	description="Senior Quantitative Engineer and Data Scientist based in Kuala Lumpur, working at the intersection of optimization, AI, scientific computing, and quantum machine learning."
 >
 	<div class="stack gap-20">
 		<main class="wrapper about">
-			<Hero
-				title="About"
-				tagline="Linux Specialist & Physicist with experience across systems administration, databases, programming, and computational physics."
-			>
-				<img
-					width="1553"
-					height="873"
-					src="/assets/Mahdi-AboutMe.png"
-					alt="Sayed Mohammad Mahdi Sadrnezhaad"
-				/>
-			</Hero>
+			<section class="about-hero" aria-labelledby="about-hero-title">
+				<div class="about-hero-bg" aria-hidden="true">
+					<div class="about-hero-gradient"></div>
+					<div class="about-hero-noise"></div>
+				</div>
+
+				<!-- Floating accent glyphs: math ∑, optimization ⟶, AI ◇, quantum |ψ⟩ -->
+				<div class="about-hero-accents" aria-hidden="true">
+					<span class="accent accent-1">∑</span>
+					<span class="accent accent-2">∇</span>
+					<span class="accent accent-3">⟶</span>
+					<span class="accent accent-4">◇</span>
+					<span class="accent accent-5">|ψ⟩</span>
+					<span class="accent accent-6">π</span>
+					<span class="accent accent-7">∫</span>
+					<span class="accent accent-8">⟨φ|</span>
+				</div>
+
+				<div class="about-hero-content">
+					<p class="about-eyebrow">About</p>
+					<h1 id="about-hero-title" class="about-title">
+						Building systems that transform<br />
+						complexity into decisions.
+					</h1>
+					<p class="about-lede">
+						I am a Senior Quantitative Engineer and Data Scientist based in Kuala Lumpur,
+						working at the intersection of optimization, artificial intelligence, scientific
+						computing, and quantum machine learning. My work combines mathematical modelling,
+						software engineering, and systems thinking to build reliable decision systems
+						for real-world problems.
+					</p>
+				</div>
+
+				<div class="about-hero-portrait">
+					<img
+						width="1553"
+						height="873"
+						src="/assets/Mahdi-AboutMe.png"
+						alt="Sayed Mohammad Mahdi Sadrnezhaad"
+					/>
+				</div>
+			</section>
 
 			<section>
 				<h2 class="section-title">Background</h2>
@@ -75,11 +105,177 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 		gap: 3.5rem;
 	}
 
-	img {
-		margin-top: 1.5rem;
+	/* -------- About Hero (redesigned) -------- */
+
+	.about-hero {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+		align-items: center;
+		padding: 2.5rem 1.25rem 3rem;
+		border-radius: 1.5rem;
+		overflow: hidden;
+		isolation: isolate;
+	}
+
+	.about-hero-bg {
+		position: absolute;
+		inset: 0;
+		z-index: -2;
+		border-radius: inherit;
+		overflow: hidden;
+	}
+
+	.about-hero-gradient {
+		position: absolute;
+		inset: -20%;
+		background:
+			radial-gradient(circle at 15% 20%, hsla(187, 85%, 53%, 0.28), transparent 55%),
+			radial-gradient(circle at 85% 15%, hsla(265, 80%, 60%, 0.22), transparent 60%),
+			radial-gradient(circle at 60% 90%, hsla(210, 85%, 55%, 0.24), transparent 55%),
+			linear-gradient(180deg, hsla(var(--gray-999-basis), 0.35), hsla(var(--gray-999-basis), 0.15));
+		filter: blur(0.5px);
+		animation: about-hero-drift 24s ease-in-out infinite alternate;
+	}
+
+	.about-hero-noise {
+		position: absolute;
+		inset: 0;
+		background: url('/assets/backgrounds/noise.png') top center/220px repeat;
+		mix-blend-mode: overlay;
+		opacity: 0.35;
+		pointer-events: none;
+	}
+
+	@keyframes about-hero-drift {
+		0%   { transform: translate3d(0, 0, 0) scale(1); }
+		50%  { transform: translate3d(-1.5%, 1%, 0) scale(1.03); }
+		100% { transform: translate3d(1.5%, -1%, 0) scale(1.02); }
+	}
+
+	.about-hero-accents {
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+		z-index: -1;
+		overflow: hidden;
+	}
+
+	.about-hero-accents .accent {
+		position: absolute;
+		font-family: var(--font-brand);
+		color: hsla(187, 85%, 75%, 0.28);
+		text-shadow: 0 0 12px hsla(187, 85%, 60%, 0.18);
+		user-select: none;
+		will-change: transform;
+		animation: accent-float 14s ease-in-out infinite;
+	}
+
+	.accent-1 { top: 8%;  left: 6%;  font-size: 2.4rem; animation-delay: -0.5s; }
+	.accent-2 { top: 22%; left: 88%; font-size: 2rem;   animation-delay: -3s;   color: hsla(265, 80%, 78%, 0.28); }
+	.accent-3 { top: 58%; left: 4%;  font-size: 2.2rem; animation-delay: -6s;   color: hsla(210, 85%, 78%, 0.28); }
+	.accent-4 { top: 78%; left: 82%; font-size: 1.8rem; animation-delay: -1.5s; }
+	.accent-5 { top: 46%; left: 92%; font-size: 1.6rem; animation-delay: -8s;   color: hsla(265, 80%, 78%, 0.32); letter-spacing: 0.05em; }
+	.accent-6 { top: 88%; left: 20%; font-size: 1.9rem; animation-delay: -4s;   color: hsla(210, 85%, 78%, 0.28); }
+	.accent-7 { top: 6%;  left: 62%; font-size: 2.1rem; animation-delay: -2s; }
+	.accent-8 { top: 68%; left: 56%; font-size: 1.5rem; animation-delay: -10s;  color: hsla(187, 85%, 78%, 0.30); letter-spacing: 0.05em; }
+
+	@keyframes accent-float {
+		0%, 100% { transform: translate3d(0, 0, 0); opacity: 0.75; }
+		50%      { transform: translate3d(0, -8px, 0); opacity: 1; }
+	}
+
+	.about-hero-content {
+		position: relative;
+		z-index: 1;
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+		width: 100%;
+	}
+
+	.about-eyebrow {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: var(--text-base);
+		letter-spacing: 0.24em;
+		text-transform: uppercase;
+		color: var(--accent-regular);
+	}
+
+	.about-title {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: clamp(var(--text-3xl), 5vw, var(--text-5xl));
+		line-height: 1.12;
+		color: var(--gray-0);
+		font-weight: 600;
+		max-width: 22ch;
+	}
+
+	.about-lede {
+		margin: 0;
+		max-width: 62ch;
+		color: var(--gray-200);
+		font-size: var(--text-md);
+		line-height: 1.7;
+	}
+
+	.about-hero-portrait {
+		position: relative;
+		z-index: 1;
+		width: 100%;
+		max-width: 22rem;
+	}
+
+	.about-hero-portrait img {
+		width: 100%;
+		height: auto;
+		aspect-ratio: 5 / 4;
+		object-fit: cover;
+		object-position: top;
 		border-radius: 1.5rem;
 		box-shadow: var(--shadow-md);
+		border: 1px solid hsla(210, 80%, 70%, 0.14);
 	}
+
+	@media (min-width: 50em) {
+		.about-hero {
+			display: grid;
+			grid-template-columns: 6fr 4fr;
+			gap: 3.75rem;
+			padding: 4rem 3rem;
+			align-items: center;
+		}
+
+		.about-hero-content {
+			gap: 1.5rem;
+		}
+
+		.about-lede {
+			font-size: var(--text-lg);
+		}
+
+		.about-hero-portrait {
+			max-width: none;
+			justify-self: end;
+		}
+
+		.about-hero-portrait img {
+			aspect-ratio: 3 / 4;
+			border-radius: 2.5rem;
+		}
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.about-hero-gradient,
+		.about-hero-accents .accent {
+			animation: none;
+		}
+	}
+
+	/* -------- Rest of page (unchanged) -------- */
 
 	section {
 		display: flex;
@@ -119,7 +315,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 			grid-column-start: 2;
 		}
 
-		section {
+		section:not(.about-hero) {
 			display: contents;
 			font-size: var(--text-lg);
 		}
