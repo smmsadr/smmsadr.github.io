@@ -39,7 +39,7 @@ const pathD = smoothPath(points);
 <section class="jr" aria-labelledby="jr-title" data-journey>
 	<div class="jr-left">
 		<p class="jr-eyebrow">Journey</p>
-		<h2 id="jr-title" class="jr-title">Experience &amp;<br />Education</h2>
+		<h2 id="jr-title" class="jr-title">Experience &amp; Education</h2>
 		<p class="jr-sub">
 			A roadmap from today back to the beginning of my scientific and engineering journey.
 		</p>
@@ -279,7 +279,7 @@ const pathD = smoothPath(points);
 <style>
 	.jr {
 		display: grid;
-		grid-template-columns: minmax(16rem, 30%) minmax(0, 70%);
+		grid-template-columns: minmax(20rem, 34%) minmax(0, 66%);
 		gap: 2rem;
 		align-items: start;
 	}
@@ -290,6 +290,7 @@ const pathD = smoothPath(points);
 		display: flex;
 		flex-direction: column;
 		gap: 0.8rem;
+		width: 100%;
 	}
 
 	.jr-eyebrow {
@@ -308,6 +309,7 @@ const pathD = smoothPath(points);
 		line-height: 1.05;
 		color: var(--gray-0);
 		font-weight: 600;
+		max-width: none;
 	}
 
 	.jr-sub {
@@ -315,7 +317,7 @@ const pathD = smoothPath(points);
 		color: var(--gray-300);
 		font-size: var(--text-md);
 		line-height: 1.65;
-		max-width: 36ch;
+		max-width: none;
 	}
 
 	.jr-help {
