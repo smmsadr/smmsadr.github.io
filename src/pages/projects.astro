@@ -1,0 +1,42 @@
+---
+import { getCollection } from 'astro:content';
+import ContactCTA from '../components/ContactCTA.astro';
+import Grid from '../components/Grid.astro';
+import Hero from '../components/Hero.astro';
+import PortfolioPreview from '../components/PortfolioPreview.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+// Projects pulls from blog collection (written projects and articles)
+const projects = (await getCollection('blog'))
+	.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
+---
+
+<BaseLayout
+	title="Projects | Sayed Mohammad Mahdi Sadrnezhaad"
+	description="Technical projects, articles, and written work on quantum computing, AI, and systems."
+>
+	<div class="stack gap-20">
+		<main class="wrapper stack gap-8">
+			<Hero
+				title="Projects"
+				tagline="Technical articles, course notes, research summaries, and project documentation."
+				align="start"
+			/>
+			<Grid variant="offset">
+				{
+					projects.length > 0 ? (
+						projects.map((entry) => (
+							<li>
+								<PortfolioPreview entry={entry} hrefBase="/projects" />
+							</li>
+						))
+					) : (
+						<p>Projects coming soon.</p>
+					)
+				}
+			</Grid>
+		</main>
+		<ContactCTA />
+	</div>
+</BaseLayout>
+

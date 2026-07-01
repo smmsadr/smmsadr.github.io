@@ -12,21 +12,21 @@ const entries = (await getCollection('certifications')).sort(
 ---
 
 <BaseLayout
-	title="Certifications | Sayed Mohammad Mahdi Sadrnezhaad"
-	description="Professional certifications in AI, cloud technologies, and quantum computing."
+	title="Awards & Certificates | Sayed Mohammad Mahdi Sadrnezhaad"
+	description="Professional certifications, awards, and recognitions in AI, cloud technologies, and quantum computing."
 >
 	<div class="stack gap-20">
 		<main class="wrapper stack gap-8">
 			<Hero
-				title="Certifications"
-				tagline="Professional certifications across AI, cloud, data science, and quantum computing."
+				title="Awards & Certificates"
+				tagline="Professional certifications and awards across AI, quantum computing, data science, and cloud technologies."
 				align="start"
 			/>
 			<Grid variant="offset">
 				{
 					entries.map((entry) => (
 						<li>
-							<PortfolioPreview entry={entry} hrefBase="/certifications" />
+							<PortfolioPreview entry={entry} hrefBase="/awards" />
 						</li>
 					))
 				}

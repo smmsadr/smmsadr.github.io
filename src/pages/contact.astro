@@ -1,0 +1,24 @@
+---
+import ContactCTA from '../components/ContactCTA.astro';
+import Hero from '../components/Hero.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+	title="Contact | Sayed Mohammad Mahdi Sadrnezhaad"
+	description="Get in touch with Mahdi Sadrnezhaad. Contact information and social links."
+>
+	<div class="stack gap-20">
+		<main class="wrapper stack gap-20">
+			<header>
+				<Hero
+					title="Get in Touch"
+					tagline="I'm open to collaboration, consulting, and conversations about quantum computing, AI, systems, and physics."
+					align="center"
+				/>
+			</header>
+		</main>
+		<ContactCTA />
+	</div>
+</BaseLayout>
+
