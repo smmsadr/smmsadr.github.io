@@ -34,17 +34,24 @@ const publications = (await getCollection('publications'))
 	<div class="stack gap-20 lg:gap-48">
 		<div class="wrapper stack gap-8 lg:gap-20">
 			<header class="hero">
-				<Hero
-					title="Mahdi Sadrnezhaad"
-					tagline="Linux specialist, physicist, and software practitioner writing across computer science, information technology, physics, and philosophy of science."
-					align="start"
-				>
-					<div class="roles">
-						<Pill><Icon icon="terminal-window" size="1.33em" /> Linux Specialist</Pill>
-						<Pill><Icon icon="strategy" size="1.33em" /> Physicist</Pill>
-						<Pill><Icon icon="pencil-line" size="1.33em" /> Writer</Pill>
-					</div>
-				</Hero>
+				<div class="hero-content">
+					<Hero
+						title="Exploring Deep Systems"
+						tagline="Transforming complex data into real-world decisions through Quantitative Engineering, Hybrid AI, Optimization, and Quantum Computing."
+						align="start"
+					>
+						<div class="cta-buttons">
+							<CallToAction href="/projects/">
+								Explore My Work
+								<Icon icon="arrow-right" size="1.2em" />
+							</CallToAction>
+							<a href="/Mahdi-CV.pdf" download class="cta-secondary">
+								Download CV
+								<Icon icon="download" size="1.2em" />
+							</a>
+						</div>
+					</Hero>
+				</div>
 
 				<img
 					alt="Mahdi Sadrnezhaad"
@@ -166,7 +173,17 @@ const publications = (await getCollection('publications'))
 <style>
 	.hero :global(.title) {
 		max-width: none;
-		white-space: nowrap;
+		white-space: normal;
+		font-size: var(--text-5xl);
+		line-height: 1.1;
+		margin-bottom: 0.5rem;
+	}
+
+	.hero :global(.tagline) {
+		max-width: 50ch;
+		font-size: var(--text-lg);
+		color: var(--gray-300);
+		margin-bottom: 2rem;
 	}
 
 	.hero {
@@ -176,8 +193,59 @@ const publications = (await getCollection('publications'))
 		gap: 2rem;
 	}
 
-	.roles {
-		display: none;
+	.hero-content {
+		width: 100%;
+	}
+
+	.cta-buttons {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		margin-top: 2rem;
+	}
+
+	.cta-secondary {
+		position: relative;
+		display: flex;
+		place-content: center;
+		text-align: center;
+		padding: 0.56em 2em;
+		gap: 0.8em;
+		color: var(--gray-200);
+		text-decoration: none;
+		line-height: 1.1;
+		border-radius: 999rem;
+		overflow: hidden;
+		border: 1px solid var(--gray-800);
+		background: transparent;
+		box-shadow: none;
+		white-space: nowrap;
+		transition: all var(--theme-transition);
+	}
+
+	.cta-secondary:hover,
+	.cta-secondary:focus {
+		background-color: var(--gray-800);
+		border-color: var(--gray-700);
+		color: var(--gray-0);
+	}
+
+	@media (min-width: 20em) {
+		.cta-secondary {
+			font-size: var(--text-lg);
+		}
+	}
+
+	@media (min-width: 50em) {
+		.cta-buttons {
+			flex-direction: row;
+			gap: 1.5rem;
+		}
+
+		.cta-secondary {
+			padding: 1.125rem 2.5rem;
+			font-size: var(--text-xl);
+		}
 	}
 
 	.hero img {
@@ -196,10 +264,10 @@ const publications = (await getCollection('publications'))
 			gap: 3.75rem;
 		}
 
-		.roles {
-			margin-top: 0.5rem;
+		.hero-content {
 			display: flex;
-			gap: 0.5rem;
+			flex-direction: column;
+			justify-content: center;
 		}
 
 		.hero img {
