@@ -4,12 +4,10 @@ import { getCollection } from 'astro:content';
 import CallToAction from '../components/CallToAction.astro';
 // Page section components
 import ContactCTA from '../components/ContactCTA.astro';
-import Grid from '../components/Grid.astro';
 import Hero from '../components/Hero.astro';
 import Icon from '../components/Icon.astro';
-import Pill from '../components/Pill.astro';
-import PortfolioPreview from '../components/PortfolioPreview.astro';
 import Skills from '../components/Skills.astro';
+import WhatIExplore from '../components/WhatIExplore.astro';
 import WhyDeepSystems from '../components/WhyDeepSystems.astro';
 // Layout import — provides basic page elements: <head>, <nav>, <footer> etc.
 import BaseLayout from '../layouts/BaseLayout.astro';
@@ -18,14 +16,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 const writing = (await getCollection('blog'))
 	.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
 	.slice(0, 4);
-
-const experience = (await getCollection('experience'))
-	.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
-	.slice(0, 3);
-
-const publications = (await getCollection('publications'))
-	.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
-	.slice(0, 3);
 
 // Full Astro Component Syntax:
 // https://docs.astro.build/basics/astro-components/
@@ -71,103 +61,61 @@ const publications = (await getCollection('publications'))
 		</div>
 
 		<main class="wrapper stack gap-20 lg:gap-48">
-			<section class="section with-background with-cta">
+
+
+			<WhatIExplore />
+
+			<section class="section with-background with-cta blog-section">
 				<header class="section-header stack gap-2 lg:gap-4">
-					<h3>Selected Writing</h3>
-					<p>Essays, course notes, and research summaries from mahdi.sadrn.com.</p>
-				</header>
-
-				<div class="gallery">
-					<Grid variant="offset">
-						{
-							writing.map((project) => (
-								<li>
-												<PortfolioPreview entry={project} hrefBase="/blog" />
-								</li>
-							))
-						}
-					</Grid>
-				</div>
-
-				<div class="cta">
-					<CallToAction href="/blog/">
-						View Archive
-						<Icon icon="arrow-right" size="1.2em" />
-					</CallToAction>
-				</div>
-			</section>
-
-			<section class="section with-background with-cta">
-				<header class="section-header stack gap-2 lg:gap-4">
-					<h3>Selected Experience</h3>
-					<p>Professional roles focused on quantitative engineering, AI, and systems.</p>
-				</header>
-
-				<div class="gallery">
-					<Grid variant="offset">
-						{
-							experience.map((entry) => (
-								<li>
-									<PortfolioPreview entry={entry} hrefBase="/experience" />
-								</li>
-							))
-						}
-					</Grid>
-				</div>
-
-				<div class="cta">
-					<CallToAction href="/experience/">
-						View Experience
-						<Icon icon="arrow-right" size="1.2em" />
-					</CallToAction>
-				</div>
-			</section>
-
-			<section class="section with-background with-cta">
-				<header class="section-header stack gap-2 lg:gap-4">
-					<h3>Selected Publications</h3>
-					<p>Research publications and conference contributions in quantum computing.</p>
-				</header>
-
-				<div class="gallery">
-					<Grid variant="offset">
-						{
-							publications.map((entry) => (
-								<li>
-									<PortfolioPreview entry={entry} hrefBase="/publications" />
-								</li>
-							))
-						}
-					</Grid>
-				</div>
-
-				<div class="cta">
-					<CallToAction href="/publications/">
-						View Publications
-						<Icon icon="arrow-right" size="1.2em" />
-					</CallToAction>
-				</div>
-			</section>
-
-			<section class="section with-background bg-variant">
-				<header class="section-header stack gap-2 lg:gap-4">
-					<h3>Areas</h3>
+					<h3>From the Blog</h3>
 					<p>
-						The old website grouped work around physics, computer science, systems, and broader
-						questions about science and rationality.
+						Essays, notes, and research summaries — thinking in public, distinct from
+						shipped project work.
 					</p>
 				</header>
 
-				<div class="gallery">
-					<Grid variant="small">
-						{
-							['Computer Science', 'Information Technology', 'Physics', 'Scientific Computing', 'Philosophy of Science'].map((brand) => (
-								<li class="mention-card">
-									<p>{brand}</p>
+				<ol class="blog-list">
+					{
+						writing.map((entry) => {
+							const isExternal = Boolean(entry.data.externalUrl);
+							const href = isExternal ? entry.data.externalUrl : `/blog/${entry.id}/`;
+							return (
+								<li class="blog-item">
+									<a
+										href={href}
+										class="blog-link"
+										{...(isExternal
+											? { target: '_blank', rel: 'noopener noreferrer' }
+											: {})}
+									>
+										<time class="blog-date" datetime={entry.data.publishDate.toISOString()}>
+											{entry.data.publishDate.toLocaleDateString('en-US', {
+												year: 'numeric',
+												month: 'short',
+												day: 'numeric',
+											})}
+										</time>
+										<span class="blog-title">
+											{entry.data.title}
+											{isExternal && (
+												<span class="blog-external" aria-label="External post">
+													↗
+												</span>
+											)}
+										</span>
+										<span class="blog-excerpt">{entry.data.description}</span>
+									</a>
 								</li>
-							))
-						}
-					</Grid>
+							);
+						})
+					}
+				</ol>
+
+				<div class="cta">
+					<CallToAction href="/blog/">
+						Read the blog
+						<Icon icon="arrow-right" size="1.2em" />
+					</CallToAction>
 				</div>
 			</section>
 		</main>
@@ -408,23 +356,91 @@ const publications = (await getCollection('publications'))
 
 	/* ====================================================== */
 
-	.mention-card {
+	/* ====================================================== */
+	/* Blog list — editorial rows, intentionally different from portfolio cards */
+
+	.blog-section .blog-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		grid-area: gallery;
 		display: flex;
-		height: 7rem;
-		justify-content: center;
-		align-items: center;
-		text-align: center;
-		border: 1px solid var(--gray-800);
-		border-radius: 1.5rem;
+		flex-direction: column;
+		gap: 0;
+		border-top: 1px solid var(--gray-800);
+	}
+
+	.blog-item {
+		border-bottom: 1px solid var(--gray-800);
+	}
+
+	.blog-link {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 0.35rem;
+		padding: 1.15rem 0.25rem;
+		text-decoration: none;
+		color: var(--gray-200);
+		transition:
+			color var(--theme-transition),
+			background-color var(--theme-transition);
+	}
+
+	.blog-link:hover,
+	.blog-link:focus-visible {
+		color: var(--gray-0);
+		background: linear-gradient(
+			90deg,
+			hsla(var(--gray-999-basis), 0),
+			hsla(var(--gray-999-basis), 0.35),
+			hsla(var(--gray-999-basis), 0)
+		);
+	}
+
+	.blog-date {
+		font-size: var(--text-sm);
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--accent-regular);
+	}
+
+	.blog-title {
+		font-family: var(--font-brand);
+		font-size: var(--text-lg);
+		line-height: 1.25;
+		color: var(--gray-100);
+	}
+
+	.blog-external {
+		display: inline-block;
+		margin-inline-start: 0.35em;
+		font-size: 0.75em;
+		color: var(--accent-regular);
+	}
+
+	.blog-excerpt {
 		color: var(--gray-300);
-		background: var(--gradient-subtle);
-		box-shadow: var(--shadow-sm);
+		font-size: var(--text-base);
+		line-height: 1.55;
 	}
 
 	@media (min-width: 50em) {
-		.mention-card {
-			border-radius: 1.5rem;
-			height: 9.5rem;
+		.blog-link {
+			grid-template-columns: 10rem 1fr;
+			column-gap: 2rem;
+			row-gap: 0.35rem;
+			padding: 1.5rem 0.5rem;
+			align-items: baseline;
+		}
+
+		.blog-date {
+			grid-row: span 2;
+			align-self: start;
+		}
+
+		.blog-title {
+			font-size: var(--text-xl);
 		}
 	}
+
 </style>

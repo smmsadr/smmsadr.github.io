@@ -1,38 +1,234 @@
 ---
 import { getCollection } from 'astro:content';
 import ContactCTA from '../components/ContactCTA.astro';
-import Grid from '../components/Grid.astro';
 import Hero from '../components/Hero.astro';
-import PortfolioPreview from '../components/PortfolioPreview.astro';
+import Pill from '../components/Pill.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 const posts = (await getCollection('blog')).sort(
 	(a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf(),
 );
+
+// Group posts by year for editorial section dividers.
+const postsByYear = posts.reduce<Record<string, typeof posts>>((acc, post) => {
+	const year = String(post.data.publishDate.getFullYear());
+	(acc[year] ||= []).push(post);
+	return acc;
+}, {});
+const years = Object.keys(postsByYear).sort((a, b) => Number(b) - Number(a));
+
+const dateFormat = new Intl.DateTimeFormat('en-US', {
+	month: 'short',
+	day: 'numeric',
+});
 ---
 
 <BaseLayout
 	title="Blog | Sayed Mohammad Mahdi Sadrnezhaad"
-	description="Physics, computer science, and philosophy of science writing by Sayed Mohammad Mahdi Sadrnezhaad."
+	description="Essays, research notes, and course writing by Sayed Mohammad Mahdi Sadrnezhaad."
 >
 	<div class="stack gap-20">
-		<main class="wrapper stack gap-8">
+		<main class="wrapper stack gap-8 lg:gap-12">
 			<Hero
 				title="Blog"
-				tagline="Articles, research notes, and course essays from mahdi.sadrn.com and earlier work."
+				tagline="Essays, research notes, and course writing. Some pieces are being migrated to Medium — external links open there."
 				align="start"
 			/>
-			<Grid variant="offset">
+
+			<div class="blog-archive stack gap-10">
 				{
-					posts.map((post) => (
-						<li>
-							<PortfolioPreview entry={post} hrefBase="/blog" />
-						</li>
+					years.map((year) => (
+						<section class="year-group" aria-labelledby={`year-${year}`}>
+							<h2 id={`year-${year}`} class="year-heading">
+								{year}
+							</h2>
+							<ol class="posts">
+								{postsByYear[year].map((post) => {
+									const isExternal = Boolean(post.data.externalUrl);
+									const href = isExternal ? post.data.externalUrl : `/blog/${post.id}/`;
+									return (
+										<li class="post">
+											<a
+												class="post-link"
+												href={href}
+												{...(isExternal
+													? { target: '_blank', rel: 'noopener noreferrer' }
+													: {})}
+											>
+												<time
+													class="post-date"
+													datetime={post.data.publishDate.toISOString()}
+												>
+													{dateFormat.format(post.data.publishDate)}
+												</time>
+												<div class="post-body">
+													<h3 class="post-title">
+														{post.data.title}
+														{isExternal && (
+															<span
+																class="post-external"
+																aria-label="External post on Medium"
+															>
+																↗
+															</span>
+														)}
+													</h3>
+													{post.data.description && (
+														<p class="post-excerpt">{post.data.description}</p>
+													)}
+													<div class="post-meta">
+														{post.data.readingMinutes && (
+															<span class="post-reading">
+																{post.data.readingMinutes} min read
+															</span>
+														)}
+														{post.data.tags.length > 0 && (
+															<ul class="post-tags">
+																{post.data.tags.slice(0, 3).map((t) => (
+																	<li>
+																		<Pill>{t}</Pill>
+																	</li>
+																))}
+															</ul>
+														)}
+													</div>
+												</div>
+											</a>
+										</li>
+									);
+								})}
+							</ol>
+						</section>
 					))
 				}
-			</Grid>
+			</div>
 		</main>
 		<ContactCTA />
 	</div>
 </BaseLayout>
+
+<style>
+	.blog-archive {
+		max-width: 62rem;
+		margin-inline: auto;
+		width: 100%;
+	}
+
+	.year-heading {
+		font-family: var(--font-brand);
+		font-size: var(--text-md);
+		letter-spacing: 0.24em;
+		text-transform: uppercase;
+		color: var(--accent-regular);
+		margin: 0 0 1rem;
+	}
+
+	.posts {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		border-top: 1px solid var(--gray-800);
+	}
+
+	.post {
+		border-bottom: 1px solid var(--gray-800);
+	}
+
+	.post-link {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 0.4rem;
+		padding: 1.25rem 0.25rem;
+		text-decoration: none;
+		color: var(--gray-200);
+		transition:
+			color var(--theme-transition),
+			background-color var(--theme-transition);
+	}
+
+	.post-link:hover,
+	.post-link:focus-visible {
+		color: var(--gray-0);
+		background: linear-gradient(
+			90deg,
+			hsla(var(--gray-999-basis), 0),
+			hsla(var(--gray-999-basis), 0.4),
+			hsla(var(--gray-999-basis), 0)
+		);
+	}
+
+	.post-date {
+		font-size: var(--text-sm);
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--accent-regular);
+	}
+
+	.post-title {
+		font-family: var(--font-brand);
+		font-size: var(--text-lg);
+		line-height: 1.25;
+		color: var(--gray-100);
+		margin: 0;
+		font-weight: 600;
+	}
+
+	.post-external {
+		display: inline-block;
+		margin-inline-start: 0.35em;
+		font-size: 0.85em;
+		color: var(--accent-regular);
+	}
+
+	.post-excerpt {
+		margin: 0;
+		color: var(--gray-300);
+		font-size: var(--text-base);
+		line-height: 1.55;
+	}
+
+	.post-meta {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.65rem 1rem;
+		align-items: center;
+		margin-top: 0.15rem;
+	}
+
+	.post-reading {
+		font-size: var(--text-sm);
+		color: var(--gray-400);
+	}
+
+	.post-tags {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+	}
+
+	@media (min-width: 50em) {
+		.year-heading {
+			font-size: var(--text-lg);
+		}
+
+		.post-link {
+			grid-template-columns: 8rem 1fr;
+			column-gap: 2.25rem;
+			padding: 1.75rem 0.5rem;
+			align-items: baseline;
+		}
+
+		.post-date {
+			align-self: start;
+			padding-top: 0.35rem;
+		}
+
+		.post-title {
+			font-size: var(--text-xl);
+		}
+	}
+</style>
 
