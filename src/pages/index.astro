@@ -1,5 +1,4 @@
 ---
-import { getCollection } from 'astro:content';
 // Component Imports
 import CallToAction from '../components/CallToAction.astro';
 // Page section components
@@ -12,10 +11,6 @@ import WhyDeepSystems from '../components/WhyDeepSystems.astro';
 // Layout import — provides basic page elements: <head>, <nav>, <footer> etc.
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-// Content Fetching: latest entries for section previews
-const writing = (await getCollection('blog'))
-	.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf())
-	.slice(0, 4);
 
 // Full Astro Component Syntax:
 // https://docs.astro.build/basics/astro-components/
@@ -64,60 +59,6 @@ const writing = (await getCollection('blog'))
 
 
 			<WhatIExplore />
-
-			<section class="section with-background with-cta blog-section">
-				<header class="section-header stack gap-2 lg:gap-4">
-					<h3>From the Blog</h3>
-					<p>
-						Essays, notes, and research summaries — thinking in public, distinct from
-						shipped project work.
-					</p>
-				</header>
-
-				<ol class="blog-list">
-					{
-						writing.map((entry) => {
-							const isExternal = Boolean(entry.data.externalUrl);
-							const href = isExternal ? entry.data.externalUrl : `/blog/${entry.id}/`;
-							return (
-								<li class="blog-item">
-									<a
-										href={href}
-										class="blog-link"
-										{...(isExternal
-											? { target: '_blank', rel: 'noopener noreferrer' }
-											: {})}
-									>
-										<time class="blog-date" datetime={entry.data.publishDate.toISOString()}>
-											{entry.data.publishDate.toLocaleDateString('en-US', {
-												year: 'numeric',
-												month: 'short',
-												day: 'numeric',
-											})}
-										</time>
-										<span class="blog-title">
-											{entry.data.title}
-											{isExternal && (
-												<span class="blog-external" aria-label="External post">
-													↗
-												</span>
-											)}
-										</span>
-										<span class="blog-excerpt">{entry.data.description}</span>
-									</a>
-								</li>
-							);
-						})
-					}
-				</ol>
-
-				<div class="cta">
-					<CallToAction href="/blog/">
-						Read the blog
-						<Icon icon="arrow-right" size="1.2em" />
-					</CallToAction>
-				</div>
-			</section>
 		</main>
 
 		<ContactCTA />
@@ -357,90 +298,5 @@ const writing = (await getCollection('blog'))
 	/* ====================================================== */
 
 	/* ====================================================== */
-	/* Blog list — editorial rows, intentionally different from portfolio cards */
-
-	.blog-section .blog-list {
-		list-style: none;
-		padding: 0;
-		margin: 0;
-		grid-area: gallery;
-		display: flex;
-		flex-direction: column;
-		gap: 0;
-		border-top: 1px solid var(--gray-800);
-	}
-
-	.blog-item {
-		border-bottom: 1px solid var(--gray-800);
-	}
-
-	.blog-link {
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: 0.35rem;
-		padding: 1.15rem 0.25rem;
-		text-decoration: none;
-		color: var(--gray-200);
-		transition:
-			color var(--theme-transition),
-			background-color var(--theme-transition);
-	}
-
-	.blog-link:hover,
-	.blog-link:focus-visible {
-		color: var(--gray-0);
-		background: linear-gradient(
-			90deg,
-			hsla(var(--gray-999-basis), 0),
-			hsla(var(--gray-999-basis), 0.35),
-			hsla(var(--gray-999-basis), 0)
-		);
-	}
-
-	.blog-date {
-		font-size: var(--text-sm);
-		letter-spacing: 0.14em;
-		text-transform: uppercase;
-		color: var(--accent-regular);
-	}
-
-	.blog-title {
-		font-family: var(--font-brand);
-		font-size: var(--text-lg);
-		line-height: 1.25;
-		color: var(--gray-100);
-	}
-
-	.blog-external {
-		display: inline-block;
-		margin-inline-start: 0.35em;
-		font-size: 0.75em;
-		color: var(--accent-regular);
-	}
-
-	.blog-excerpt {
-		color: var(--gray-300);
-		font-size: var(--text-base);
-		line-height: 1.55;
-	}
-
-	@media (min-width: 50em) {
-		.blog-link {
-			grid-template-columns: 10rem 1fr;
-			column-gap: 2rem;
-			row-gap: 0.35rem;
-			padding: 1.5rem 0.5rem;
-			align-items: baseline;
-		}
-
-		.blog-date {
-			grid-row: span 2;
-			align-self: start;
-		}
-
-		.blog-title {
-			font-size: var(--text-xl);
-		}
-	}
 
 </style>

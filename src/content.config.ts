@@ -12,9 +12,9 @@ const baseSchema = z.object({
 });
 
 export const collections = {
-	blog: defineCollection({
-		// Load Markdown files in the src/content/blog directory.
-		loader: glob({ base: './src/content/blog', pattern: '**/*.md' }),
+	writing: defineCollection({
+		// Load Markdown files in the src/content/writing directory.
+		loader: glob({ base: './src/content/writing', pattern: '**/*.md' }),
 		schema: baseSchema.extend({
 			// Optional canonical URL for posts hosted externally (e.g. Medium).
 			externalUrl: z.string().url().optional(),

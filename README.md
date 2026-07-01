@@ -41,5 +41,5 @@ env:
 - Replace photos in `public/assets`.
 - Edit homepage copy in `src/pages/index.astro`.
 - Edit the about page in `src/pages/about.astro`.
-- Replace starter posts in `src/content/blog`.
+- Replace starter posts in `src/content/writing`.
 - Update social/contact links in `src/components/Nav.astro`, `src/components/Footer.astro`, and `src/components/ContactCTA.astro`.

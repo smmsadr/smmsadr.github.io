@@ -6,8 +6,8 @@ import Hero from '../components/Hero.astro';
 import PortfolioPreview from '../components/PortfolioPreview.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-// Projects pulls from blog collection (written projects and articles)
-const projects = (await getCollection('blog'))
+// Projects pulls from writing collection (written projects and articles)
+const projects = (await getCollection('writing'))
 	.sort((a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf());
 ---
 

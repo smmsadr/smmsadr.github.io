@@ -5,7 +5,7 @@ import Hero from '../components/Hero.astro';
 import Pill from '../components/Pill.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-const posts = (await getCollection('blog')).sort(
+const posts = (await getCollection('writing')).sort(
 	(a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf(),
 );
 
@@ -24,13 +24,13 @@ const dateFormat = new Intl.DateTimeFormat('en-US', {
 ---
 
 <BaseLayout
-	title="Blog | Sayed Mohammad Mahdi Sadrnezhaad"
+	title="Writing | Sayed Mohammad Mahdi Sadrnezhaad"
 	description="Essays, research notes, and course writing by Sayed Mohammad Mahdi Sadrnezhaad."
 >
 	<div class="stack gap-20">
 		<main class="wrapper stack gap-8 lg:gap-12">
 			<Hero
-				title="Blog"
+				title="Writing"
 				tagline="Essays, research notes, and course writing. Some pieces are being migrated to Medium — external links open there."
 				align="start"
 			/>
@@ -45,7 +45,7 @@ const dateFormat = new Intl.DateTimeFormat('en-US', {
 							<ol class="posts">
 								{postsByYear[year].map((post) => {
 									const isExternal = Boolean(post.data.externalUrl);
-									const href = isExternal ? post.data.externalUrl : `/blog/${post.id}/`;
+									const href = isExternal ? post.data.externalUrl : `/writing/${post.id}/`;
 									return (
 										<li class="post">
 											<a

@@ -8,11 +8,11 @@ import Pill from '../../components/Pill.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 interface Props {
-	entry: CollectionEntry<'blog'>;
+	entry: CollectionEntry<'writing'>;
 }
 
 export async function getStaticPaths() {
-	const entries = await getCollection('blog');
+	const entries = await getCollection('writing');
 	return entries.map((entry) => ({
 		params: { slug: entry.id },
 		props: { entry },
