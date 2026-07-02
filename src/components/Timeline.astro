@@ -86,9 +86,12 @@ const pathD = smoothPath(points);
 							style={`--x:${p.x}px;--y:${p.y}px;--i:${i};`}
 							aria-controls="jr-card"
 							aria-expanded="false"
-							aria-label={`${entry.year}: ${entry.title}${entry.organization ? `, ${entry.organization}` : ''}`}
+							aria-label={`${entry.chapter}: ${entry.year} — ${entry.title}${entry.organization ? `, ${entry.organization}` : ''}`}
 						>
-							<span class="jr-year">{entry.year}</span>
+							<span class="jr-label">
+								<span class="jr-chapter">{entry.chapter}</span>
+								<span class="jr-year">{entry.year}</span>
+							</span>
 							<span class="jr-dot" aria-hidden="true"></span>
 						</button>
 					);
@@ -382,13 +385,32 @@ const pathD = smoothPath(points);
 		transition-delay: calc(var(--i) * 80ms + 180ms);
 	}
 
+	.jr-label {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		gap: 0.2rem;
+	}
+
+	.jr-chapter {
+		font-family: var(--font-brand);
+		font-size: 0.95rem;
+		font-weight: 700;
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		color: var(--gray-0);
+		white-space: nowrap;
+		line-height: 1;
+	}
+
 	.jr-year {
 		font-family: var(--font-brand);
-		font-size: 0.84rem;
-		letter-spacing: 0.16em;
+		font-size: 0.7rem;
+		letter-spacing: 0.14em;
 		text-transform: uppercase;
-		color: var(--gray-200);
+		color: var(--gray-400);
 		white-space: nowrap;
+		opacity: 0.75;
 	}
 
 	.jr-dot {
@@ -670,13 +692,25 @@ const pathD = smoothPath(points);
 			margin: 0.62rem 0;
 		}
 
+		.jr-label {
+			flex-direction: row;
+			gap: 0.5rem;
+			align-items: baseline;
+			order: 2;
+		}
+
+		.jr-chapter {
+			font-size: 0.9rem;
+		}
+
+		.jr-year {
+			font-size: 0.65rem;
+		}
+
 		.jr.is-revealed .jr-node {
 			transform: translateY(0);
 		}
 
-		.jr-year {
-			order: 2;
-		}
 
 		.jr-card {
 			position: relative;

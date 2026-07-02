@@ -3,6 +3,7 @@ import type { iconPaths } from '../components/IconPaths';
 export type TimelineEntry = {
 	id: string;
 	year: string;
+	chapter: string;
 	title: string;
 	organization?: string;
 	icon: keyof typeof iconPaths;
@@ -19,7 +20,8 @@ export type TimelineEntry = {
 export const timelineData: TimelineEntry[] = [
 	{
 		id: 'today',
-		year: 'Today since 2021',
+		year: '2021–Present',
+		chapter: 'CURRENT - Generative AI',
 		title: 'Senior Data Scientist & Quantitative Engineer',
 		organization: 'KINESSO, Kuala Lumpur, Malaysia',
 		icon: 'cpu',
@@ -30,7 +32,8 @@ export const timelineData: TimelineEntry[] = [
 	},
 	{
 		id: 'y2024',
-		year: '2024 - Today',
+		year: '2024–Present',
+		chapter: 'Quantum Computing',
 		title: 'PhD Candidate (Research), Computer Science (Quantum Computing)',
 		organization: 'University of Malaya',
 		icon: 'rocket-launch',
@@ -41,6 +44,7 @@ export const timelineData: TimelineEntry[] = [
 	{
 		id: 'y2021',
 		year: '2021',
+		chapter: 'Optimization',
 		title: 'Quantitative Engineer',
 		organization: 'KINESSO, Kuala Lumpur, Malaysia',
 		icon: 'chart-line-up',
@@ -50,7 +54,8 @@ export const timelineData: TimelineEntry[] = [
 	},
 	{
 		id: 'y2018a',
-		year: '2018 - 2021',
+		year: '2018–2021',
+		chapter: 'Media Analytics',
 		title: 'Quantitative Modelling Analyst',
 		organization: 'KINESSO Malaysia (formerly IPG Mediabrands Technologies), Kuala Lumpur, Malaysia',
 		icon: 'strategy',
@@ -61,6 +66,7 @@ export const timelineData: TimelineEntry[] = [
 	{
 		id: 'y2018',
 		year: '2018',
+		chapter: 'Media Analytics',
 		title: 'Quantitative Modelling Analyst',
 		organization: 'EXPERIS (contract for IPG Mediabrands Technologies), Kuala Lumpur, Malaysia',
 		icon: 'strategy',
@@ -70,7 +76,8 @@ export const timelineData: TimelineEntry[] = [
 	},
 	{
 		id: 'y2016',
-		year: '2016 - 2018',
+		year: '2016–2018',
+		chapter: 'Trading Systems',
 		title: 'Quantitative Analyst',
 		organization: 'DERIV (formerly Binary Group Services), Cyberjaya, Malaysia',
 		icon: 'chart-line-up',
@@ -80,7 +87,8 @@ export const timelineData: TimelineEntry[] = [
 	},
 	{
 		id: 'y2014a',
-		year: '2014-2020',
+		year: '2014–2020',
+		chapter: 'Computer Science',
 		title: 'MSc, Computer Science (Computing & Machine Learning)',
 		organization: 'University of Malaya',
 		icon: 'calculator',
@@ -90,7 +98,8 @@ export const timelineData: TimelineEntry[] = [
 	},
 	{
 		id: 'y2014',
-		year: '2014 - 2016',
+		year: '2014–2016',
+		chapter: 'Infrastructure',
 		title: 'Linux Administration & DevOps Engineer',
 		organization: 'DERIV (formerly Binary Group Services), Cyberjaya, Malaysia',
 		icon: 'code',
@@ -100,7 +109,8 @@ export const timelineData: TimelineEntry[] = [
 	},
 	{
 		id: 'y2011',
-		year: '2011 - 2014',
+		year: '2011–2014',
+		chapter: 'Systems',
 		title: 'Linux System Administrator & DBA',
 		organization: 'BEHESTAN RAYAN COMPANY, Tehran, Iran',
 		icon: 'terminal-window',
@@ -110,7 +120,8 @@ export const timelineData: TimelineEntry[] = [
 	},
 	{
 		id: 'y2008',
-		year: '2008 - 2010',
+		year: '2008–2010',
+		chapter: 'Foundations',
 		title: 'Systems Engineer',
 		organization: 'MATERIALS AND ENERGY RESEARCH CENTER, Karaj, Iran',
 		icon: 'terminal-window',
@@ -119,7 +130,8 @@ export const timelineData: TimelineEntry[] = [
 	},
 	{
 		id: 'y2001',
-		year: '2001-2007',
+		year: '2001–2007',
+		chapter: 'Physics',
 		title: 'BSc, Physics',
 		organization: 'Sharif University of Technology',
 		icon: 'atom',
