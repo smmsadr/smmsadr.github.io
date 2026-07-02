@@ -16,6 +16,7 @@ type Milestone = {
 	slug: string;                 // matches src/content/experience/<slug>.md
 	company: string;
 	position: string;
+	location: string;             // e.g. "Kuala Lumpur, Malaysia"
 	era: string;                  // display range, e.g. "2021 — Present"
 	shortLabel: string;           // for the timeline node
 	mission: string;
@@ -32,6 +33,7 @@ const journey: Milestone[] = [
 		slug: 'senior-data-scientist-quantitative-engineer-kinesso',
 		company: 'Kinesso',
 		position: 'Senior Data Scientist & Quantitative Engineer',
+		location: 'Kuala Lumpur, Malaysia',
 		era: '2021 — Present',
 		shortLabel: '2021 – Now',
 		mission:
@@ -57,6 +59,7 @@ const journey: Milestone[] = [
 		slug: 'quantitative-modelling-analyst-kinesso',
 		company: 'Kinesso',
 		position: 'Quantitative Engineer & Modelling Analyst',
+		location: 'Kuala Lumpur, Malaysia',
 		era: '2018 — 2021',
 		shortLabel: '2018 – 2021',
 		mission:
@@ -78,7 +81,8 @@ const journey: Milestone[] = [
 	{
 		slug: 'quantitative-modelling-analyst-experis',
 		company: 'Experis',
-		position: 'Quantitative Modelling Analyst (Contract)',
+		position: 'Quantitative Modelling Analyst',
+		location: 'Kuala Lumpur, Malaysia',
 		era: '2018',
 		shortLabel: '2018 · Experis',
 		mission:
@@ -100,6 +104,7 @@ const journey: Milestone[] = [
 		slug: 'quantitative-analyst-deriv',
 		company: 'Deriv',
 		position: 'Quantitative Analyst',
+		location: 'Cyberjaya, Malaysia',
 		era: '2016 — 2018',
 		shortLabel: '2016 – 2018',
 		mission:
@@ -121,6 +126,7 @@ const journey: Milestone[] = [
 		slug: 'linux-admin-devops-deriv',
 		company: 'Deriv',
 		position: 'Linux Administration & DevOps Engineer',
+		location: 'Cyberjaya, Malaysia',
 		era: '2014 — 2016',
 		shortLabel: '2014 – 2016',
 		mission:
@@ -142,6 +148,7 @@ const journey: Milestone[] = [
 		slug: 'linux-admin-dba-behestan-rayan',
 		company: 'Behestan Rayan',
 		position: 'Linux Sysadmin & DBA',
+		location: 'Tehran, Iran',
 		era: '2011 — 2014',
 		shortLabel: '2011 – 2014',
 		mission:
@@ -163,6 +170,7 @@ const journey: Milestone[] = [
 		slug: 'it-manager-merc',
 		company: 'Materials & Energy Research Center',
 		position: 'IT Manager',
+		location: 'Karaj, Iran',
 		era: '2008 — 2010',
 		shortLabel: '2008 – 2010',
 		mission:
@@ -674,14 +682,23 @@ const journey: Milestone[] = [
 								<article
 									id={`jr-milestone-${m.slug}`}
 									class="jr-card"
-									tabindex="0"
 								>
 									{m.current && <span class="jr-now-badge">Now</span>}
 
 									<header class="jr-card-head">
+										<h3 class="jr-card-position">
+											<a
+												class="jr-card-link"
+												href={`/experience/${m.slug}/`}
+												aria-label={`View role details — ${m.position} at ${m.company}, ${m.era}`}
+											>{m.position}</a>
+										</h3>
+										<p class="jr-card-subtitle">
+											<span class="jr-card-company">{m.company}</span>
+											<span class="jr-card-sep" aria-hidden="true">·</span>
+											<span class="jr-card-location">{m.location}</span>
+										</p>
 										<p class="jr-card-era">{m.era}</p>
-										<h3 class="jr-card-company">{m.company}</h3>
-										<p class="jr-card-position">{m.position}</p>
 									</header>
 
 									<p class="jr-card-mission">{m.mission}</p>
@@ -718,15 +735,6 @@ const journey: Milestone[] = [
 											))}
 										</ul>
 									)}
-
-									<a
-										class="jr-card-more"
-										href={`/experience/${m.slug}/`}
-										aria-label={`View role details for ${m.company} ${m.position}`}
-									>
-										View role details
-										<Icon icon="arrow-right" size="0.95em" />
-									</a>
 								</article>
 							</li>
 						))
@@ -1934,39 +1942,60 @@ const journey: Milestone[] = [
 		opacity: 0.85;
 	}
 
-	/* Card head */
+	/* Card head — position is the primary heading, company & location
+	   step down as a subtitle, era sits below as a small accent line. */
 	.jr-card-head {
 		display: flex;
 		flex-direction: column;
-		gap: 0.25rem;
-	}
-
-	.jr-card-era {
-		margin: 0;
-		font-family: var(--font-brand);
-		font-size: 0.72rem;
-		letter-spacing: 0.24em;
-		text-transform: uppercase;
-		color: var(--jr-accent);
-	}
-
-	.jr-card-company {
-		margin: 0;
-		font-family: var(--font-brand);
-		font-size: var(--text-xl);
-		line-height: 1.15;
-		color: var(--gray-0);
-		font-weight: 600;
-		letter-spacing: -0.005em;
+		gap: 0.35rem;
 	}
 
 	.jr-card-position {
 		margin: 0;
 		font-family: var(--font-brand);
-		font-size: var(--text-sm);
-		letter-spacing: 0.02em;
+		font-size: var(--text-xl);
+		line-height: 1.18;
+		letter-spacing: -0.005em;
+		color: var(--gray-0);
+		font-weight: 600;
+	}
+
+	.jr-card-subtitle {
+		margin: 0;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 0.4rem 0.5rem;
+		font-family: var(--font-brand);
+		line-height: 1.35;
+	}
+
+	.jr-card-company {
+		font-size: var(--text-md);
 		color: var(--jr-accent);
+		font-weight: 600;
+		letter-spacing: 0.005em;
+	}
+
+	.jr-card-sep {
+		color: var(--gray-500);
 		opacity: 0.9;
+	}
+
+	.jr-card-location {
+		font-size: 0.88rem;
+		color: var(--gray-300);
+		font-weight: 400;
+		letter-spacing: 0.01em;
+	}
+
+	.jr-card-era {
+		margin: 0.15rem 0 0;
+		font-family: var(--font-brand);
+		font-size: 0.7rem;
+		letter-spacing: 0.24em;
+		text-transform: uppercase;
+		color: var(--gray-400);
 	}
 
 	.jr-card-mission {
@@ -2099,31 +2128,42 @@ const journey: Milestone[] = [
 		box-shadow: 0 0 6px var(--jr-accent-glow);
 	}
 
-	.jr-card-more {
-		display: inline-flex;
-		align-items: center;
-		gap: 0.4rem;
-		margin-top: 0.15rem;
-		font-family: var(--font-brand);
-		font-size: 0.78rem;
-		letter-spacing: 0.14em;
-		text-transform: uppercase;
-		color: var(--jr-accent);
+	/* Position heading is the primary link — its ::after pseudo overlays
+	   the whole card, so anywhere on the card is clickable. */
+	.jr-card-link {
+		color: inherit;
 		text-decoration: none;
-		width: max-content;
-		transition: color 0.25s ease, transform 0.25s ease;
-	}
-
-	.jr-card-more:hover,
-	.jr-card-more:focus-visible {
-		color: var(--gray-0);
-		transform: translateX(2px);
 		outline: none;
 	}
 
-	.jr-card-more:focus-visible {
+	.jr-card-link::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: 1;
+		border-radius: inherit;
+	}
+
+	/* Anything the visitor might interact with inside the card (badges,
+	   metrics, tech pills, etc.) sits above the overlay so it doesn't
+	   swallow their pointer events. Currently none of them are
+	   interactive, but this keeps future additions safe. */
+	.jr-card > *:not(.jr-card-head) {
+		position: relative;
+		z-index: 2;
+	}
+
+	.jr-card-link:focus-visible {
+		outline: none;
+	}
+
+	.jr-card:has(.jr-card-link:focus-visible),
+	.jr-card:focus-within {
+		outline: none;
+	}
+
+	.jr-card-link:focus-visible::after {
 		box-shadow: 0 0 0 3px var(--jr-accent-soft);
-		border-radius: 0.25rem;
 	}
 
 	/* "Now" badge for the current role */
@@ -2131,6 +2171,7 @@ const journey: Milestone[] = [
 		position: absolute;
 		top: 1rem;
 		right: 1rem;
+		z-index: 2;
 		display: inline-flex;
 		align-items: center;
 		gap: 0.35rem;
@@ -2160,10 +2201,17 @@ const journey: Milestone[] = [
 		50%      { transform: scale(1.35); opacity: 1;   }
 	}
 
-	/* -- Visual hierarchy: newest = brightest, older = quieter -- */
+	/* -- Visual hierarchy: newest = brightest, older = quieter.
+	     Emphasis now scales the POSITION (the primary heading),
+	     not the company name. -- */
+
+	.jr-emphasis-primary .jr-card-position {
+		font-size: var(--text-2xl);
+		line-height: 1.15;
+	}
 
 	.jr-emphasis-primary .jr-card-company {
-		font-size: var(--text-2xl);
+		font-size: var(--text-lg);
 	}
 
 	.jr-emphasis-secondary .jr-card {
@@ -2184,9 +2232,13 @@ const journey: Milestone[] = [
 		gap: 0.85rem;
 	}
 
-	.jr-emphasis-tertiary .jr-card-company {
+	.jr-emphasis-tertiary .jr-card-position {
 		font-size: var(--text-lg);
-		color: var(--gray-100);
+		color: var(--gray-0);
+	}
+
+	.jr-emphasis-tertiary .jr-card-company {
+		font-size: var(--text-base);
 	}
 
 	.jr-emphasis-tertiary .jr-card-mission {
@@ -2194,7 +2246,6 @@ const journey: Milestone[] = [
 		font-size: 0.9rem;
 	}
 
-	.jr-emphasis-tertiary .jr-card-position,
 	.jr-emphasis-tertiary .jr-card-era {
 		opacity: 0.85;
 	}
