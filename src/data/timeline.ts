@@ -30,6 +30,7 @@ export const timelineData: TimelineEntry[] = [
 		description:
 			'Architecting AI-driven optimization platforms for global media planning and decision support, combining mathematical optimization, machine learning, and generative AI in production systems.',
 		tags: ['Pyomo', 'GAMS', 'CPLEX', 'IPOPT', 'LangChain', 'LangGraph', 'Gemini', 'Python'],
+		href: '/experience/senior-data-scientist-quantitative-engineer-kinesso/',
 		current: true,
 	},
 	{
@@ -43,6 +44,7 @@ export const timelineData: TimelineEntry[] = [
 		description:
 			'Research field: Quantum Machine Learning. Supervisors: Prof. Dr. Loo Chu Kiong and Dr. Liew Wei Shiung.',
 		tags: ['Quantum Computing', 'Quantum Hybrid Language Processing'],
+		href: '/education/phd-candidate-university-of-malaya/',
 	},
 	{
 		id: 'y2021',
@@ -55,6 +57,7 @@ export const timelineData: TimelineEntry[] = [
 		description:
 			'Enhanced cross-channel planning and optimization models, improved TV and OOH audience workflows, and delivered solver-backed analytics services integrated with cloud data platforms.',
 		tags: ['Cross-channel Optimization', 'TV/OOH', 'Python', 'Analytics Services'],
+		href: '/experience/quantitative-engineer-kinesso/',
 	},
 	{
 		id: 'y2018a',
@@ -67,6 +70,7 @@ export const timelineData: TimelineEntry[] = [
 		description:
 			'Developed audience and media-response models, contributed to marketing mix and omnichannel optimization initiatives, and built large-scale analytical pipelines for planning tools.',
 		tags: ['Audience Models', 'Marketing Mix', 'Omnichannel Optimization', 'Data Pipelines'],
+		href: '/experience/quantitative-modelling-analyst-kinesso/',
 	},
 	{
 		id: 'y2018',
@@ -79,6 +83,7 @@ export const timelineData: TimelineEntry[] = [
 		description:
 			'Supported quantitative modelling delivery for media planning initiatives as a contract analyst.',
 		tags: ['Quantitative Modelling', 'Media Planning'],
+		href: '/experience/quantitative-modelling-analyst-experis/',
 	},
 	{
 		id: 'y2016',
@@ -91,6 +96,7 @@ export const timelineData: TimelineEntry[] = [
 		description:
 			'Built and maintained quantitative models and analytics workflows for trading-related decision support.',
 		tags: ['Quantitative Analysis', 'Modelling', 'Python'],
+		href: '/experience/quantitative-analyst-deriv/',
 	},
 	{
 		id: 'y2014a',
@@ -103,6 +109,7 @@ export const timelineData: TimelineEntry[] = [
 		description:
 			'Thesis: Enhanced Dynamic Quantum Clustering based on Von Neumann Entropy. Supervisor: Prof. Loo Chu Kiong.',
 		tags: ['Machine Learning', 'Quantum Clustering', 'Von Neumann Entropy'],
+		href: '/education/msc-computer-science-university-of-malaya/',
 	},
 	{
 		id: 'y2014',
@@ -115,6 +122,7 @@ export const timelineData: TimelineEntry[] = [
 		description:
 			'Delivered Linux administration and DevOps engineering for production systems and deployment workflows.',
 		tags: ['Linux', 'DevOps', 'Infrastructure'],
+		href: '/experience/linux-admin-devops-deriv/',
 	},
 	{
 		id: 'y2011',
@@ -127,17 +135,20 @@ export const timelineData: TimelineEntry[] = [
 		description:
 			'Managed Linux infrastructure and database systems while supporting core business platforms.',
 		tags: ['Linux Administration', 'Database Administration', 'Infrastructure', 'Oracle DBA'],
+		href: '/experience/linux-admin-dba-behestan-rayan/',
 	},
 	{
 		id: 'y2008',
 		year: '2008–2010',
 		chapter: 'Foundations',
 		kind: 'experience',
-		title: 'Systems Engineer',
+		title: 'IT Manager',
 		organization: 'MATERIALS AND ENERGY RESEARCH CENTER, Karaj, Iran',
 		icon: 'terminal-window',
-		description: 'Led IT infrastructure operations across Linux, network, and platform services.',
-		tags: ['Linux', 'Networks', 'Infrastructure'],
+		description:
+			'Led IT operations, systems administration, and service support across research and administrative teams — where the systems thinking journey began.',
+		tags: ['IT Management', 'Linux', 'Networks', 'Infrastructure'],
+		href: '/experience/it-manager-merc/',
 	},
 	{
 		id: 'y2001',
@@ -150,6 +161,7 @@ export const timelineData: TimelineEntry[] = [
 		description:
 			'Project: Analytical Solution of Heisenberg Model for one-dimensional quantum spin system. Supervisor: Prof. Abdollah Langari.',
 		tags: ['Physics', 'Heisenberg Model', 'Quantum Spin Systems'],
+		href: '/education/bsc-physics-sharif-university/',
 	},
 ];
 

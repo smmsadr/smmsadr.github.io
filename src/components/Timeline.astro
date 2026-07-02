@@ -11,7 +11,7 @@ const CARD_TOP = 415;
 // Snaking premium path: Today (left) -> 2001 (right).
 const points: Pt[] = timelineData.map((_, i) => ({
 	x: 88 + i * ((CANVAS_W - 176) / Math.max(timelineData.length - 1, 1)),
-	y: [126, 282, 142, 296, 152, 286, 154, 278, 160][i] ?? 180,
+	y: [126, 282, 142, 296, 152, 286, 154, 278, 160, 292, 168][i] ?? 180,
 }));
 
 const iconMap = Object.fromEntries(timelineData.map((d) => [d.id, iconPaths[d.icon]]));

@@ -1,38 +1,2364 @@
 ---
-import { getCollection } from 'astro:content';
+import CallToAction from '../components/CallToAction.astro';
 import ContactCTA from '../components/ContactCTA.astro';
-import Grid from '../components/Grid.astro';
-import Hero from '../components/Hero.astro';
-import PortfolioPreview from '../components/PortfolioPreview.astro';
+import Icon from '../components/Icon.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-const entries = (await getCollection('experience')).sort(
-	(a, b) => b.data.publishDate.valueOf() - a.data.publishDate.valueOf(),
-);
+// ------------------------------------------------------------------
+// Curated engineering journey — story-first, not a chronological CV.
+// Order: newest first (most visually emphasized).
+// Metrics are qualitative markers drawn from existing role content;
+// no numeric metrics are invented.
+// ------------------------------------------------------------------
+type TechGroup = { label: string; items: string[] };
+
+type Milestone = {
+	slug: string;                 // matches src/content/experience/<slug>.md
+	company: string;
+	position: string;
+	era: string;                  // display range, e.g. "2021 — Present"
+	shortLabel: string;           // for the timeline node
+	mission: string;
+	achievements: string[];
+	tech: TechGroup[];
+	metrics: string[];
+	emphasis: 'primary' | 'secondary' | 'tertiary';
+	accent: 'cyan' | 'violet' | 'blue' | 'teal';
+	current?: boolean;
+};
+
+const journey: Milestone[] = [
+	{
+		slug: 'senior-data-scientist-quantitative-engineer-kinesso',
+		company: 'Kinesso',
+		position: 'Senior Data Scientist & Quantitative Engineer',
+		era: '2021 — Present',
+		shortLabel: '2021 – Now',
+		mission:
+			'Building global optimization platforms, AI-assisted planning workflows, and decision intelligence systems used across markets.',
+		achievements: [
+			'Architected optimization engines for budget and performance planning',
+			'Delivered production ML and generative-AI workflows',
+			'Applied Pyomo, GAMS, CPLEX, and IPOPT to business optimization',
+			'Led cross-functional modelling initiatives',
+			'Productionized decision platforms on cloud data infrastructure',
+		],
+		tech: [
+			{ label: 'Optimization', items: ['Pyomo', 'GAMS', 'IPOPT', 'CPLEX'] },
+			{ label: 'AI', items: ['LangGraph', 'Gemini', 'LangChain', 'FastAPI'] },
+			{ label: 'Engineering', items: ['Python', 'Polars', 'Docker', 'AWS'] },
+		],
+		metrics: ['Global media planning', 'Production AI workflows', 'Cross-functional leadership'],
+		emphasis: 'primary',
+		accent: 'cyan',
+		current: true,
+	},
+	{
+		slug: 'quantitative-modelling-analyst-kinesso',
+		company: 'Kinesso',
+		position: 'Quantitative Engineer & Modelling Analyst',
+		era: '2018 — 2021',
+		shortLabel: '2018 – 2021',
+		mission:
+			'Designed audience, response, and optimization models powering media planning and campaign investment decisions.',
+		achievements: [
+			'Developed audience and media-response models for strategic planning',
+			'Contributed to marketing mix and omnichannel optimization',
+			'Improved audience measurement with probabilistic modelling',
+			'Built solver-backed analytics services on data platforms',
+		],
+		tech: [
+			{ label: 'Modelling', items: ['Python', 'Pyomo', 'SciPy'] },
+			{ label: 'Analytics', items: ['SQL', 'Polars', 'NumPy'] },
+		],
+		metrics: ['Marketing mix modelling', 'Omnichannel optimization'],
+		emphasis: 'secondary',
+		accent: 'violet',
+	},
+	{
+		slug: 'quantitative-modelling-analyst-experis',
+		company: 'Experis',
+		position: 'Quantitative Modelling Analyst (Contract)',
+		era: '2018',
+		shortLabel: '2018 · Experis',
+		mission:
+			'Delivered quantitative modelling for a media technology team on a contract engagement — the bridge into full-time modelling work.',
+		achievements: [
+			'Supported model development and analytics execution under a fast delivery cadence',
+			'Contributed to planning-focused quantitative workflows and reporting',
+			'Bridged operational data into planning-oriented analytical outputs',
+		],
+		tech: [
+			{ label: 'Modelling', items: ['Python', 'NumPy'] },
+			{ label: 'Analytics', items: ['SQL', 'Pandas'] },
+		],
+		metrics: ['Media planning support', 'Contract delivery'],
+		emphasis: 'tertiary',
+		accent: 'violet',
+	},
+	{
+		slug: 'quantitative-analyst-deriv',
+		company: 'Deriv',
+		position: 'Quantitative Analyst',
+		era: '2016 — 2018',
+		shortLabel: '2016 – 2018',
+		mission:
+			'Moved from operations into modelling — quantitative analysis for trading and risk-oriented data systems.',
+		achievements: [
+			'Built quantitative workflows for decision support',
+			'Contributed to production analytics and model interpretation',
+			'Bridged operational data into trading and risk analytics',
+		],
+		tech: [
+			{ label: 'Analytics', items: ['Python', 'SQL', 'NumPy'] },
+			{ label: 'Systems', items: ['Linux', 'Bash'] },
+		],
+		metrics: ['Trading analytics', 'Risk decision support'],
+		emphasis: 'secondary',
+		accent: 'blue',
+	},
+	{
+		slug: 'linux-admin-devops-deriv',
+		company: 'Deriv',
+		position: 'Linux Administration & DevOps Engineer',
+		era: '2014 — 2016',
+		shortLabel: '2014 – 2016',
+		mission:
+			'Ran Linux infrastructure and deployment operations for production trading services — learning how large systems truly behave.',
+		achievements: [
+			'Maintained Linux environments and deployment tooling',
+			'Automated operational tasks and improved reliability',
+			'Owned production support for critical services',
+		],
+		tech: [
+			{ label: 'Infrastructure', items: ['Linux', 'Bash'] },
+			{ label: 'Operations', items: ['DevOps', 'Automation'] },
+		],
+		metrics: ['Production Linux environments'],
+		emphasis: 'tertiary',
+		accent: 'teal',
+	},
+	{
+		slug: 'linux-admin-dba-behestan-rayan',
+		company: 'Behestan Rayan',
+		position: 'Linux Sysadmin & DBA',
+		era: '2011 — 2014',
+		shortLabel: '2011 – 2014',
+		mission:
+			'Administered Linux systems and enterprise databases for internal applications and data operations.',
+		achievements: [
+			'Managed Linux servers and networked services',
+			'Administered Oracle and MySQL database environments',
+			'Supported internal application delivery',
+		],
+		tech: [
+			{ label: 'Systems', items: ['Linux'] },
+			{ label: 'Databases', items: ['Oracle', 'MySQL'] },
+		],
+		metrics: ['Enterprise data operations'],
+		emphasis: 'tertiary',
+		accent: 'blue',
+	},
+	{
+		slug: 'it-manager-merc',
+		company: 'Materials & Energy Research Center',
+		position: 'IT Manager',
+		era: '2008 — 2010',
+		shortLabel: '2008 – 2010',
+		mission:
+			'Led IT operations and infrastructure for a research organization in Karaj — where the systems thinking journey began.',
+		achievements: [
+			'Oversaw IT operations, systems administration, and service support',
+			'Coordinated infrastructure across research and administrative teams',
+			'Introduced Linux and network service practices across research units',
+		],
+		tech: [
+			{ label: 'Operations', items: ['IT Management', 'Linux', 'Networking'] },
+		],
+		metrics: ['Research organization IT'],
+		emphasis: 'tertiary',
+		accent: 'teal',
+	},
+];
 ---
 
 <BaseLayout
 	title="Experience | Sayed Mohammad Mahdi Sadrnezhaad"
-	description="Professional experience in quantitative engineering, data science, and AI systems."
+	description="Engineering systems that create real-world impact — quantitative engineering, optimization, AI, and scalable software."
 >
 	<div class="stack gap-20">
 		<main class="wrapper stack gap-8">
-			<Hero
-				title="Experience"
-				tagline="Roles across quantitative engineering, machine learning, and platform delivery."
-				align="start"
-			/>
-			<Grid variant="offset">
-				{
-					entries.map((entry) => (
-						<li>
-							<PortfolioPreview entry={entry} hrefBase="/experience" />
-						</li>
-					))
-				}
-			</Grid>
+			<section class="xp-hero" aria-labelledby="xp-hero-title">
+				<!-- Premium animated background: gradient + blueprint grid + particles + curves -->
+				<div class="xp-hero-bg" aria-hidden="true">
+					<div class="xp-hero-gradient"></div>
+					<div class="xp-hero-grid"></div>
+					<svg
+						class="xp-hero-curves"
+						viewBox="0 0 1440 600"
+						preserveAspectRatio="none"
+						aria-hidden="true"
+					>
+						<defs>
+							<linearGradient id="xp-curve-a" x1="0" x2="1" y1="0" y2="1">
+								<stop offset="0%" stop-color="#67e8f9" stop-opacity="0.55" />
+								<stop offset="100%" stop-color="#a855f7" stop-opacity="0" />
+							</linearGradient>
+							<linearGradient id="xp-curve-b" x1="0" x2="1" y1="1" y2="0">
+								<stop offset="0%" stop-color="#22d3ee" stop-opacity="0.35" />
+								<stop offset="100%" stop-color="#6d28d9" stop-opacity="0" />
+							</linearGradient>
+						</defs>
+						<path
+							class="xp-curve xp-curve-1"
+							d="M-40 420 C 220 340, 420 500, 720 380 S 1240 220, 1500 300"
+							fill="none"
+							stroke="url(#xp-curve-a)"
+							stroke-width="1.1"
+						/>
+						<path
+							class="xp-curve xp-curve-2"
+							d="M-40 520 C 260 480, 500 340, 780 460 S 1220 560, 1500 440"
+							fill="none"
+							stroke="url(#xp-curve-b)"
+							stroke-width="1.1"
+						/>
+					</svg>
+					<div class="xp-hero-particles">
+						<span class="xp-particle" style="--x: 8%;  --y: 18%; --d: 0s;  --s: 3px;"></span>
+						<span class="xp-particle" style="--x: 22%; --y: 74%; --d: 3s;  --s: 2px;"></span>
+						<span class="xp-particle" style="--x: 38%; --y: 34%; --d: 6s;  --s: 4px;"></span>
+						<span class="xp-particle" style="--x: 52%; --y: 82%; --d: 1.5s;--s: 2px;"></span>
+						<span class="xp-particle" style="--x: 66%; --y: 12%; --d: 4.5s;--s: 3px;"></span>
+						<span class="xp-particle" style="--x: 74%; --y: 58%; --d: 7s;  --s: 2px;"></span>
+						<span class="xp-particle" style="--x: 84%; --y: 28%; --d: 2.5s;--s: 3px;"></span>
+						<span class="xp-particle" style="--x: 92%; --y: 68%; --d: 5.5s;--s: 2px;"></span>
+						<span class="xp-particle" style="--x: 14%; --y: 88%; --d: 8s;  --s: 2px;"></span>
+						<span class="xp-particle" style="--x: 46%; --y: 6%;  --d: 6.5s;--s: 3px;"></span>
+					</div>
+				</div>
+
+				<!-- Left column: text -->
+				<div class="xp-hero-content">
+					<p class="xp-eyebrow">Experience</p>
+					<h1 id="xp-hero-title" class="xp-title">
+						<span class="xp-line xp-line-1">Engineering Systems</span>
+						<span class="xp-line xp-line-2">That Create</span>
+						<span class="xp-line xp-line-3">
+							<span class="xp-gradient-text">Real-World Impact</span>
+						</span>
+					</h1>
+					<p class="xp-lede">
+						Every project is an opportunity to transform complex data into reliable
+						decisions. My work combines quantitative engineering, optimization,
+						artificial intelligence, and scalable software systems to solve practical
+						challenges across industries.
+					</p>
+					<div class="xp-cta">
+						<div class="xp-cta-primary">
+							<CallToAction href="#signature-systems">
+								Explore Signature Systems
+								<Icon icon="arrow-right" size="1.2em" />
+							</CallToAction>
+						</div>
+						<a href="/Mahdi-CV.pdf" download class="xp-cta-secondary">
+							Download CV
+							<Icon icon="download" size="1.2em" />
+						</a>
+					</div>
+				</div>
+
+				<!-- Right column: abstract engineering illustration -->
+				<div class="xp-hero-illustration" aria-hidden="true">
+					<svg viewBox="0 0 480 560" role="img" aria-label="Abstract engineering systems illustration">
+						<defs>
+							<linearGradient id="xp-ill-stroke" x1="0" x2="1" y1="0" y2="1">
+								<stop offset="0%" stop-color="#67e8f9" stop-opacity="0.9" />
+								<stop offset="60%" stop-color="#22d3ee" stop-opacity="0.7" />
+								<stop offset="100%" stop-color="#a855f7" stop-opacity="0.9" />
+							</linearGradient>
+							<linearGradient id="xp-ill-opt" x1="0" x2="1" y1="1" y2="0">
+								<stop offset="0%" stop-color="#22d3ee" stop-opacity="0.95" />
+								<stop offset="100%" stop-color="#a855f7" stop-opacity="0.6" />
+							</linearGradient>
+							<radialGradient id="xp-ill-glow" cx="50%" cy="50%" r="50%">
+								<stop offset="0%" stop-color="#22d3ee" stop-opacity="0.35" />
+								<stop offset="100%" stop-color="#22d3ee" stop-opacity="0" />
+							</radialGradient>
+							<pattern id="xp-blueprint" width="32" height="32" patternUnits="userSpaceOnUse">
+								<path
+									d="M 32 0 L 0 0 0 32"
+									fill="none"
+									stroke="rgba(103,232,249,0.08)"
+									stroke-width="0.6"
+								/>
+							</pattern>
+						</defs>
+
+						<!-- Blueprint grid & soft glow backdrop -->
+						<rect x="0" y="0" width="480" height="560" fill="url(#xp-blueprint)" opacity="0.9" />
+						<circle cx="240" cy="290" r="220" fill="url(#xp-ill-glow)" />
+
+						<!-- Quantum-inspired concentric rings (slow rotate) -->
+						<g transform="translate(240 290)">
+							<g class="xp-ill-quantum">
+								<ellipse cx="0" cy="0" rx="180" ry="70" fill="none" stroke="rgba(168,85,247,0.35)" stroke-width="0.8" />
+								<ellipse cx="0" cy="0" rx="180" ry="70" transform="rotate(60)" fill="none" stroke="rgba(103,232,249,0.35)" stroke-width="0.8" />
+								<ellipse cx="0" cy="0" rx="180" ry="70" transform="rotate(-60)" fill="none" stroke="rgba(34,211,238,0.30)" stroke-width="0.8" />
+								<circle cx="0" cy="0" r="6" fill="#67e8f9" opacity="0.9" />
+							</g>
+						</g>
+
+						<!-- Optimization / convergence curve -->
+						<g class="xp-ill-optcurve">
+							<path
+								d="M 40 460 C 120 460, 160 380, 210 320 S 320 180, 440 130"
+								fill="none"
+								stroke="url(#xp-ill-opt)"
+								stroke-width="2.2"
+								stroke-linecap="round"
+							/>
+							<!-- Iteration ticks -->
+							<circle cx="70"  cy="452" r="3" fill="#67e8f9" opacity="0.6" />
+							<circle cx="130" cy="418" r="3" fill="#67e8f9" opacity="0.7" />
+							<circle cx="185" cy="355" r="3" fill="#22d3ee" opacity="0.85" />
+							<circle cx="250" cy="280" r="3.2" fill="#22d3ee" />
+							<circle cx="330" cy="205" r="3.5" fill="#a855f7" />
+							<circle cx="420" cy="140" r="4" fill="#a855f7" />
+							<!-- Axes (blueprint) -->
+							<line x1="30" y1="470" x2="450" y2="470" stroke="rgba(147,197,253,0.20)" stroke-width="0.8" />
+							<line x1="30" y1="470" x2="30" y2="110" stroke="rgba(147,197,253,0.20)" stroke-width="0.8" />
+						</g>
+
+						<!-- Connected network nodes -->
+						<g class="xp-ill-network">
+							<line x1="120" y1="140" x2="220" y2="90"  stroke="rgba(103,232,249,0.45)" stroke-width="0.9" />
+							<line x1="220" y1="90"  x2="340" y2="140" stroke="rgba(103,232,249,0.45)" stroke-width="0.9" />
+							<line x1="120" y1="140" x2="180" y2="240" stroke="rgba(168,85,247,0.40)"  stroke-width="0.9" />
+							<line x1="340" y1="140" x2="300" y2="240" stroke="rgba(168,85,247,0.40)"  stroke-width="0.9" />
+							<line x1="180" y1="240" x2="300" y2="240" stroke="rgba(34,211,238,0.55)"  stroke-width="0.9" />
+							<line x1="220" y1="90"  x2="180" y2="240" stroke="rgba(103,232,249,0.30)" stroke-width="0.9" />
+							<line x1="220" y1="90"  x2="300" y2="240" stroke="rgba(103,232,249,0.30)" stroke-width="0.9" />
+
+							<circle class="xp-node" cx="120" cy="140" r="5" />
+							<circle class="xp-node" cx="220" cy="90"  r="6" />
+							<circle class="xp-node" cx="340" cy="140" r="5" />
+							<circle class="xp-node" cx="180" cy="240" r="5" />
+							<circle class="xp-node" cx="300" cy="240" r="5" />
+						</g>
+
+						<!-- Flowing data path with pulses -->
+						<g class="xp-ill-flow">
+							<path
+								id="xp-flow-path"
+								d="M 40 500 C 140 500, 200 460, 250 420 C 320 370, 380 380, 460 330"
+								fill="none"
+								stroke="url(#xp-ill-stroke)"
+								stroke-width="1.3"
+								stroke-dasharray="4 6"
+								opacity="0.75"
+							/>
+							<circle r="3.2" fill="#67e8f9">
+								<animateMotion dur="14s" repeatCount="indefinite" rotate="auto">
+									<mpath href="#xp-flow-path" />
+								</animateMotion>
+							</circle>
+							<circle r="2.4" fill="#a855f7">
+								<animateMotion dur="14s" begin="-7s" repeatCount="indefinite" rotate="auto">
+									<mpath href="#xp-flow-path" />
+								</animateMotion>
+							</circle>
+						</g>
+
+						<!-- Corner blueprint marks -->
+						<g stroke="rgba(103,232,249,0.35)" stroke-width="0.8" fill="none">
+							<path d="M 12 24 L 12 12 L 24 12" />
+							<path d="M 468 24 L 468 12 L 456 12" />
+							<path d="M 12 536 L 12 548 L 24 548" />
+							<path d="M 468 536 L 468 548 L 456 548" />
+						</g>
+					</svg>
+				</div>
+
+				<!-- Scroll indicator -->
+				<a class="xp-scroll" href="#signature-systems" aria-label="Scroll to explore the systems I've built">
+					<span class="xp-scroll-arrow" aria-hidden="true">↓</span>
+					<span class="xp-scroll-label">Scroll to explore the systems I've built</span>
+				</a>
+			</section>
+
+			<!-- ============================================================
+			     CURRENT FOCUS — engineering mission, not employment
+			     ============================================================ -->
+			<section class="cf" aria-labelledby="cf-title">
+				<div class="cf-intro">
+					<div class="cf-copy">
+						<p class="cf-eyebrow">Current Focus</p>
+						<h2 id="cf-title" class="cf-title">
+							Engineering Intelligent<br />Decision Systems
+						</h2>
+						<p class="cf-lede">
+							I engineer intelligent decision systems that transform complex data
+							into reliable, explainable, and actionable decisions. My work
+							combines quantitative modelling, optimization, machine learning,
+							and modern software engineering into scalable production platforms.
+						</p>
+						<p class="cf-lede">
+							Rather than solving isolated problems, I design reusable systems
+							that evolve over time—from optimization engines and AI-assisted
+							workflows to simulation platforms and decision intelligence tools.
+						</p>
+					</div>
+
+					<div class="cf-illustration" aria-hidden="true">
+						<svg viewBox="0 0 440 460" role="img" aria-label="Interconnected decision systems diagram">
+							<defs>
+								<linearGradient id="cf-stroke" x1="0" y1="0" x2="1" y2="1">
+									<stop offset="0%"   stop-color="#67e8f9" stop-opacity="0.95" />
+									<stop offset="60%"  stop-color="#22d3ee" stop-opacity="0.75" />
+									<stop offset="100%" stop-color="#a855f7" stop-opacity="0.95" />
+								</linearGradient>
+								<linearGradient id="cf-edge" x1="0" y1="0" x2="1" y2="0">
+									<stop offset="0%"   stop-color="#22d3ee" stop-opacity="0.75" />
+									<stop offset="100%" stop-color="#a855f7" stop-opacity="0.75" />
+								</linearGradient>
+								<radialGradient id="cf-glow" cx="50%" cy="50%" r="50%">
+									<stop offset="0%"   stop-color="#22d3ee" stop-opacity="0.28" />
+									<stop offset="100%" stop-color="#22d3ee" stop-opacity="0" />
+								</radialGradient>
+								<pattern id="cf-grid" width="28" height="28" patternUnits="userSpaceOnUse">
+									<path d="M 28 0 L 0 0 0 28" fill="none" stroke="rgba(103,232,249,0.07)" stroke-width="0.6" />
+								</pattern>
+							</defs>
+
+							<!-- Blueprint grid & central glow -->
+							<rect width="440" height="460" fill="url(#cf-grid)" />
+							<circle cx="220" cy="230" r="180" fill="url(#cf-glow)" />
+
+							<!-- Subtle quantum-inspired orbit -->
+							<g class="cf-orbit" transform="translate(220 230)">
+								<g class="cf-orbit-inner">
+									<ellipse rx="170" ry="90" fill="none" stroke="rgba(168,85,247,0.22)" stroke-width="0.8" />
+									<ellipse rx="170" ry="90" transform="rotate(55)" fill="none" stroke="rgba(103,232,249,0.20)" stroke-width="0.8" />
+								</g>
+							</g>
+
+							<!-- Mathematical curve (optimization convergence) -->
+							<path
+								class="cf-curve"
+								d="M 40 400 C 110 400, 150 340, 190 300 S 300 200, 400 150"
+								fill="none"
+								stroke="url(#cf-stroke)"
+								stroke-width="1.6"
+								stroke-linecap="round"
+								opacity="0.55"
+							/>
+
+							<!-- Edges (data pipelines / agent workflows) -->
+							<g class="cf-edges" stroke="url(#cf-edge)" stroke-width="1.1" fill="none" opacity="0.7">
+								<!-- Data → Optimization -->
+								<path d="M 70 130 L 200 180" />
+								<!-- Data → AI Agent -->
+								<path d="M 70 130 L 200 90" />
+								<!-- AI Agent → Optimization -->
+								<path d="M 200 90 L 200 180" />
+								<!-- Optimization → Decision -->
+								<path d="M 200 180 L 350 230" />
+								<!-- AI Agent → Decision -->
+								<path d="M 200 90 L 350 230" />
+								<!-- Simulation → Decision -->
+								<path d="M 110 320 L 350 230" />
+								<!-- Optimization → Simulation (feedback loop) -->
+								<path d="M 200 180 L 110 320" stroke-dasharray="4 5" />
+								<!-- Decision → AI Agent (feedback) -->
+								<path d="M 350 230 L 200 90" stroke-dasharray="4 5" opacity="0.5" />
+							</g>
+
+							<!-- Flowing pulses along a data pipeline -->
+							<path id="cf-flow-path"
+								d="M 70 130 C 140 160, 170 170, 200 180 C 260 200, 300 210, 350 230"
+								fill="none" stroke="rgba(103,232,249,0.35)" stroke-width="0.8"
+								stroke-dasharray="3 6" />
+							<circle r="3" fill="#67e8f9">
+								<animateMotion dur="9s" repeatCount="indefinite">
+									<mpath href="#cf-flow-path" />
+								</animateMotion>
+							</circle>
+							<circle r="2.4" fill="#a855f7">
+								<animateMotion dur="9s" begin="-4.5s" repeatCount="indefinite">
+									<mpath href="#cf-flow-path" />
+								</animateMotion>
+							</circle>
+
+							<!-- Nodes -->
+							<g class="cf-nodes">
+								<!-- Data source -->
+								<g transform="translate(70 130)">
+									<circle r="22" fill="hsla(224,72%,7%,0.85)" stroke="rgba(103,232,249,0.65)" stroke-width="1.2" />
+									<circle r="4" fill="#67e8f9" class="cf-dot" />
+									<text y="42" text-anchor="middle" class="cf-label">Data</text>
+								</g>
+								<!-- AI Agent -->
+								<g transform="translate(200 90)">
+									<circle r="26" fill="hsla(224,72%,7%,0.85)" stroke="rgba(168,85,247,0.7)"  stroke-width="1.2" />
+									<circle r="4.5" fill="#a855f7" class="cf-dot" />
+									<text y="46" text-anchor="middle" class="cf-label">AI Agent</text>
+								</g>
+								<!-- Optimization core -->
+								<g transform="translate(200 180)">
+									<circle r="30" fill="hsla(224,72%,7%,0.9)"  stroke="rgba(34,211,238,0.85)" stroke-width="1.4" />
+									<circle r="5.5" fill="#22d3ee" class="cf-dot cf-dot-hero" />
+									<text y="50" text-anchor="middle" class="cf-label cf-label-strong">Optimization</text>
+								</g>
+								<!-- Simulation -->
+								<g transform="translate(110 320)">
+									<circle r="22" fill="hsla(224,72%,7%,0.85)" stroke="rgba(103,232,249,0.6)" stroke-width="1.2" />
+									<circle r="4" fill="#67e8f9" class="cf-dot" />
+									<text y="42" text-anchor="middle" class="cf-label">Simulation</text>
+								</g>
+								<!-- Decision -->
+								<g transform="translate(350 230)">
+									<circle r="26" fill="hsla(224,72%,7%,0.9)"  stroke="rgba(168,85,247,0.85)" stroke-width="1.3" />
+									<circle r="4.5" fill="#a855f7" class="cf-dot" />
+									<text y="46" text-anchor="middle" class="cf-label cf-label-strong">Decision</text>
+								</g>
+							</g>
+
+							<!-- Corner blueprint marks -->
+							<g stroke="rgba(103,232,249,0.32)" stroke-width="0.8" fill="none">
+								<path d="M 10 22 L 10 10 L 22 10" />
+								<path d="M 430 22 L 430 10 L 418 10" />
+								<path d="M 10 438 L 10 450 L 22 450" />
+								<path d="M 430 438 L 430 450 L 418 450" />
+							</g>
+						</svg>
+					</div>
+				</div>
+
+				<ol class="cf-cards" aria-label="Current focus areas">
+					<li class="cf-card" tabindex="0" style="--cf-delay: 0.05s">
+						<div class="cf-card-head">
+							<div class="cf-card-icon" aria-hidden="true">
+								<Icon icon="strategy" color="var(--accent-regular)" size="1.4rem" gradient />
+							</div>
+							<h3 class="cf-card-title">Optimization Platforms</h3>
+						</div>
+						<p class="cf-card-desc">
+							Designing reusable optimization engines for planning, forecasting,
+							allocation, and decision support.
+						</p>
+						<p class="cf-tags" aria-label="Technologies">
+							<span>Python</span>
+							<span>Pyomo</span>
+							<span>GAMS</span>
+							<span>IPOPT</span>
+							<span>CPLEX</span>
+						</p>
+					</li>
+
+					<li class="cf-card" tabindex="0" style="--cf-delay: 0.18s">
+						<div class="cf-card-head">
+							<div class="cf-card-icon" aria-hidden="true">
+								<Icon icon="cpu" color="var(--accent-regular)" size="1.4rem" gradient />
+							</div>
+							<h3 class="cf-card-title">Agentic AI</h3>
+						</div>
+						<p class="cf-card-desc">
+							Engineering AI systems that combine LLMs, optimization, domain
+							knowledge, and production workflows.
+						</p>
+						<p class="cf-tags" aria-label="Technologies">
+							<span>LangGraph</span>
+							<span>Gemini</span>
+							<span>FastAPI</span>
+							<span>LLMs</span>
+						</p>
+					</li>
+
+					<li class="cf-card" tabindex="0" style="--cf-delay: 0.31s">
+						<div class="cf-card-head">
+							<div class="cf-card-icon" aria-hidden="true">
+								<Icon icon="chart-line-up" color="var(--accent-regular)" size="1.4rem" gradient />
+							</div>
+							<h3 class="cf-card-title">Decision Intelligence</h3>
+						</div>
+						<p class="cf-card-desc">
+							Transforming uncertainty into measurable, explainable business
+							decisions through simulation, forecasting, and optimization.
+						</p>
+						<p class="cf-tags" aria-label="Focus areas">
+							<span>Planning</span>
+							<span>Simulation</span>
+							<span>Reach Models</span>
+							<span>MMM</span>
+						</p>
+					</li>
+
+					<li class="cf-card" tabindex="0" style="--cf-delay: 0.44s">
+						<div class="cf-card-head">
+							<div class="cf-card-icon" aria-hidden="true">
+								<Icon icon="atom" color="var(--accent-regular)" size="1.4rem" gradient />
+							</div>
+							<h3 class="cf-card-title">Scientific Computing</h3>
+						</div>
+						<p class="cf-card-desc">
+							Applying mathematical modelling, numerical methods, and
+							high-performance computing to solve complex engineering problems.
+						</p>
+						<p class="cf-tags" aria-label="Technologies">
+							<span>NumPy</span>
+							<span>SciPy</span>
+							<span>Polars</span>
+							<span>Mathematical Modelling</span>
+						</p>
+					</li>
+				</ol>
+			</section>
+
+			<!-- ============================================================
+			     ENGINEERING JOURNEY — alternating timeline
+			     ============================================================ -->
+			<section
+				id="signature-systems"
+				class="jr"
+				aria-labelledby="jr-title"
+				tabindex="-1"
+			>
+				<header class="jr-header">
+					<p class="jr-eyebrow">Timeline</p>
+					<h2 id="jr-title" class="jr-title">Engineering Journey</h2>
+					<p class="jr-subtitle">
+						Every role introduced a new layer of complexity. Together they shaped
+						the systems thinker I am today.
+					</p>
+				</header>
+
+				<nav class="jr-jumpbar" aria-label="Jump to milestone">
+					{
+						journey.map((m) => (
+							<a
+								class={`jr-jump jr-accent-${m.accent}`}
+								href={`#jr-milestone-${m.slug}`}
+								data-jump={m.slug}
+							>
+								<span class="jr-jump-year">{m.shortLabel}</span>
+								<span class="jr-jump-company">{m.company}</span>
+							</a>
+						))
+					}
+				</nav>
+
+				<ol class="jr-timeline" aria-label="Engineering journey milestones">
+
+					{
+						journey.map((m, i) => (
+							<li
+								class={`jr-item jr-emphasis-${m.emphasis} jr-accent-${m.accent} ${
+									i % 2 === 0 ? 'jr-side-left' : 'jr-side-right'
+								}`}
+								data-slug={m.slug}
+							>
+								<a
+									class="jr-node"
+									href={`#jr-milestone-${m.slug}`}
+									aria-label={`${m.era} — ${m.company}, ${m.position}`}
+									data-node={m.slug}
+								>
+									<span class="jr-node-halo" aria-hidden="true" />
+									<span class="jr-node-dot" aria-hidden="true" />
+									<span class="jr-node-year">{m.shortLabel}</span>
+								</a>
+
+								<div class="jr-connector" aria-hidden="true" />
+
+								<article
+									id={`jr-milestone-${m.slug}`}
+									class="jr-card"
+									tabindex="0"
+								>
+									{m.current && <span class="jr-now-badge">Now</span>}
+
+									<header class="jr-card-head">
+										<p class="jr-card-era">{m.era}</p>
+										<h3 class="jr-card-company">{m.company}</h3>
+										<p class="jr-card-position">{m.position}</p>
+									</header>
+
+									<p class="jr-card-mission">{m.mission}</p>
+
+									<div class="jr-card-block">
+										<p class="jr-block-label">Key achievements</p>
+										<ul class="jr-achievements">
+											{m.achievements.map((a) => (
+												<li>{a}</li>
+											))}
+										</ul>
+									</div>
+
+									<div class="jr-card-block">
+										<p class="jr-block-label">Technologies</p>
+										<div class="jr-tech-groups">
+											{m.tech.map((g) => (
+												<div class="jr-tech-group">
+													<p class="jr-tech-group-label">{g.label}</p>
+													<p class="jr-tech-items">
+														{g.items.map((t) => (
+															<span>{t}</span>
+														))}
+													</p>
+												</div>
+											))}
+										</div>
+									</div>
+
+									{m.metrics.length > 0 && (
+										<ul class="jr-metrics" aria-label="Impact markers">
+											{m.metrics.map((k) => (
+												<li>{k}</li>
+											))}
+										</ul>
+									)}
+
+									<a
+										class="jr-card-more"
+										href={`/experience/${m.slug}/`}
+										aria-label={`View role details for ${m.company} ${m.position}`}
+									>
+										View role details
+										<Icon icon="arrow-right" size="0.95em" />
+									</a>
+								</article>
+							</li>
+						))
+					}
+				</ol>
+			</section>
 		</main>
 		<ContactCTA />
 	</div>
 </BaseLayout>
+
+<script>
+	// Engineering Journey — scroll-triggered reveal + node ↔ card linking.
+	(() => {
+		const items = Array.from(
+			document.querySelectorAll<HTMLLIElement>('.jr-item'),
+		);
+		if (items.length === 0) return;
+
+		const reduceMotion =
+			typeof window !== 'undefined' &&
+			window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+		if (reduceMotion) {
+			items.forEach((el) => el.classList.add('is-visible'));
+		} else if ('IntersectionObserver' in window) {
+			const io = new IntersectionObserver(
+				(entries) => {
+					entries.forEach((entry) => {
+						if (entry.isIntersecting) {
+							entry.target.classList.add('is-visible');
+							io.unobserve(entry.target);
+						}
+					});
+				},
+				{ threshold: 0.18, rootMargin: '0px 0px -8% 0px' },
+			);
+			items.forEach((el) => io.observe(el));
+		} else {
+			items.forEach((el) => el.classList.add('is-visible'));
+		}
+
+		// Track which milestone is currently on-screen so nodes & jumpbar glow.
+		const activeObserver =
+			'IntersectionObserver' in window
+				? new IntersectionObserver(
+						(entries) => {
+							entries.forEach((entry) => {
+								const li = entry.target as HTMLElement;
+								const slug = li.dataset.slug;
+								if (!slug) return;
+								if (entry.isIntersecting) {
+									li.classList.add('is-active');
+									document
+										.querySelectorAll(`.jr-jump[data-jump="${slug}"]`)
+										.forEach((n) => n.classList.add('is-active'));
+								} else {
+									li.classList.remove('is-active');
+									document
+										.querySelectorAll(`.jr-jump[data-jump="${slug}"]`)
+										.forEach((n) => n.classList.remove('is-active'));
+								}
+							});
+						},
+						{ threshold: 0.35 },
+				  )
+				: null;
+
+		if (activeObserver) items.forEach((el) => activeObserver.observe(el));
+
+		// Smooth scroll for node & jumpbar links (respects reduced-motion).
+		document
+			.querySelectorAll<HTMLAnchorElement>('.jr-node, .jr-jump')
+			.forEach((link) => {
+				link.addEventListener('click', (event) => {
+					const href = link.getAttribute('href') || '';
+					if (!href.startsWith('#')) return;
+					const target = document.querySelector(href);
+					if (!target) return;
+					event.preventDefault();
+					target.scrollIntoView({
+						behavior: reduceMotion ? 'auto' : 'smooth',
+						block: 'center',
+					});
+					// Update URL hash without jumping.
+					history.replaceState(null, '', href);
+					(target as HTMLElement).focus({ preventScroll: true });
+				});
+			});
+	})();
+</script>
+
+<style>
+	/* =====================================================================
+	   Experience Hero — engineering impact / systems thinking
+	   Visual language: deep navy, cyan/violet accents, glassmorphism,
+	   blueprint grid, floating particles, slow gradient motion.
+	   ===================================================================== */
+
+	.xp-hero {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 2.5rem;
+		padding: 3rem 1.25rem 3.5rem;
+		border-radius: 1.75rem;
+		overflow: hidden;
+		isolation: isolate;
+		min-height: 32rem;
+	}
+
+	/* --- Background layers --- */
+
+	.xp-hero-bg {
+		position: absolute;
+		inset: 0;
+		z-index: -2;
+		border-radius: inherit;
+		overflow: hidden;
+		background:
+			linear-gradient(
+				180deg,
+				hsla(var(--gray-999-basis), 0.55),
+				hsla(var(--gray-999-basis), 0.25)
+			);
+	}
+
+	.xp-hero-gradient {
+		position: absolute;
+		inset: -25%;
+		background:
+			radial-gradient(circle at 18% 22%, hsla(187, 85%, 53%, 0.30), transparent 55%),
+			radial-gradient(circle at 82% 18%, hsla(265, 80%, 60%, 0.24), transparent 60%),
+			radial-gradient(circle at 55% 92%, hsla(210, 85%, 55%, 0.22), transparent 55%);
+		filter: blur(2px);
+		animation: xp-drift 32s ease-in-out infinite alternate;
+		will-change: transform;
+	}
+
+	@keyframes xp-drift {
+		0%   { transform: translate3d(0, 0, 0) scale(1); }
+		50%  { transform: translate3d(-1.5%, 1%, 0) scale(1.04); }
+		100% { transform: translate3d(1.5%, -1%, 0) scale(1.02); }
+	}
+
+	.xp-hero-grid {
+		position: absolute;
+		inset: 0;
+		background-image:
+			linear-gradient(to right, hsla(187, 85%, 75%, 0.055) 1px, transparent 1px),
+			linear-gradient(to bottom, hsla(187, 85%, 75%, 0.055) 1px, transparent 1px);
+		background-size: 44px 44px;
+		mask-image: radial-gradient(ellipse at center, #000 55%, transparent 92%);
+		-webkit-mask-image: radial-gradient(ellipse at center, #000 55%, transparent 92%);
+		opacity: 0.7;
+	}
+
+	.xp-hero-curves {
+		position: absolute;
+		inset: 0;
+		width: 100%;
+		height: 100%;
+		opacity: 0.55;
+	}
+
+	.xp-curve {
+		stroke-dasharray: 6 10;
+		animation: xp-curve-flow 28s linear infinite;
+	}
+
+	.xp-curve-2 { animation-duration: 42s; animation-direction: reverse; }
+
+	@keyframes xp-curve-flow {
+		to { stroke-dashoffset: -320; }
+	}
+
+	.xp-hero-particles {
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+	}
+
+	.xp-particle {
+		position: absolute;
+		left: var(--x);
+		top: var(--y);
+		width: var(--s);
+		height: var(--s);
+		border-radius: 999rem;
+		background: radial-gradient(circle, hsla(187, 90%, 75%, 0.95), hsla(187, 90%, 75%, 0) 70%);
+		box-shadow: 0 0 8px hsla(187, 90%, 65%, 0.5);
+		animation: xp-particle-float 18s ease-in-out infinite;
+		animation-delay: var(--d);
+		opacity: 0.75;
+	}
+
+	@keyframes xp-particle-float {
+		0%, 100% { transform: translate3d(0, 0, 0); opacity: 0.35; }
+		50%      { transform: translate3d(6px, -14px, 0); opacity: 1; }
+	}
+
+	/* --- Content (left column) --- */
+
+	.xp-hero-content {
+		position: relative;
+		z-index: 1;
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+		width: 100%;
+	}
+
+	.xp-eyebrow {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: var(--text-base);
+		letter-spacing: 0.28em;
+		text-transform: uppercase;
+		color: var(--accent-regular);
+		opacity: 0;
+		animation: xp-fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.05s forwards;
+	}
+
+	.xp-title {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: clamp(2.25rem, 5.4vw, var(--text-5xl));
+		line-height: 1.06;
+		letter-spacing: -0.01em;
+		color: var(--gray-0);
+		font-weight: 600;
+		display: flex;
+		flex-direction: column;
+		gap: 0.15em;
+	}
+
+	.xp-line {
+		display: block;
+		opacity: 0;
+		transform: translateY(18px);
+		animation: xp-fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+	}
+	.xp-line-1 { animation-delay: 0.15s; }
+	.xp-line-2 { animation-delay: 0.30s; }
+	.xp-line-3 { animation-delay: 0.45s; }
+
+	.xp-gradient-text {
+		background: linear-gradient(120deg, #67e8f9 0%, #22d3ee 45%, #a855f7 100%);
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
+	}
+
+	.xp-lede {
+		margin: 0;
+		max-width: 58ch;
+		color: var(--gray-200);
+		font-size: var(--text-md);
+		line-height: 1.7;
+		opacity: 0;
+		animation: xp-fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) 0.7s forwards;
+	}
+
+	.xp-cta {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		margin-top: 0.75rem;
+	}
+
+	.xp-cta-primary,
+	.xp-cta-secondary {
+		opacity: 0;
+		animation: xp-fade-up 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+	}
+	.xp-cta-primary   { animation-delay: 0.95s; }
+	.xp-cta-secondary { animation-delay: 1.10s; }
+
+	.xp-cta-secondary {
+		position: relative;
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.7em;
+		padding: 0.56em 2em;
+		color: var(--gray-100);
+		text-decoration: none;
+		line-height: 1.1;
+		border-radius: 999rem;
+		border: 1px solid hsla(187, 85%, 60%, 0.35);
+		background: hsla(var(--gray-999-basis), 0.35);
+		backdrop-filter: blur(14px);
+		-webkit-backdrop-filter: blur(14px);
+		white-space: nowrap;
+		transition:
+			background-color var(--theme-transition),
+			border-color var(--theme-transition),
+			color var(--theme-transition),
+			transform var(--theme-transition);
+	}
+
+	.xp-cta-secondary:hover,
+	.xp-cta-secondary:focus-visible {
+		border-color: hsla(187, 85%, 60%, 0.75);
+		background: hsla(187, 85%, 53%, 0.10);
+		color: var(--gray-0);
+		outline: none;
+		transform: translateY(-1px);
+	}
+
+	.xp-cta-secondary:focus-visible {
+		box-shadow: 0 0 0 3px hsla(187, 85%, 60%, 0.35);
+	}
+
+	@media (min-width: 20em) {
+		.xp-cta-secondary { font-size: var(--text-lg); }
+	}
+
+	/* --- Illustration (right column) --- */
+
+	.xp-hero-illustration {
+		position: relative;
+		z-index: 1;
+		width: 100%;
+		max-width: 30rem;
+		align-self: center;
+		border-radius: 1.5rem;
+		padding: 0.5rem;
+		border: 1px solid hsla(187, 85%, 60%, 0.14);
+		background: linear-gradient(
+			180deg,
+			hsla(var(--gray-999-basis), 0.55),
+			hsla(var(--gray-999-basis), 0.25)
+		);
+		backdrop-filter: blur(18px);
+		-webkit-backdrop-filter: blur(18px);
+		box-shadow: var(--shadow-sm);
+		opacity: 0;
+		animation:
+			xp-fade-up 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.5s forwards,
+			xp-float 12s ease-in-out infinite 1.6s;
+		will-change: transform;
+	}
+
+	.xp-hero-illustration svg {
+		display: block;
+		width: 100%;
+		height: auto;
+		border-radius: 1.15rem;
+	}
+
+	@keyframes xp-float {
+		0%, 100% { transform: translate3d(0, 0, 0); }
+		50%      { transform: translate3d(0, -10px, 0); }
+	}
+
+	.xp-ill-quantum {
+		transform-origin: center;
+		transform-box: fill-box;
+		animation: xp-slow-rotate 90s linear infinite;
+	}
+
+	@keyframes xp-slow-rotate {
+		to { transform: rotate(360deg); }
+	}
+
+	.xp-node {
+		fill: #67e8f9;
+		transform-box: fill-box;
+		transform-origin: center;
+		filter: drop-shadow(0 0 6px rgba(103,232,249,0.55));
+		animation: xp-node-pulse 4.5s ease-in-out infinite;
+	}
+	.xp-ill-network .xp-node:nth-child(7)  { animation-delay: -0.6s; fill: #22d3ee; }
+	.xp-ill-network .xp-node:nth-child(8)  { animation-delay: -1.2s; fill: #a855f7; filter: drop-shadow(0 0 6px rgba(168,85,247,0.6)); }
+	.xp-ill-network .xp-node:nth-child(9)  { animation-delay: -1.8s; fill: #22d3ee; }
+	.xp-ill-network .xp-node:nth-child(10) { animation-delay: -2.4s; fill: #67e8f9; }
+	.xp-ill-network .xp-node:nth-child(11) { animation-delay: -3.0s; fill: #a855f7; filter: drop-shadow(0 0 6px rgba(168,85,247,0.6)); }
+
+	@keyframes xp-node-pulse {
+		0%, 100% { transform: scale(1);    opacity: 0.85; }
+		50%      { transform: scale(1.25); opacity: 1;    }
+	}
+
+	/* Anchor target for smooth scroll below hero */
+	.xp-anchor {
+		scroll-margin-top: 6rem;
+		outline: none;
+	}
+
+	/* --- Scroll indicator --- */
+
+	.xp-scroll {
+		position: relative;
+		z-index: 1;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.75rem;
+		align-self: center;
+		margin-top: 1rem;
+		padding: 0.5rem 0.15rem;
+		color: var(--gray-400);
+		font-size: var(--text-sm);
+		letter-spacing: 0.18em;
+		text-transform: uppercase;
+		text-decoration: none;
+		opacity: 0;
+		animation: xp-fade-up 0.9s cubic-bezier(0.22, 1, 0.36, 1) 1.45s forwards;
+		transition: color var(--theme-transition), opacity var(--theme-transition);
+	}
+
+	.xp-scroll:hover,
+	.xp-scroll:focus-visible {
+		color: var(--gray-100);
+		outline: none;
+	}
+
+	.xp-scroll:focus-visible {
+		box-shadow: 0 0 0 3px hsla(187, 85%, 60%, 0.35);
+		border-radius: 999rem;
+	}
+
+	.xp-scroll-arrow {
+		display: inline-block;
+		font-size: 1.05rem;
+		animation: xp-scroll-hint 2.6s ease-in-out infinite;
+	}
+
+	@keyframes xp-scroll-hint {
+		0%, 100% { transform: translateY(0);   opacity: 0.7; }
+		50%      { transform: translateY(4px); opacity: 1;   }
+	}
+
+	/* --- Shared keyframe --- */
+
+	@keyframes xp-fade-up {
+		0%   { opacity: 0; transform: translateY(18px); }
+		100% { opacity: 1; transform: translateY(0);    }
+	}
+
+	/* --- Desktop layout: two columns (~60 / 40) --- */
+
+	@media (min-width: 50em) {
+		.xp-hero {
+			display: grid;
+			grid-template-columns: 6fr 4fr;
+			grid-template-areas:
+				'content illustration'
+				'scroll  scroll';
+			column-gap: 4rem;
+			row-gap: 2.5rem;
+			padding: 5rem 3.5rem 3.5rem;
+			align-items: center;
+			min-height: 38rem;
+		}
+
+		.xp-hero-content       { grid-area: content;      gap: 1.75rem; }
+		.xp-hero-illustration  { grid-area: illustration; justify-self: end; max-width: none; }
+		.xp-scroll             { grid-area: scroll; justify-self: center; margin-top: 1.5rem; font-size: var(--text-base); }
+
+		.xp-lede { font-size: var(--text-lg); }
+
+		.xp-cta {
+			flex-direction: row;
+			align-items: center;
+			gap: 1.25rem;
+			margin-top: 1rem;
+		}
+
+		.xp-cta-secondary {
+			padding: 1.125rem 2.5rem;
+			font-size: var(--text-xl);
+		}
+	}
+
+	@media (min-width: 72em) {
+		.xp-title {
+			font-size: clamp(3.25rem, 5.6vw, 5.25rem);
+		}
+	}
+
+	/* --- Accessibility: reduced motion --- */
+
+	@media (prefers-reduced-motion: reduce) {
+		.xp-hero-gradient,
+		.xp-curve,
+		.xp-particle,
+		.xp-ill-quantum,
+		.xp-node,
+		.xp-scroll-arrow,
+		.xp-hero-illustration {
+			animation: none !important;
+		}
+		.xp-eyebrow,
+		.xp-line,
+		.xp-lede,
+		.xp-cta-primary,
+		.xp-cta-secondary,
+		.xp-hero-illustration,
+		.xp-scroll {
+			opacity: 1 !important;
+			transform: none !important;
+		}
+	}
+
+	/* =====================================================================
+	   CURRENT FOCUS — engineering mission section
+	   ===================================================================== */
+
+	.cf {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 2.5rem;
+	}
+
+	/* --- Intro row (55 / 45) --- */
+
+	.cf-intro {
+		display: flex;
+		flex-direction: column;
+		gap: 2.5rem;
+		align-items: stretch;
+	}
+
+	.cf-copy {
+		display: flex;
+		flex-direction: column;
+		gap: 1.25rem;
+	}
+
+	.cf-eyebrow {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: var(--text-base);
+		letter-spacing: 0.28em;
+		text-transform: uppercase;
+		color: var(--accent-regular);
+	}
+
+	.cf-title {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: clamp(var(--text-2xl), 4.2vw, var(--text-4xl));
+		line-height: 1.1;
+		letter-spacing: -0.01em;
+		color: var(--gray-0);
+		font-weight: 600;
+	}
+
+	.cf-lede {
+		margin: 0;
+		max-width: 62ch;
+		color: var(--gray-200);
+		font-size: var(--text-md);
+		line-height: 1.7;
+	}
+
+	/* --- Illustration (right column) --- */
+
+	.cf-illustration {
+		position: relative;
+		width: 100%;
+		max-width: 32rem;
+		align-self: center;
+		border-radius: 1.5rem;
+		padding: 0.5rem;
+		border: 1px solid hsla(187, 85%, 60%, 0.14);
+		background: linear-gradient(
+			180deg,
+			hsla(var(--gray-999-basis), 0.55),
+			hsla(var(--gray-999-basis), 0.25)
+		);
+		backdrop-filter: blur(18px);
+		-webkit-backdrop-filter: blur(18px);
+		box-shadow: var(--shadow-sm);
+		overflow: hidden;
+	}
+
+
+	.cf-illustration::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+		background: radial-gradient(
+			circle at 85% -10%,
+			hsla(187, 85%, 53%, 0.14),
+			transparent 55%
+		);
+	}
+
+	.cf-illustration svg {
+		display: block;
+		width: 100%;
+		height: auto;
+		border-radius: 1.15rem;
+		animation: cf-float 14s ease-in-out infinite;
+		will-change: transform;
+	}
+
+	@keyframes cf-float {
+		0%, 100% { transform: translate3d(0, 0, 0); }
+		50%      { transform: translate3d(0, -6px, 0); }
+	}
+
+	.cf-orbit-inner {
+		transform-origin: center;
+		transform-box: fill-box;
+		animation: cf-orbit-rotate 110s linear infinite;
+	}
+
+	@keyframes cf-orbit-rotate {
+		to { transform: rotate(360deg); }
+	}
+
+	.cf-dot {
+		animation: cf-dot-pulse 5s ease-in-out infinite;
+		transform-origin: center;
+		transform-box: fill-box;
+	}
+	.cf-nodes g:nth-child(1) .cf-dot { animation-delay: -0.4s; }
+	.cf-nodes g:nth-child(2) .cf-dot { animation-delay: -1.2s; }
+	.cf-nodes g:nth-child(3) .cf-dot { animation-delay: -2.0s; }
+	.cf-nodes g:nth-child(4) .cf-dot { animation-delay: -2.8s; }
+	.cf-nodes g:nth-child(5) .cf-dot { animation-delay: -3.6s; }
+	.cf-dot-hero {
+		filter: drop-shadow(0 0 6px rgba(34,211,238,0.75));
+	}
+
+	@keyframes cf-dot-pulse {
+		0%, 100% { transform: scale(1);    opacity: 0.85; }
+		50%      { transform: scale(1.35); opacity: 1;    }
+	}
+
+	.cf-label {
+		font-family: var(--font-brand);
+		font-size: 11px;
+		fill: var(--gray-200);
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+	}
+	.cf-label-strong { fill: var(--gray-0); }
+
+	.cf-curve {
+		stroke-dasharray: 5 7;
+		animation: cf-curve-flow 24s linear infinite;
+	}
+
+	@keyframes cf-curve-flow {
+		to { stroke-dashoffset: -240; }
+	}
+
+	/* --- Cards --- */
+
+	.cf-cards {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 1.15rem;
+	}
+
+	.cf-card {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 0.85rem;
+		padding: 1.5rem;
+		border: 1px solid hsla(210, 80%, 70%, 0.14);
+		border-radius: 1.25rem;
+		background: linear-gradient(
+			180deg,
+			hsla(var(--gray-999-basis), 0.6),
+			hsla(var(--gray-999-basis), 0.28)
+		);
+		backdrop-filter: blur(22px);
+		-webkit-backdrop-filter: blur(22px);
+		box-shadow: var(--shadow-sm);
+		overflow: hidden;
+		cursor: default;
+		opacity: 0;
+		transform: translateY(14px);
+		animation: cf-card-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+		animation-delay: var(--cf-delay, 0s);
+		transition:
+			transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+			border-color 0.35s ease,
+			box-shadow 0.35s ease;
+	}
+
+	@keyframes cf-card-in {
+		to { opacity: 1; transform: translateY(0); }
+	}
+
+	/* Inner glow overlay */
+	.cf-card::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+		background: radial-gradient(
+			circle at 85% -10%,
+			hsla(187, 85%, 53%, 0.18),
+			transparent 55%
+		);
+		opacity: 0;
+		transition: opacity 0.35s ease;
+	}
+
+	/* Animated gradient border on hover */
+	.cf-card::after {
+		content: '';
+		position: absolute;
+		inset: -1px;
+		border-radius: inherit;
+		padding: 1px;
+		background: linear-gradient(
+			130deg,
+			hsla(187, 85%, 60%, 0.6),
+			hsla(265, 80%, 65%, 0.6),
+			hsla(187, 85%, 60%, 0.6)
+		);
+		background-size: 220% 220%;
+		-webkit-mask:
+			linear-gradient(#000 0 0) content-box,
+			linear-gradient(#000 0 0);
+		-webkit-mask-composite: xor;
+				mask-composite: exclude;
+		opacity: 0;
+		transition: opacity 0.35s ease;
+		animation: cf-border-shimmer 6s linear infinite;
+		pointer-events: none;
+	}
+
+	@keyframes cf-border-shimmer {
+		from { background-position: 0 50%; }
+		to   { background-position: 220% 50%; }
+	}
+
+	.cf-card:hover,
+	.cf-card:focus-visible,
+	.cf-card:focus-within {
+		transform: translateY(-4px);
+		border-color: hsla(187, 85%, 60%, 0.35);
+		box-shadow:
+			var(--shadow-md),
+			0 0 30px -10px hsla(187, 85%, 60%, 0.55),
+			0 0 40px -18px hsla(265, 80%, 65%, 0.45);
+		outline: none;
+	}
+
+	.cf-card:hover::before,
+	.cf-card:focus-visible::before,
+	.cf-card:focus-within::before,
+	.cf-card:hover::after,
+	.cf-card:focus-visible::after,
+	.cf-card:focus-within::after {
+		opacity: 1;
+	}
+
+	.cf-card-head {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+	}
+
+	.cf-card-icon {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 2.4rem;
+		height: 2.4rem;
+		border-radius: 0.7rem;
+		background: hsla(187, 85%, 53%, 0.10);
+		border: 1px solid hsla(187, 85%, 53%, 0.22);
+		flex-shrink: 0;
+	}
+
+	.cf-card-title {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: var(--text-md);
+		line-height: 1.2;
+		color: var(--gray-0);
+		font-weight: 600;
+	}
+
+	.cf-card-desc {
+		margin: 0;
+		color: var(--gray-100);
+		font-size: 0.98rem;
+		line-height: 1.6;
+		/* Primary content of the card */
+		flex: 1 1 auto;
+	}
+
+	.cf-tags {
+		margin: 0;
+		padding: 0.75rem 0 0;
+		border-top: 1px solid hsla(210, 80%, 70%, 0.10);
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0 0.55rem;
+		row-gap: 0.25rem;
+		font-family: var(--font-brand);
+		font-size: 0.74rem;
+		letter-spacing: 0.06em;
+		color: var(--gray-400);
+		margin-top: auto; /* keep tags pinned to bottom for equal-height cards */
+	}
+
+	.cf-tags span {
+		display: inline-flex;
+		align-items: center;
+	}
+
+	/* Dot separator between tags */
+	.cf-tags span + span::before {
+		content: '•';
+		margin-right: 0.55rem;
+		color: hsla(187, 85%, 60%, 0.55);
+	}
+
+	/* --- Responsive breakpoints --- */
+
+	/* Tablet: 2x2 card grid */
+	@media (min-width: 40em) {
+		.cf-cards {
+			grid-template-columns: repeat(2, 1fr);
+			gap: 1.25rem;
+		}
+	}
+
+	/* Desktop: two-column intro (55 / 45) + 4-across cards */
+	@media (min-width: 60em) {
+		.cf {
+			gap: 3rem;
+		}
+
+		.cf-intro {
+			display: grid;
+			grid-template-columns: 55fr 45fr;
+			gap: 3.5rem;
+			align-items: center;
+		}
+
+		.cf-copy { gap: 1.5rem; }
+		.cf-lede { font-size: var(--text-lg); }
+
+		.cf-illustration {
+			max-width: none;
+			justify-self: end;
+		}
+
+		.cf-cards {
+			grid-template-columns: repeat(4, 1fr);
+			gap: 1.25rem;
+		}
+	}
+
+	/* --- Reduced motion --- */
+
+	@media (prefers-reduced-motion: reduce) {
+		.cf-illustration svg,
+		.cf-orbit-inner,
+		.cf-dot,
+		.cf-curve,
+		.cf-card,
+		.cf-card::after {
+			animation: none !important;
+		}
+		.cf-card {
+			opacity: 1 !important;
+			transform: none !important;
+			transition: none !important;
+		}
+		.cf-card:hover,
+		.cf-card:focus-visible,
+		.cf-card:focus-within {
+			transform: none !important;
+		}
+	}
+
+	/* =====================================================================
+	   ENGINEERING JOURNEY — alternating timeline
+	   ===================================================================== */
+
+	.jr {
+		--jr-accent: #22d3ee;
+		--jr-accent-soft: hsla(187, 85%, 60%, 0.35);
+		--jr-accent-glow: hsla(187, 85%, 60%, 0.6);
+		--jr-rail-w: 2px;
+		--jr-node-size: 3.75rem;
+		--jr-node-inner: 0.75rem;
+
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 2.5rem;
+		outline: none;
+		scroll-margin-top: 5rem;
+	}
+
+	/* Accent variants (each milestone can carry its own hue) */
+	.jr-accent-cyan   { --jr-accent: #22d3ee; --jr-accent-soft: hsla(187, 85%, 60%, 0.35); --jr-accent-glow: hsla(187, 85%, 60%, 0.6); }
+	.jr-accent-violet { --jr-accent: #a855f7; --jr-accent-soft: hsla(265, 85%, 68%, 0.35); --jr-accent-glow: hsla(265, 85%, 68%, 0.6); }
+	.jr-accent-blue   { --jr-accent: #60a5fa; --jr-accent-soft: hsla(217, 90%, 68%, 0.35); --jr-accent-glow: hsla(217, 90%, 68%, 0.6); }
+	.jr-accent-teal   { --jr-accent: #5eead4; --jr-accent-soft: hsla(170, 78%, 65%, 0.35); --jr-accent-glow: hsla(170, 78%, 65%, 0.6); }
+
+	/* -- Section header -- */
+
+	.jr-header {
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
+	}
+
+	.jr-eyebrow {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: var(--text-base);
+		letter-spacing: 0.28em;
+		text-transform: uppercase;
+		color: var(--accent-regular);
+	}
+
+	.jr-title {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: clamp(var(--text-2xl), 4.2vw, var(--text-4xl));
+		line-height: 1.1;
+		letter-spacing: -0.01em;
+		color: var(--gray-0);
+		font-weight: 600;
+	}
+
+	.jr-subtitle {
+		margin: 0;
+		max-width: 62ch;
+		color: var(--gray-200);
+		font-size: var(--text-md);
+		line-height: 1.65;
+	}
+
+	/* -- Jump bar (quick nav across eras) -- */
+
+	.jr-jumpbar {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.jr-jump {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.55rem;
+		padding: 0.45rem 0.85rem;
+		border-radius: 999rem;
+		border: 1px solid hsla(210, 80%, 70%, 0.16);
+		background: hsla(var(--gray-999-basis), 0.35);
+		color: var(--gray-200);
+		text-decoration: none;
+		font-family: var(--font-brand);
+		font-size: 0.78rem;
+		letter-spacing: 0.06em;
+		transition:
+			background-color var(--theme-transition),
+			border-color var(--theme-transition),
+			color var(--theme-transition),
+			transform var(--theme-transition);
+	}
+
+	.jr-jump-year {
+		color: var(--jr-accent);
+		font-weight: 600;
+	}
+
+	.jr-jump-company {
+		color: var(--gray-300);
+	}
+
+	.jr-jump:hover,
+	.jr-jump:focus-visible,
+	.jr-jump.is-active {
+		border-color: var(--jr-accent-soft);
+		background: hsla(var(--gray-999-basis), 0.55);
+		color: var(--gray-0);
+		outline: none;
+		transform: translateY(-1px);
+	}
+
+	.jr-jump:focus-visible {
+		box-shadow: 0 0 0 3px var(--jr-accent-soft);
+	}
+
+	/* -- Timeline structure -- */
+
+	.jr-timeline {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 2.5rem;
+	}
+
+	.jr-timeline::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: calc(var(--jr-node-size) / 2);
+		width: var(--jr-rail-w);
+		background: linear-gradient(
+			180deg,
+			hsla(187, 85%, 60%, 0.55) 0%,
+			hsla(265, 85%, 68%, 0.35) 55%,
+			hsla(210, 80%, 70%, 0.12) 100%
+		);
+		border-radius: 999rem;
+		pointer-events: none;
+		box-shadow: 0 0 12px hsla(187, 85%, 60%, 0.35);
+	}
+
+	.jr-item {
+		position: relative;
+		display: grid;
+		grid-template-columns: var(--jr-node-size) 1fr;
+		column-gap: 1.25rem;
+		align-items: start;
+		opacity: 0;
+		transform: translateY(28px);
+		z-index: 1;
+		transition:
+			opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+			transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.jr-item.is-visible {
+		opacity: 1;
+		transform: translateY(0);
+	}
+
+	/* When milestones overlap on desktop, whichever the user is engaging with
+	   should always rise above its neighbours. */
+	.jr-item:hover,
+	.jr-item:focus-within,
+	.jr-item.is-active {
+		z-index: 3;
+	}
+
+	/* -- Timeline node (marker) -- */
+
+	.jr-node {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: flex-start;
+		width: var(--jr-node-size);
+		padding-top: 0.5rem;
+		text-decoration: none;
+		color: var(--gray-200);
+		outline: none;
+	}
+
+	.jr-node-halo {
+		position: absolute;
+		top: 0.25rem;
+		width: 2.25rem;
+		height: 2.25rem;
+		border-radius: 999rem;
+		background: radial-gradient(
+			circle,
+			var(--jr-accent-glow) 0%,
+			transparent 65%
+		);
+		opacity: 0;
+		transition: opacity 0.4s ease;
+		pointer-events: none;
+	}
+
+	.jr-node-dot {
+		position: relative;
+		width: 1.15rem;
+		height: 1.15rem;
+		border-radius: 999rem;
+		background: hsla(224, 72%, 7%, 0.95);
+		border: 2px solid var(--jr-accent);
+		box-shadow: 0 0 0 4px hsla(var(--gray-999-basis), 0.75);
+		transition:
+			transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+			border-color 0.3s ease,
+			box-shadow 0.3s ease,
+			background-color 0.3s ease;
+	}
+
+	.jr-node-year {
+		margin-top: 0.75rem;
+		font-family: var(--font-brand);
+		font-size: 0.7rem;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--gray-400);
+		text-align: center;
+		line-height: 1.25;
+		transition: color 0.3s ease;
+	}
+
+	.jr-item.is-active .jr-node-halo,
+	.jr-node:hover .jr-node-halo,
+	.jr-node:focus-visible .jr-node-halo {
+		opacity: 1;
+	}
+
+	.jr-item.is-active .jr-node-dot,
+	.jr-node:hover .jr-node-dot,
+	.jr-node:focus-visible .jr-node-dot {
+		background: var(--jr-accent);
+		transform: scale(1.2);
+		box-shadow:
+			0 0 0 4px hsla(var(--gray-999-basis), 0.75),
+			0 0 22px var(--jr-accent-glow);
+	}
+
+	.jr-item.is-active .jr-node-year,
+	.jr-node:hover .jr-node-year,
+	.jr-node:focus-visible .jr-node-year {
+		color: var(--gray-0);
+	}
+
+	.jr-node:focus-visible {
+		outline: none;
+	}
+
+	.jr-node:focus-visible .jr-node-dot {
+		box-shadow:
+			0 0 0 4px hsla(var(--gray-999-basis), 0.75),
+			0 0 0 7px var(--jr-accent-soft);
+	}
+
+	/* -- Connector line from rail to card -- */
+
+	.jr-connector {
+		display: none;
+	}
+
+	/* -- Card -- */
+
+	.jr-card {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		padding: 1.5rem 1.35rem;
+		border-radius: 1.15rem;
+		border: 1px solid hsla(210, 80%, 70%, 0.14);
+		background: linear-gradient(
+			180deg,
+			hsla(var(--gray-999-basis), 0.6),
+			hsla(var(--gray-999-basis), 0.28)
+		);
+		backdrop-filter: blur(22px);
+		-webkit-backdrop-filter: blur(22px);
+		box-shadow: var(--shadow-sm);
+		overflow: hidden;
+		outline: none;
+		transition:
+			transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+			border-color 0.4s ease,
+			box-shadow 0.4s ease;
+	}
+
+	.jr-card::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+		background: radial-gradient(
+			circle at 90% -10%,
+			var(--jr-accent-soft),
+			transparent 55%
+		);
+		opacity: 0;
+		transition: opacity 0.4s ease;
+	}
+
+	.jr-card:hover,
+	.jr-card:focus-visible,
+	.jr-item.is-active .jr-card {
+		transform: translateY(-3px);
+		border-color: var(--jr-accent-soft);
+		box-shadow:
+			var(--shadow-md),
+			0 0 28px -12px var(--jr-accent-glow);
+	}
+
+	.jr-card:hover::before,
+	.jr-card:focus-visible::before,
+	.jr-item.is-active .jr-card::before {
+		opacity: 0.85;
+	}
+
+	/* Card head */
+	.jr-card-head {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+	}
+
+	.jr-card-era {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: 0.72rem;
+		letter-spacing: 0.24em;
+		text-transform: uppercase;
+		color: var(--jr-accent);
+	}
+
+	.jr-card-company {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: var(--text-xl);
+		line-height: 1.15;
+		color: var(--gray-0);
+		font-weight: 600;
+		letter-spacing: -0.005em;
+	}
+
+	.jr-card-position {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: var(--text-sm);
+		letter-spacing: 0.02em;
+		color: var(--jr-accent);
+		opacity: 0.9;
+	}
+
+	.jr-card-mission {
+		margin: 0;
+		color: var(--gray-100);
+		font-size: 0.98rem;
+		line-height: 1.6;
+	}
+
+	.jr-card-block {
+		display: flex;
+		flex-direction: column;
+		gap: 0.55rem;
+	}
+
+	.jr-block-label {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: 0.68rem;
+		letter-spacing: 0.24em;
+		text-transform: uppercase;
+		color: var(--gray-400);
+	}
+
+	.jr-achievements {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.4rem;
+	}
+
+	.jr-achievements li {
+		position: relative;
+		padding-left: 1.15rem;
+		color: var(--gray-200);
+		font-size: 0.9rem;
+		line-height: 1.55;
+	}
+
+	.jr-achievements li::before {
+		content: '';
+		position: absolute;
+		left: 0;
+		top: 0.55rem;
+		width: 0.4rem;
+		height: 0.4rem;
+		border-radius: 999rem;
+		background: var(--jr-accent);
+		box-shadow: 0 0 8px var(--jr-accent-glow);
+	}
+
+	.jr-tech-groups {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 0.65rem;
+	}
+
+	.jr-tech-group {
+		display: flex;
+		flex-direction: column;
+		gap: 0.15rem;
+	}
+
+	.jr-tech-group-label {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: 0.68rem;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: var(--gray-400);
+	}
+
+	.jr-tech-items {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: 0.82rem;
+		letter-spacing: 0.03em;
+		color: var(--gray-100);
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0 0.5rem;
+		row-gap: 0.25rem;
+	}
+
+	.jr-tech-items span {
+		display: inline-flex;
+		align-items: center;
+	}
+
+	.jr-tech-items span + span::before {
+		content: '·';
+		margin-right: 0.5rem;
+		color: var(--jr-accent);
+		opacity: 0.75;
+	}
+
+	.jr-metrics {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+	}
+
+	.jr-metrics li {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		padding: 0.28rem 0.65rem;
+		border-radius: 999rem;
+		border: 1px solid var(--jr-accent-soft);
+		background: hsla(var(--gray-999-basis), 0.45);
+		color: var(--gray-100);
+		font-family: var(--font-brand);
+		font-size: 0.7rem;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+	}
+
+	.jr-metrics li::before {
+		content: '';
+		width: 0.35rem;
+		height: 0.35rem;
+		border-radius: 999rem;
+		background: var(--jr-accent);
+		box-shadow: 0 0 6px var(--jr-accent-glow);
+	}
+
+	.jr-card-more {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		margin-top: 0.15rem;
+		font-family: var(--font-brand);
+		font-size: 0.78rem;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--jr-accent);
+		text-decoration: none;
+		width: max-content;
+		transition: color 0.25s ease, transform 0.25s ease;
+	}
+
+	.jr-card-more:hover,
+	.jr-card-more:focus-visible {
+		color: var(--gray-0);
+		transform: translateX(2px);
+		outline: none;
+	}
+
+	.jr-card-more:focus-visible {
+		box-shadow: 0 0 0 3px var(--jr-accent-soft);
+		border-radius: 0.25rem;
+	}
+
+	/* "Now" badge for the current role */
+	.jr-now-badge {
+		position: absolute;
+		top: 1rem;
+		right: 1rem;
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		padding: 0.25rem 0.6rem;
+		border-radius: 999rem;
+		background: hsla(187, 85%, 53%, 0.15);
+		border: 1px solid var(--jr-accent-soft);
+		color: var(--jr-accent);
+		font-family: var(--font-brand);
+		font-size: 0.66rem;
+		letter-spacing: 0.28em;
+		text-transform: uppercase;
+	}
+
+	.jr-now-badge::before {
+		content: '';
+		width: 0.4rem;
+		height: 0.4rem;
+		border-radius: 999rem;
+		background: var(--jr-accent);
+		box-shadow: 0 0 8px var(--jr-accent-glow);
+		animation: jr-now-pulse 2.4s ease-in-out infinite;
+	}
+
+	@keyframes jr-now-pulse {
+		0%, 100% { transform: scale(1);   opacity: 0.9; }
+		50%      { transform: scale(1.35); opacity: 1;   }
+	}
+
+	/* -- Visual hierarchy: newest = brightest, older = quieter -- */
+
+	.jr-emphasis-primary .jr-card-company {
+		font-size: var(--text-2xl);
+	}
+
+	.jr-emphasis-secondary .jr-card {
+		background: linear-gradient(
+			180deg,
+			hsla(var(--gray-999-basis), 0.5),
+			hsla(var(--gray-999-basis), 0.22)
+		);
+	}
+
+	.jr-emphasis-tertiary .jr-card {
+		background: linear-gradient(
+			180deg,
+			hsla(var(--gray-999-basis), 0.42),
+			hsla(var(--gray-999-basis), 0.18)
+		);
+		padding: 1.25rem 1.15rem;
+		gap: 0.85rem;
+	}
+
+	.jr-emphasis-tertiary .jr-card-company {
+		font-size: var(--text-lg);
+		color: var(--gray-100);
+	}
+
+	.jr-emphasis-tertiary .jr-card-mission {
+		color: var(--gray-200);
+		font-size: 0.9rem;
+	}
+
+	.jr-emphasis-tertiary .jr-card-position,
+	.jr-emphasis-tertiary .jr-card-era {
+		opacity: 0.85;
+	}
+
+	.jr-emphasis-tertiary .jr-achievements li,
+	.jr-emphasis-tertiary .jr-tech-items {
+		font-size: 0.85rem;
+	}
+
+	.jr-emphasis-tertiary .jr-node-dot {
+		width: 0.95rem;
+		height: 0.95rem;
+		border-width: 1.5px;
+	}
+
+	/* =====================================================================
+	   Desktop: alternating left/right layout
+	   ===================================================================== */
+
+	@media (min-width: 60em) {
+		.jr { gap: 3rem; }
+
+		/* Alternating cards never collide horizontally, so we let successive
+		   milestones overlap vertically for a cascading, less-stiff rhythm.
+		   Newer sits higher; the next one starts before it finishes. */
+		.jr-timeline {
+			gap: 0;
+		}
+
+		.jr-item + .jr-item {
+			margin-top: -13rem;
+		}
+
+		/* Because milestones now overlap, later items sit on top of earlier
+		   cards in DOM order — their transparent side column would block
+		   clicks on the previous card's "View role details" link. Route
+		   pointer events only to the interactive children so overlaps never
+		   trap clicks. Hover on the item still fires because :hover
+		   propagates from the hovered descendant. */
+		.jr-item {
+			pointer-events: none;
+		}
+		.jr-item > .jr-card,
+		.jr-item > .jr-node {
+			pointer-events: auto;
+		}
+
+		.jr-timeline::before {
+			left: 50%;
+			transform: translateX(-50%);
+		}
+
+		.jr-item {
+			--jr-side-gap: 3rem;
+			grid-template-columns: 1fr var(--jr-node-size) 1fr;
+			column-gap: 0;
+			align-items: center;
+		}
+
+		.jr-node {
+			grid-column: 2;
+			grid-row: 1;
+			padding-top: 0;
+			justify-content: center;
+		}
+
+		.jr-node-year {
+			position: absolute;
+			top: calc(100% + 0.6rem);
+			left: 50%;
+			transform: translateX(-50%);
+			white-space: nowrap;
+			margin: 0;
+		}
+
+		.jr-side-left .jr-card {
+			grid-column: 1;
+			grid-row: 1;
+			margin-right: var(--jr-side-gap);
+		}
+
+		.jr-side-right .jr-card {
+			grid-column: 3;
+			grid-row: 1;
+			margin-left: var(--jr-side-gap);
+		}
+
+		/* Connector line from node to card */
+		.jr-connector {
+			display: block;
+			grid-row: 1;
+			align-self: center;
+			height: 1px;
+			background: linear-gradient(
+				90deg,
+				transparent,
+				var(--jr-accent-soft) 25%,
+				var(--jr-accent) 100%
+			);
+			opacity: 0.55;
+			transition: opacity 0.35s ease, filter 0.35s ease;
+		}
+
+		.jr-side-left .jr-connector {
+			grid-column: 1;
+			justify-self: end;
+			width: calc(var(--jr-side-gap) - 0.35rem);
+			background: linear-gradient(
+				90deg,
+				var(--jr-accent) 0%,
+				var(--jr-accent-soft) 75%,
+				transparent
+			);
+		}
+
+		.jr-side-right .jr-connector {
+			grid-column: 3;
+			justify-self: start;
+			width: calc(var(--jr-side-gap) - 0.35rem);
+		}
+
+		.jr-item.is-active .jr-connector,
+		.jr-item:hover .jr-connector {
+			opacity: 1;
+			filter: drop-shadow(0 0 6px var(--jr-accent-glow));
+		}
+
+		/* Emphasis sizing on desktop */
+		.jr-emphasis-primary   { --jr-node-size: 4.5rem; }
+		.jr-emphasis-secondary { --jr-node-size: 3.75rem; }
+		.jr-emphasis-tertiary  { --jr-node-size: 3rem; }
+
+		.jr-emphasis-primary .jr-node-dot { width: 1.4rem;  height: 1.4rem; }
+		.jr-emphasis-secondary .jr-node-dot { width: 1.15rem; height: 1.15rem; }
+		.jr-emphasis-tertiary .jr-node-dot  { width: 0.9rem;  height: 0.9rem; }
+
+		.jr-emphasis-tertiary .jr-card {
+			padding: 1.15rem 1.15rem;
+		}
+	}
+
+	/* =====================================================================
+	   Reduced motion
+	   ===================================================================== */
+
+	@media (prefers-reduced-motion: reduce) {
+		.jr-item,
+		.jr-card,
+		.jr-node-dot,
+		.jr-node-halo,
+		.jr-connector,
+		.jr-now-badge::before {
+			transition: none !important;
+			animation: none !important;
+		}
+		.jr-item {
+			opacity: 1 !important;
+			transform: none !important;
+		}
+		.jr-card:hover,
+		.jr-card:focus-visible,
+		.jr-item.is-active .jr-card {
+			transform: none !important;
+		}
+	}
+</style>
 
