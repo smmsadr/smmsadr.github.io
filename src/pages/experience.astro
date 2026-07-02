@@ -37,7 +37,7 @@ const journey: Milestone[] = [
 		era: '2021 — Present',
 		shortLabel: '2021 – Now',
 		mission:
-			'Building global optimization platforms, AI-assisted planning workflows, and decision intelligence systems used across markets.',
+			'Architect AI-driven optimization and decision intelligence platforms that shape global media planning decisions across multiple markets and business units.',
 		achievements: [
 			'Architected optimization engines for budget and performance planning',
 			'Delivered production ML and generative-AI workflows',
@@ -63,7 +63,7 @@ const journey: Milestone[] = [
 		era: '2018 — 2021',
 		shortLabel: '2018 – 2021',
 		mission:
-			'Designed audience, response, and optimization models powering media planning and campaign investment decisions.',
+			'Designed the audience, response, and optimization models that shape campaign investment and cross-channel planning decisions for enterprise media clients.',
 		achievements: [
 			'Developed audience and media-response models for strategic planning',
 			'Contributed to marketing mix and omnichannel optimization',
@@ -86,7 +86,7 @@ const journey: Milestone[] = [
 		era: '2018',
 		shortLabel: '2018 · Experis',
 		mission:
-			'Delivered quantitative modelling for a media technology team on a contract engagement — the bridge into full-time modelling work.',
+			'Delivered the early quantitative modelling that later scaled into the production planning platforms clients rely on to make media decisions today.',
 		achievements: [
 			'Supported model development and analytics execution under a fast delivery cadence',
 			'Contributed to planning-focused quantitative workflows and reporting',
@@ -108,7 +108,7 @@ const journey: Milestone[] = [
 		era: '2016 — 2018',
 		shortLabel: '2016 – 2018',
 		mission:
-			'Moved from operations into modelling — quantitative analysis for trading and risk-oriented data systems.',
+			'Turned trading and risk data into quantitative analyses that supported live decision-making across a global online trading platform.',
 		achievements: [
 			'Built quantitative workflows for decision support',
 			'Contributed to production analytics and model interpretation',
@@ -130,7 +130,7 @@ const journey: Milestone[] = [
 		era: '2014 — 2016',
 		shortLabel: '2014 – 2016',
 		mission:
-			'Ran Linux infrastructure and deployment operations for production trading services — learning how large systems truly behave.',
+			'Kept high-volume production trading services reliable at scale — where deployment, uptime, and automation shaped an engineer\'s intuition for how large systems really behave.',
 		achievements: [
 			'Maintained Linux environments and deployment tooling',
 			'Automated operational tasks and improved reliability',
@@ -152,7 +152,7 @@ const journey: Milestone[] = [
 		era: '2011 — 2014',
 		shortLabel: '2011 – 2014',
 		mission:
-			'Administered Linux systems and enterprise databases for internal applications and data operations.',
+			'Kept the Linux infrastructure and enterprise databases that ran an organization\'s daily business dependable — the foundation for later work in production-grade data systems.',
 		achievements: [
 			'Managed Linux servers and networked services',
 			'Administered Oracle and MySQL database environments',
@@ -174,7 +174,7 @@ const journey: Milestone[] = [
 		era: '2008 — 2010',
 		shortLabel: '2008 – 2010',
 		mission:
-			'Led IT operations and infrastructure for a research organization in Karaj — where the systems thinking journey began.',
+			'Led the IT operations that kept a research organization\'s day-to-day science running — where thinking in systems rather than tools became the default lens.',
 		achievements: [
 			'Oversaw IT operations, systems administration, and service support',
 			'Coordinated infrastructure across research and administrative teams',
@@ -1742,7 +1742,7 @@ const journey: Milestone[] = [
 		position: relative;
 		display: flex;
 		flex-direction: column;
-		gap: 2.5rem;
+		gap: 1.25rem;
 	}
 
 	.jr-timeline::before {
@@ -2148,7 +2148,7 @@ const journey: Milestone[] = [
 	   metrics, tech pills, etc.) sits above the overlay so it doesn't
 	   swallow their pointer events. Currently none of them are
 	   interactive, but this keeps future additions safe. */
-	.jr-card > *:not(.jr-card-head) {
+	.jr-card > *:not(.jr-card-head):not(.jr-now-badge) {
 		position: relative;
 		z-index: 2;
 	}
@@ -2169,20 +2169,21 @@ const journey: Milestone[] = [
 	/* "Now" badge for the current role */
 	.jr-now-badge {
 		position: absolute;
-		top: 1rem;
-		right: 1rem;
+		top: 1.5rem;
+		right: 1.35rem;
 		z-index: 2;
 		display: inline-flex;
 		align-items: center;
 		gap: 0.35rem;
-		padding: 0.25rem 0.6rem;
+		padding: 0.2rem 0.55rem;
 		border-radius: 999rem;
 		background: hsla(187, 85%, 53%, 0.15);
 		border: 1px solid var(--jr-accent-soft);
 		color: var(--jr-accent);
 		font-family: var(--font-brand);
-		font-size: 0.66rem;
-		letter-spacing: 0.28em;
+		font-size: 0.62rem;
+		line-height: 1;
+		letter-spacing: 0.24em;
 		text-transform: uppercase;
 	}
 
@@ -2276,7 +2277,7 @@ const journey: Milestone[] = [
 		}
 
 		.jr-item + .jr-item {
-			margin-top: -13rem;
+			margin-top: -14rem;
 		}
 
 		/* Because milestones now overlap, later items sit on top of earlier
