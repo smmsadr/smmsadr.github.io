@@ -80,13 +80,13 @@ const pathD = smoothPath(points);
 					return (
 						<button
 							type="button"
-							class:list={['jr-node', { 'is-current': entry.current }]}
+							class:list={['jr-node', { 'is-current': entry.current, 'is-education': entry.kind === 'education', 'is-experience': entry.kind === 'experience' }]}
 							data-node-id={entry.id}
 							data-index={i}
 							style={`--x:${p.x}px;--y:${p.y}px;--i:${i};`}
 							aria-controls="jr-card"
 							aria-expanded="false"
-							aria-label={`${entry.chapter}: ${entry.year} — ${entry.title}${entry.organization ? `, ${entry.organization}` : ''}`}
+							aria-label={`${entry.kind === 'education' ? 'Education' : 'Experience'} — ${entry.chapter}: ${entry.year} — ${entry.title}${entry.organization ? `, ${entry.organization}` : ''}`}
 						>
 							<span class="jr-label">
 								<span class="jr-chapter">{entry.chapter}</span>
@@ -369,6 +369,8 @@ const pathD = smoothPath(points);
 		position: absolute;
 		left: var(--x);
 		top: var(--y);
+		--node-accent-1: 187;
+		--node-accent-2: 265;
 		transform: translate(-50%, -50%) scale(0.95);
 		border: 0;
 		background: transparent;
@@ -383,6 +385,16 @@ const pathD = smoothPath(points);
 			opacity 0.55s ease,
 			transform 0.45s ease;
 		transition-delay: calc(var(--i) * 80ms + 180ms);
+	}
+
+	.jr-node.is-education {
+		--node-accent-1: 286;
+		--node-accent-2: 325;
+	}
+
+	.jr-node.is-experience {
+		--node-accent-1: 187;
+		--node-accent-2: 265;
 	}
 
 	.jr-label {
@@ -418,12 +430,12 @@ const pathD = smoothPath(points);
 		width: 2.15rem;
 		height: 2.15rem;
 		border-radius: 999rem;
-		background: radial-gradient(circle at 40% 30%, hsla(187, 85%, 70%, 0.6), hsla(187, 85%, 45%, 0.25));
-		border: 1px solid hsla(187, 85%, 68%, 0.62);
+		background: radial-gradient(circle at 40% 30%, hsla(var(--node-accent-1), 85%, 70%, 0.6), hsla(var(--node-accent-1), 85%, 45%, 0.25));
+		border: 1px solid hsla(var(--node-accent-1), 85%, 68%, 0.62);
 		box-shadow:
 			0 0 0 6px hsla(var(--gray-999-basis), 0.62),
-			0 0 24px -2px hsla(187, 85%, 65%, 0.7),
-			0 0 38px -8px hsla(265, 80%, 70%, 0.6);
+			0 0 24px -2px hsla(var(--node-accent-1), 85%, 65%, 0.7),
+			0 0 38px -8px hsla(var(--node-accent-2), 80%, 70%, 0.6);
 		transition:
 			transform var(--theme-transition),
 			box-shadow var(--theme-transition),
@@ -435,17 +447,17 @@ const pathD = smoothPath(points);
 		position: absolute;
 		inset: 28%;
 		border-radius: 999rem;
-		background: hsla(187, 85%, 82%, 0.95);
+		background: hsla(var(--node-accent-1), 85%, 82%, 0.95);
 	}
 
 	.jr-node:hover .jr-dot,
 	.jr-node:focus-visible .jr-dot {
 		transform: scale(1.11);
-		border-color: hsla(187, 85%, 82%, 0.95);
+		border-color: hsla(var(--node-accent-1), 85%, 82%, 0.95);
 		box-shadow:
 			0 0 0 6px hsla(var(--gray-999-basis), 0.62),
-			0 0 28px 0 hsla(187, 85%, 68%, 0.95),
-			0 0 45px -6px hsla(265, 80%, 72%, 0.75);
+			0 0 28px 0 hsla(var(--node-accent-1), 85%, 68%, 0.95),
+			0 0 45px -6px hsla(var(--node-accent-2), 80%, 72%, 0.75);
 	}
 
 	.jr-node:focus-visible {
@@ -455,17 +467,17 @@ const pathD = smoothPath(points);
 	.jr-node:focus-visible .jr-dot {
 		box-shadow:
 			0 0 0 6px hsla(var(--gray-999-basis), 0.62),
-			0 0 0 9px hsla(187, 85%, 70%, 0.5),
-			0 0 30px 0 hsla(187, 85%, 70%, 0.95),
-			0 0 46px -6px hsla(265, 80%, 72%, 0.75);
+			0 0 0 9px hsla(var(--node-accent-1), 85%, 70%, 0.5),
+			0 0 30px 0 hsla(var(--node-accent-1), 85%, 70%, 0.95),
+			0 0 46px -6px hsla(var(--node-accent-2), 80%, 72%, 0.75);
 	}
 
 	.jr-node.is-active .jr-dot {
-		border-color: hsla(187, 85%, 84%, 0.98);
+		border-color: hsla(var(--node-accent-1), 85%, 84%, 0.98);
 		box-shadow:
 			0 0 0 6px hsla(var(--gray-999-basis), 0.62),
-			0 0 34px 0 hsla(187, 85%, 72%, 0.95),
-			0 0 52px -4px hsla(265, 80%, 74%, 0.88);
+			0 0 34px 0 hsla(var(--node-accent-1), 85%, 72%, 0.95),
+			0 0 52px -4px hsla(var(--node-accent-2), 80%, 74%, 0.88);
 	}
 
 	.jr-node.is-active .jr-dot::after {
@@ -473,7 +485,7 @@ const pathD = smoothPath(points);
 		position: absolute;
 		inset: -8px;
 		border-radius: 999rem;
-		border: 1px solid hsla(187, 85%, 70%, 0.72);
+		border: 1px solid hsla(var(--node-accent-1), 85%, 70%, 0.72);
 		animation: jr-pulse 2.4s ease-out infinite;
 	}
 
@@ -608,14 +620,15 @@ const pathD = smoothPath(points);
 		gap: 0.4rem;
 	}
 
-	.jr-card-tags li {
-		font-size: 0.74rem;
-		letter-spacing: 0.04em;
-		color: var(--gray-100);
-		padding: 0.28rem 0.65rem;
+	.jr-card-tags :global(li) {
+		font-size: 0.72rem;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--gray-400);
+		padding: 0.22rem 0.55rem;
+		border: 1px solid hsla(210, 80%, 70%, 0.18);
 		border-radius: 999rem;
-		border: 1px solid hsla(187, 85%, 53%, 0.32);
-		background: hsla(187, 85%, 53%, 0.07);
+		background: hsla(var(--gray-999-basis), 0.25);
 	}
 
 	.jr-card-cta {
