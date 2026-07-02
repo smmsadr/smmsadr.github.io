@@ -33,7 +33,7 @@ const { phd } = Astro.props;
 			<p class="ld-phd-value">{phd.period} · {phd.status}</p>
 
 			{phd.supervisors.length > 0 && (
-				<>
+				<Fragment>
 					<p class="ld-phd-label">Supervisors</p>
 					<ul class="ld-phd-list">
 						{phd.supervisors.map((s) => (
@@ -44,7 +44,7 @@ const { phd } = Astro.props;
 							</li>
 						))}
 					</ul>
-				</>
+				</Fragment>
 			)}
 		</div>
 
@@ -57,7 +57,7 @@ const { phd } = Astro.props;
 			</p>
 
 			{phd.milestones && phd.milestones.length > 0 && (
-				<>
+				<Fragment>
 					<p class="ld-phd-label">Milestones</p>
 					<ol class="ld-phd-milestones">
 						{phd.milestones.map((m) => (
@@ -68,7 +68,7 @@ const { phd } = Astro.props;
 							</li>
 						))}
 					</ol>
-				</>
+				</Fragment>
 			)}
 		</div>
 	</div>

@@ -27,9 +27,7 @@ import { publications } from '../data/learning/publications';
 import { professionalLearning } from '../data/learning/professionalLearning';
 import { achievements } from '../data/learning/achievements';
 import { recognition } from '../data/learning/recognition';
-
-const heroLede =
-	'A continuous loop of formal study, applied research, professional learning, and community engagement — the shared thread through everything I build.';
+import { heroContent } from '../data/learning/hero';
 ---
 
 <BaseLayout
@@ -38,7 +36,7 @@ const heroLede =
 >
 	<div class="stack gap-20">
 		<main class="wrapper stack gap-20 lg:gap-30 learning">
-			<Hero title="Learning & Discovery" lede={heroLede} />
+			<Hero content={heroContent} />
 
 			<EducationSection items={education} />
 			<ResearchSection vision={researchVision} />

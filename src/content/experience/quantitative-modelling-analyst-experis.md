@@ -3,8 +3,8 @@ title: Quantitative Modelling Analyst
 position: Quantitative Modelling Analyst
 company: Experis
 location: Kuala Lumpur, Malaysia
-era: 2018
-shortLabel: 2018
+era: '2018'
+shortLabel: '2018'
 publishDate: 2018-02-01 00:00:00
 order: 4
 emphasis: tertiary

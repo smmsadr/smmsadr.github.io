@@ -1,61 +1,321 @@
 ---
 // Learning & Discovery — Hero
-// Placeholder header. Props keep it easy to iterate on later without
-// touching layout code.
+//
+// Identity-first hero. Continues the site narrative established by
+// Home / About / Experience:
+//   Exploring Deep Systems → The Road So Far → The Person Behind…
+//
+// This page opens with: "Every System Begins with Learning" — framing
+// the whole page around a lifelong framework for understanding
+// complex systems, not around credentials.
+//
+// All copy lives in src/data/learning/hero.ts.
+import type { HeroContent } from '../../data/learning/hero';
+
 export interface Props {
-	eyebrow?: string;
-	title: string;
-	lede: string;
+	content: HeroContent;
 }
 
-const { eyebrow = 'Learning & Discovery', title, lede } = Astro.props;
+const { content } = Astro.props;
 ---
 
-<header class="ld-hero" aria-labelledby="ld-hero-title">
-	<div class="ld-hero-bg" aria-hidden="true">
-		<div class="ld-hero-gradient"></div>
+<header class="ldh" aria-labelledby="ldh-title">
+	<!-- Ambient background: gradient wash + faint blueprint grid -->
+	<div class="ldh-bg" aria-hidden="true">
+		<div class="ldh-bg-gradient"></div>
+		<div class="ldh-bg-grid"></div>
 	</div>
-	<div class="ld-hero-content">
-		<p class="ld-eyebrow">{eyebrow}</p>
-		<h1 id="ld-hero-title" class="ld-title">{title}</h1>
-		<p class="ld-lede">{lede}</p>
+
+	<!-- Right-hand knowledge graph visualisation (desktop only).
+	     Pure SVG — nodes + edges + orbits, slow rotation. -->
+	<div class="ldh-viz" aria-hidden="true">
+		<svg viewBox="0 0 400 420" preserveAspectRatio="xMidYMid meet">
+			<defs>
+				<radialGradient id="ldh-node-a" cx="50%" cy="50%" r="50%">
+					<stop offset="0%"   stop-color="#67e8f9" stop-opacity="0.95" />
+					<stop offset="100%" stop-color="#22d3ee" stop-opacity="0.4" />
+				</radialGradient>
+				<radialGradient id="ldh-node-b" cx="50%" cy="50%" r="50%">
+					<stop offset="0%"   stop-color="#a855f7" stop-opacity="0.95" />
+					<stop offset="100%" stop-color="#6d28d9" stop-opacity="0.4" />
+				</radialGradient>
+				<linearGradient id="ldh-edge" x1="0" y1="0" x2="1" y2="1">
+					<stop offset="0%"   stop-color="#22d3ee" stop-opacity="0.55" />
+					<stop offset="100%" stop-color="#a855f7" stop-opacity="0.55" />
+				</linearGradient>
+			</defs>
+
+			<!-- Slow-rotating orbit rings for a subtle "atom of ideas" feel -->
+			<g class="ldh-orbit" transform="translate(200 210)">
+				<ellipse rx="170" ry="70"  fill="none" stroke="rgba(103,232,249,0.25)" stroke-width="0.8" />
+				<ellipse rx="170" ry="70"  transform="rotate(55)"  fill="none" stroke="rgba(168,85,247,0.22)" stroke-width="0.8" />
+				<ellipse rx="170" ry="70"  transform="rotate(-55)" fill="none" stroke="rgba(96,165,250,0.22)" stroke-width="0.8" />
+			</g>
+
+			<!-- Knowledge edges -->
+			<g class="ldh-edges" stroke="url(#ldh-edge)" stroke-width="1" fill="none" opacity="0.65">
+				<line x1="90"  y1="120" x2="200" y2="80"  />
+				<line x1="200" y1="80"  x2="320" y2="140" />
+				<line x1="90"  y1="120" x2="180" y2="230" />
+				<line x1="320" y1="140" x2="280" y2="260" />
+				<line x1="180" y1="230" x2="280" y2="260" />
+				<line x1="200" y1="80"  x2="180" y2="230" />
+				<line x1="200" y1="80"  x2="280" y2="260" />
+				<line x1="180" y1="230" x2="90"  y2="330" />
+				<line x1="280" y1="260" x2="330" y2="340" />
+				<line x1="90"  y1="330" x2="200" y2="360" />
+				<line x1="200" y1="360" x2="330" y2="340" />
+			</g>
+
+			<!-- Nodes (concepts) — slow pulse -->
+			<g class="ldh-nodes">
+				<circle cx="90"  cy="120" r="8"  fill="url(#ldh-node-a)" class="n-1" />
+				<circle cx="200" cy="80"  r="10" fill="url(#ldh-node-b)" class="n-2" />
+				<circle cx="320" cy="140" r="7"  fill="url(#ldh-node-a)" class="n-3" />
+				<circle cx="180" cy="230" r="9"  fill="url(#ldh-node-b)" class="n-4" />
+				<circle cx="280" cy="260" r="8"  fill="url(#ldh-node-a)" class="n-5" />
+				<circle cx="90"  cy="330" r="6"  fill="url(#ldh-node-a)" class="n-6" />
+				<circle cx="200" cy="360" r="9"  fill="url(#ldh-node-b)" class="n-7" />
+				<circle cx="330" cy="340" r="7"  fill="url(#ldh-node-a)" class="n-8" />
+			</g>
+		</svg>
+
+		<!-- Floating quote card, glass style, lower-right -->
+		<figure class="ldh-quote">
+			<blockquote>
+				{
+					content.quote.text.split('\n').map((line) => (
+						<p>{line}</p>
+					))
+				}
+			</blockquote>
+			{content.quote.attribution && (
+				<figcaption>{content.quote.attribution}</figcaption>
+			)}
+		</figure>
 	</div>
+
+	<div class="ldh-content">
+		<p class="ldh-eyebrow">{content.eyebrow}</p>
+		<h1 id="ldh-title" class="ldh-title">{content.headline}</h1>
+
+		<div class="ldh-subheading">
+			{
+				content.subheading.map((line) => (
+					<p>{line}</p>
+				))
+			}
+		</div>
+
+		<p class="ldh-lede">{content.lede}</p>
+
+		<ul class="ldh-badges" aria-label="Lifelong learning pillars">
+			{
+				content.badges.map((b) => (
+					<li class="ldh-badge">
+						<span class="ldh-badge-icon" aria-hidden="true">{b.icon}</span>
+						<span class="ldh-badge-label">{b.label}</span>
+					</li>
+				))
+			}
+		</ul>
+	</div>
+
+	<!-- Horizontal statistic strip -->
+	<ol class="ldh-stats" aria-label="Learning at a glance">
+		{
+			content.stats.map((s) => (
+				<li class="ldh-stat">
+					<span class="ldh-stat-value">{s.value}</span>
+					<span class="ldh-stat-label">{s.label}</span>
+				</li>
+			))
+		}
+	</ol>
 </header>
 
 <style>
-	.ld-hero {
+	/* =====================================================================
+	   Learning & Discovery — Hero
+	   ===================================================================== */
+
+	.ldh {
 		position: relative;
-		padding: 3rem 1.5rem 3.5rem;
-		border-radius: 1.5rem;
+		padding: 3.5rem 1.5rem 2.5rem;
+		border-radius: 1.75rem;
 		overflow: hidden;
 		isolation: isolate;
-	}
-
-	.ld-hero-bg {
-		position: absolute;
-		inset: 0;
-		z-index: -1;
-	}
-
-	.ld-hero-gradient {
-		position: absolute;
-		inset: -15%;
-		background:
-			radial-gradient(circle at 18% 20%, hsla(187, 85%, 60%, 0.28), transparent 55%),
-			radial-gradient(circle at 82% 12%, hsla(265, 85%, 68%, 0.24), transparent 60%),
-			radial-gradient(circle at 55% 90%, hsla(210, 85%, 65%, 0.16), transparent 55%);
-		filter: blur(2px);
-	}
-
-	.ld-hero-content {
-		position: relative;
 		display: flex;
 		flex-direction: column;
-		gap: 1rem;
-		max-width: 68ch;
+		gap: 2rem;
+		min-height: 28rem;
 	}
 
-	.ld-eyebrow {
+	/* -- Ambient background -- */
+
+	.ldh-bg {
+		position: absolute;
+		inset: 0;
+		z-index: 0;
+		pointer-events: none;
+	}
+
+	.ldh-bg-gradient {
+		position: absolute;
+		inset: -20%;
+		background:
+			radial-gradient(circle at 15% 20%, hsla(187, 85%, 60%, 0.32), transparent 55%),
+			radial-gradient(circle at 85% 25%, hsla(265, 85%, 68%, 0.28), transparent 60%),
+			radial-gradient(circle at 55% 95%, hsla(210, 85%, 65%, 0.18), transparent 55%);
+		filter: blur(2px);
+		animation: ldh-drift 32s ease-in-out infinite alternate;
+		will-change: transform;
+	}
+
+	@keyframes ldh-drift {
+		0%   { transform: translate3d(0, 0, 0) scale(1); }
+		50%  { transform: translate3d(-1.5%, 1%, 0) scale(1.03); }
+		100% { transform: translate3d(1.5%, -1%, 0) scale(1.02); }
+	}
+
+	.ldh-bg-grid {
+		position: absolute;
+		inset: 0;
+		background-image:
+			linear-gradient(to right,  hsla(187, 85%, 75%, 0.05) 1px, transparent 1px),
+			linear-gradient(to bottom, hsla(187, 85%, 75%, 0.05) 1px, transparent 1px);
+		background-size: 44px 44px;
+		mask-image: radial-gradient(ellipse at center, #000 55%, transparent 92%);
+		-webkit-mask-image: radial-gradient(ellipse at center, #000 55%, transparent 92%);
+		opacity: 0.6;
+	}
+
+	/* Ensure every direct child of .ldh sits above the background layer */
+	.ldh > *:not(.ldh-bg) {
+		position: relative;
+		z-index: 1;
+	}
+
+	/* -- Right-hand knowledge graph visualisation (desktop only) -- */
+
+	.ldh-viz {
+		display: none;                 /* hidden on mobile — keep content-focused */
+	}
+
+	.ldh-viz svg {
+		width: 100%;
+		height: 100%;
+		max-height: 30rem;
+	}
+
+	.ldh-orbit {
+		transform-origin: center;
+		transform-box: fill-box;
+		animation: ldh-orbit-rotate 120s linear infinite;
+		opacity: 0.9;
+	}
+
+	@keyframes ldh-orbit-rotate {
+		to { transform: rotate(360deg); }
+	}
+
+	.ldh-nodes circle {
+		transform-origin: center;
+		transform-box: fill-box;
+		filter: drop-shadow(0 0 6px hsla(187, 85%, 60%, 0.5));
+		animation: ldh-pulse 5s ease-in-out infinite;
+	}
+	.ldh-nodes .n-1 { animation-delay: -0.3s; }
+	.ldh-nodes .n-2 { animation-delay: -0.9s; filter: drop-shadow(0 0 8px hsla(265, 85%, 68%, 0.6)); }
+	.ldh-nodes .n-3 { animation-delay: -1.5s; }
+	.ldh-nodes .n-4 { animation-delay: -2.1s; filter: drop-shadow(0 0 8px hsla(265, 85%, 68%, 0.6)); }
+	.ldh-nodes .n-5 { animation-delay: -2.7s; }
+	.ldh-nodes .n-6 { animation-delay: -3.3s; }
+	.ldh-nodes .n-7 { animation-delay: -3.9s; filter: drop-shadow(0 0 8px hsla(265, 85%, 68%, 0.6)); }
+	.ldh-nodes .n-8 { animation-delay: -4.5s; }
+
+	@keyframes ldh-pulse {
+		0%, 100% { transform: scale(1);    opacity: 0.85; }
+		50%      { transform: scale(1.15); opacity: 1;    }
+	}
+
+	/* -- Floating quote card -- */
+
+	.ldh-quote {
+		display: none;
+		margin: 0;
+		padding: 1rem 1.15rem;
+		border-radius: 1rem;
+		border: 1px solid hsla(210, 80%, 70%, 0.2);
+		background: linear-gradient(
+			180deg,
+			hsla(var(--gray-999-basis), 0.55),
+			hsla(var(--gray-999-basis), 0.25)
+		);
+		backdrop-filter: blur(22px);
+		-webkit-backdrop-filter: blur(22px);
+		box-shadow:
+			var(--shadow-md),
+			0 0 24px -10px hsla(187, 85%, 60%, 0.55);
+		max-width: 28rem;
+		animation: ldh-float 10s ease-in-out infinite;
+		will-change: transform;
+	}
+
+	.ldh-quote blockquote {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: 0.95rem;
+		line-height: 1.45;
+		color: var(--gray-100);
+		font-style: italic;
+	}
+
+	.ldh-quote blockquote p {
+		margin: 0;
+	}
+
+	.ldh-quote blockquote p:first-child::before {
+		content: '“';
+		color: hsla(187, 85%, 60%, 0.85);
+		margin-right: 0.15em;
+	}
+
+	.ldh-quote blockquote p:last-child::after {
+		content: '”';
+		color: hsla(187, 85%, 60%, 0.85);
+		margin-left: 0.15em;
+	}
+
+	.ldh-quote figcaption {
+		margin-top: 0.55rem;
+		font-family: var(--font-brand);
+		font-size: 0.72rem;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--gray-300);
+	}
+
+	.ldh-quote figcaption::before {
+		content: '— ';
+		color: var(--accent-regular);
+	}
+
+	@keyframes ldh-float {
+		0%, 100% { transform: translate3d(0, 0, 0); }
+		50%      { transform: translate3d(0, -6px, 0); }
+	}
+
+	/* -- Content column -- */
+
+	.ldh-content {
+		display: flex;
+		flex-direction: column;
+		gap: 1.15rem;
+		max-width: 60ch;
+	}
+
+	.ldh-eyebrow {
 		margin: 0;
 		font-family: var(--font-brand);
 		font-size: var(--text-base);
@@ -64,29 +324,181 @@ const { eyebrow = 'Learning & Discovery', title, lede } = Astro.props;
 		color: var(--accent-regular);
 	}
 
-	.ld-title {
+	.ldh-title {
 		margin: 0;
 		font-family: var(--font-brand);
-		font-size: clamp(2.25rem, 5vw, var(--text-5xl));
+		font-size: clamp(2.25rem, 5.4vw, var(--text-5xl));
 		line-height: 1.06;
 		letter-spacing: -0.01em;
 		color: var(--gray-0);
 		font-weight: 600;
 	}
 
-	.ld-lede {
+	.ldh-subheading {
+		margin: 0.5rem 0 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.2rem;
+		font-family: var(--font-brand);
+		font-size: clamp(var(--text-md), 2.4vw, var(--text-lg));
+		line-height: 1.5;
+		color: var(--gray-100);
+	}
+
+	.ldh-subheading p {
 		margin: 0;
+	}
+
+	.ldh-subheading p:last-child {
+		background: linear-gradient(120deg, #67e8f9 0%, #22d3ee 45%, #a855f7 100%);
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
+	}
+
+	.ldh-lede {
+		margin: 0.35rem 0 0;
 		color: var(--gray-200);
 		font-size: var(--text-md);
 		line-height: 1.65;
 	}
 
-	@media (min-width: 50em) {
-		.ld-hero {
-			padding: 4.5rem 3rem;
+	/* -- Badges -- */
+
+	.ldh-badges {
+		list-style: none;
+		padding: 0;
+		margin: 0.75rem 0 0;
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+	}
+
+	.ldh-badge {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		padding: 0.4rem 0.7rem;
+		border-radius: 999rem;
+		border: 1px solid hsla(210, 80%, 70%, 0.18);
+		background: hsla(var(--gray-999-basis), 0.4);
+		font-family: var(--font-brand);
+		font-size: 0.78rem;
+		letter-spacing: 0.05em;
+		color: var(--gray-100);
+	}
+
+	.ldh-badge-icon { font-size: 0.95rem; line-height: 1; }
+
+	/* -- Statistic strip -- */
+
+	.ldh-stats {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: grid;
+		grid-template-columns: repeat(2, 1fr);
+		gap: 0.75rem;
+	}
+
+	.ldh-stat {
+		display: flex;
+		flex-direction: column;
+		gap: 0.25rem;
+		padding: 0.85rem 1rem;
+		border-radius: 0.85rem;
+		border: 1px solid hsla(210, 80%, 70%, 0.14);
+		background: linear-gradient(
+			180deg,
+			hsla(var(--gray-999-basis), 0.55),
+			hsla(var(--gray-999-basis), 0.24)
+		);
+		backdrop-filter: blur(18px);
+		-webkit-backdrop-filter: blur(18px);
+		box-shadow: var(--shadow-sm);
+		transition:
+			transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+			border-color 0.35s ease,
+			box-shadow 0.35s ease;
+	}
+
+	.ldh-stat:hover,
+	.ldh-stat:focus-within {
+		transform: translateY(-2px);
+		border-color: hsla(187, 85%, 60%, 0.42);
+		box-shadow:
+			var(--shadow-md),
+			0 0 22px -10px hsla(187, 85%, 60%, 0.55);
+	}
+
+	.ldh-stat-value {
+		font-family: var(--font-brand);
+		font-size: var(--text-xl);
+		line-height: 1.05;
+		font-weight: 600;
+		background: linear-gradient(120deg, #67e8f9 0%, #22d3ee 45%, #a855f7 100%);
+		-webkit-background-clip: text;
+		background-clip: text;
+		color: transparent;
+	}
+
+	.ldh-stat-label {
+		font-family: var(--font-brand);
+		font-size: 0.7rem;
+		letter-spacing: 0.2em;
+		text-transform: uppercase;
+		color: var(--gray-400);
+	}
+
+	/* -- Desktop layout: content + viz side-by-side -- */
+
+	@media (min-width: 60em) {
+		.ldh {
+			padding: 5rem 3.5rem 3rem;
+			min-height: 34rem;
+			display: grid;
+			grid-template-columns: 6fr 4fr;
+			grid-template-areas:
+				'content viz'
+				'stats   stats';
+			column-gap: 3rem;
+			row-gap: 2.5rem;
 		}
-		.ld-lede {
-			font-size: var(--text-lg);
+
+		.ldh-content { grid-area: content; max-width: none; }
+
+		.ldh-viz {
+			display: block;
+			grid-area: viz;
+			position: relative;
+			align-self: stretch;
+			min-height: 22rem;
+		}
+
+		.ldh-stats { grid-area: stats; grid-template-columns: repeat(4, 1fr); gap: 1rem; }
+
+		.ldh-quote {
+			display: block;
+			position: absolute;
+			right: 0;
+			bottom: 0.5rem;
+		}
+	}
+
+	/* -- Reduced motion -- */
+
+	@media (prefers-reduced-motion: reduce) {
+		.ldh-bg-gradient,
+		.ldh-orbit,
+		.ldh-nodes circle,
+		.ldh-quote,
+		.ldh-stat {
+			animation: none !important;
+			transition: none !important;
+		}
+		.ldh-stat:hover,
+		.ldh-stat:focus-within {
+			transform: none;
 		}
 	}
 </style>
