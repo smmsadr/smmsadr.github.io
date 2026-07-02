@@ -43,9 +43,15 @@ const experienceExtras = z.object({
 	hidden: z.boolean().optional(),
 });
 
+// Only two content collections remain markdown-driven:
+//   * experience — canonical source for the Engineering Journey
+//   * education  — powers Learning & Discovery > /learning/<slug>/
+//   * writing    — retained for the hidden Projects/Writing pages
+//                  the author plans to revisit
+// Publications and Certifications data now lives entirely under
+// src/data/learning/ as typed TS.
 export const collections = {
 	writing: defineCollection({
-		// Load Markdown files in the src/content/writing directory.
 		loader: glob({ base: './src/content/writing', pattern: '**/*.md' }),
 		schema: baseSchema.extend({
 			// Optional canonical URL for posts hosted externally (e.g. Medium).
@@ -60,14 +66,6 @@ export const collections = {
 	}),
 	education: defineCollection({
 		loader: glob({ base: './src/content/education', pattern: '**/*.md' }),
-		schema: baseSchema,
-	}),
-	publications: defineCollection({
-		loader: glob({ base: './src/content/publications', pattern: '**/*.md' }),
-		schema: baseSchema,
-	}),
-	certifications: defineCollection({
-		loader: glob({ base: './src/content/certifications', pattern: '**/*.md' }),
 		schema: baseSchema,
 	}),
 };

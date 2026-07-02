@@ -1,0 +1,203 @@
+---
+import Section from './Section.astro';
+import type { PhD } from '../../data/learning/phd';
+
+export interface Props {
+	phd: PhD;
+}
+
+const { phd } = Astro.props;
+---
+
+<Section
+	id="phd"
+	eyebrow="Current PhD"
+	title={phd.researchTopic}
+	description={phd.summary}
+>
+	<div class="ld-phd">
+		<div class="ld-phd-panel ld-phd-facts">
+			<p class="ld-phd-label">Programme</p>
+			<p class="ld-phd-value">{phd.program}</p>
+
+			<p class="ld-phd-label">Field</p>
+			<p class="ld-phd-value">{phd.field}</p>
+
+			<p class="ld-phd-label">Institution</p>
+			<p class="ld-phd-value">
+				{phd.institution}
+				{phd.location ? ` · ${phd.location}` : ''}
+			</p>
+
+			<p class="ld-phd-label">Period</p>
+			<p class="ld-phd-value">{phd.period} · {phd.status}</p>
+
+			{phd.supervisors.length > 0 && (
+				<>
+					<p class="ld-phd-label">Supervisors</p>
+					<ul class="ld-phd-list">
+						{phd.supervisors.map((s) => (
+							<li>
+								{s.title ? `${s.title} ` : ''}
+								{s.name}
+								{s.affiliation ? ` — ${s.affiliation}` : ''}
+							</li>
+						))}
+					</ul>
+				</>
+			)}
+		</div>
+
+		<div class="ld-phd-panel">
+			<p class="ld-phd-label">Focus areas</p>
+			<p class="ld-phd-tags">
+				{phd.focusAreas.map((f) => (
+					<span>{f}</span>
+				))}
+			</p>
+
+			{phd.milestones && phd.milestones.length > 0 && (
+				<>
+					<p class="ld-phd-label">Milestones</p>
+					<ol class="ld-phd-milestones">
+						{phd.milestones.map((m) => (
+							<li class={`is-${m.status}`}>
+								<span class="ld-milestone-dot" aria-hidden="true"></span>
+								<span class="ld-milestone-label">{m.label}</span>
+								{m.period && <span class="ld-milestone-period">{m.period}</span>}
+							</li>
+						))}
+					</ol>
+				</>
+			)}
+		</div>
+	</div>
+</Section>
+
+<style>
+	.ld-phd {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 1rem;
+	}
+
+	.ld-phd-panel {
+		padding: 1.25rem 1.35rem;
+		border-radius: 1rem;
+		border: 1px solid hsla(210, 80%, 70%, 0.14);
+		background: linear-gradient(
+			180deg,
+			hsla(var(--gray-999-basis), 0.55),
+			hsla(var(--gray-999-basis), 0.24)
+		);
+		backdrop-filter: blur(22px);
+		-webkit-backdrop-filter: blur(22px);
+		box-shadow: var(--shadow-sm);
+	}
+
+	.ld-phd-label {
+		margin: 0.9rem 0 0.25rem;
+		font-family: var(--font-brand);
+		font-size: 0.68rem;
+		letter-spacing: 0.24em;
+		text-transform: uppercase;
+		color: var(--gray-400);
+	}
+	.ld-phd-label:first-of-type { margin-top: 0; }
+
+	.ld-phd-value {
+		margin: 0;
+		font-size: 0.95rem;
+		color: var(--gray-100);
+		line-height: 1.5;
+	}
+
+	.ld-phd-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+	}
+
+	.ld-phd-list li {
+		font-size: 0.9rem;
+		color: var(--gray-100);
+	}
+
+	.ld-phd-tags {
+		margin: 0;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0 0.4rem;
+		row-gap: 0.25rem;
+		font-family: var(--font-brand);
+		font-size: 0.82rem;
+		letter-spacing: 0.04em;
+		color: var(--gray-100);
+	}
+
+	.ld-phd-tags span + span::before {
+		content: '·';
+		margin-right: 0.4rem;
+		color: var(--accent-regular);
+		opacity: 0.75;
+	}
+
+	.ld-phd-milestones {
+		list-style: none;
+		padding: 0;
+		margin: 0.35rem 0 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.55rem;
+	}
+
+	.ld-phd-milestones li {
+		display: flex;
+		align-items: center;
+		gap: 0.65rem;
+		font-size: 0.9rem;
+		color: var(--gray-100);
+	}
+
+	.ld-milestone-dot {
+		display: inline-block;
+		width: 0.55rem;
+		height: 0.55rem;
+		border-radius: 999rem;
+		background: hsla(210, 80%, 70%, 0.22);
+		border: 1px solid hsla(210, 80%, 70%, 0.4);
+		flex-shrink: 0;
+	}
+
+	.ld-phd-milestones li.is-in-progress .ld-milestone-dot {
+		background: hsla(187, 85%, 60%, 0.7);
+		border-color: hsla(187, 85%, 60%, 0.9);
+		box-shadow: 0 0 8px hsla(187, 85%, 60%, 0.5);
+	}
+
+	.ld-phd-milestones li.is-done .ld-milestone-dot {
+		background: hsla(160, 60%, 55%, 0.85);
+		border-color: hsla(160, 60%, 55%, 0.95);
+	}
+
+	.ld-milestone-label { flex: 1; }
+	.ld-milestone-period {
+		font-family: var(--font-brand);
+		font-size: 0.72rem;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: var(--gray-400);
+	}
+
+	@media (min-width: 50em) {
+		.ld-phd {
+			grid-template-columns: 1fr 1fr;
+			gap: 1.25rem;
+		}
+	}
+</style>
+

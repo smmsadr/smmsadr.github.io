@@ -1,0 +1,93 @@
+---
+// Learning & Discovery — Hero
+// Placeholder header. Props keep it easy to iterate on later without
+// touching layout code.
+export interface Props {
+	eyebrow?: string;
+	title: string;
+	lede: string;
+}
+
+const { eyebrow = 'Learning & Discovery', title, lede } = Astro.props;
+---
+
+<header class="ld-hero" aria-labelledby="ld-hero-title">
+	<div class="ld-hero-bg" aria-hidden="true">
+		<div class="ld-hero-gradient"></div>
+	</div>
+	<div class="ld-hero-content">
+		<p class="ld-eyebrow">{eyebrow}</p>
+		<h1 id="ld-hero-title" class="ld-title">{title}</h1>
+		<p class="ld-lede">{lede}</p>
+	</div>
+</header>
+
+<style>
+	.ld-hero {
+		position: relative;
+		padding: 3rem 1.5rem 3.5rem;
+		border-radius: 1.5rem;
+		overflow: hidden;
+		isolation: isolate;
+	}
+
+	.ld-hero-bg {
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+	}
+
+	.ld-hero-gradient {
+		position: absolute;
+		inset: -15%;
+		background:
+			radial-gradient(circle at 18% 20%, hsla(187, 85%, 60%, 0.28), transparent 55%),
+			radial-gradient(circle at 82% 12%, hsla(265, 85%, 68%, 0.24), transparent 60%),
+			radial-gradient(circle at 55% 90%, hsla(210, 85%, 65%, 0.16), transparent 55%);
+		filter: blur(2px);
+	}
+
+	.ld-hero-content {
+		position: relative;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		max-width: 68ch;
+	}
+
+	.ld-eyebrow {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: var(--text-base);
+		letter-spacing: 0.28em;
+		text-transform: uppercase;
+		color: var(--accent-regular);
+	}
+
+	.ld-title {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: clamp(2.25rem, 5vw, var(--text-5xl));
+		line-height: 1.06;
+		letter-spacing: -0.01em;
+		color: var(--gray-0);
+		font-weight: 600;
+	}
+
+	.ld-lede {
+		margin: 0;
+		color: var(--gray-200);
+		font-size: var(--text-md);
+		line-height: 1.65;
+	}
+
+	@media (min-width: 50em) {
+		.ld-hero {
+			padding: 4.5rem 3rem;
+		}
+		.ld-lede {
+			font-size: var(--text-lg);
+		}
+	}
+</style>
+

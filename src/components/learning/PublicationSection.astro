@@ -1,0 +1,128 @@
+---
+import Section from './Section.astro';
+import type { Publication } from '../../data/learning/publications';
+
+export interface Props {
+	items: Publication[];
+}
+
+const { items } = Astro.props;
+
+// Newest first
+const sorted = [...items].sort((a, b) => b.year - a.year);
+---
+
+<Section
+	id="publications"
+	eyebrow="Publications"
+	title="Papers, presentations & preprints"
+	description="Selected outputs — journal submissions, conference presentations, and workshop contributions."
+>
+	<ol class="ld-pubs">
+		{
+			sorted.map((p) => (
+				<li class="ld-pub">
+					<article>
+						<p class="ld-pub-meta">
+							<span class="ld-pub-year">{p.year}</span>
+							{p.type && <span class="ld-pub-sep" aria-hidden="true">·</span>}
+							{p.type && <span class="ld-pub-type">{p.type}</span>}
+							<span class="ld-pub-sep" aria-hidden="true">·</span>
+							<span class={`ld-pub-status is-${p.status}`}>{p.status}</span>
+						</p>
+						<h3 class="ld-pub-title">
+							{p.url ? <a href={p.url} rel="noopener noreferrer">{p.title}</a> : p.title}
+						</h3>
+						<p class="ld-pub-authors">{p.authors.join(', ')}</p>
+						<p class="ld-pub-venue">
+							{p.venue}
+							{p.pageOrId ? ` · ${p.pageOrId}` : ''}
+						</p>
+					</article>
+				</li>
+			))
+		}
+	</ol>
+</Section>
+
+<style>
+	.ld-pubs {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.9rem;
+	}
+
+	.ld-pub {
+		padding: 1.15rem 1.25rem;
+		border-radius: 1rem;
+		border: 1px solid hsla(210, 80%, 70%, 0.14);
+		background: linear-gradient(
+			180deg,
+			hsla(var(--gray-999-basis), 0.55),
+			hsla(var(--gray-999-basis), 0.24)
+		);
+		backdrop-filter: blur(20px);
+		-webkit-backdrop-filter: blur(20px);
+		box-shadow: var(--shadow-sm);
+	}
+
+	.ld-pub-meta {
+		margin: 0 0 0.4rem;
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.35rem 0.5rem;
+		font-family: var(--font-brand);
+		font-size: 0.7rem;
+		letter-spacing: 0.2em;
+		text-transform: uppercase;
+	}
+
+	.ld-pub-year { color: var(--accent-regular); font-weight: 600; }
+	.ld-pub-sep { color: var(--gray-500); }
+	.ld-pub-type { color: var(--gray-300); }
+
+	.ld-pub-status {
+		color: var(--gray-300);
+	}
+	.ld-pub-status.is-published,
+	.ld-pub-status.is-accepted { color: hsla(160, 60%, 65%, 0.95); }
+	.ld-pub-status.is-submitted { color: hsla(45, 90%, 65%, 0.95); }
+	.ld-pub-status.is-preprint { color: hsla(265, 80%, 75%, 0.95); }
+	.ld-pub-status.is-presented { color: hsla(217, 90%, 75%, 0.95); }
+
+	.ld-pub-title {
+		margin: 0 0 0.35rem;
+		font-family: var(--font-brand);
+		font-size: var(--text-md);
+		line-height: 1.3;
+		color: var(--gray-0);
+		font-weight: 600;
+	}
+
+	.ld-pub-title a {
+		color: inherit;
+		text-decoration: none;
+	}
+	.ld-pub-title a:hover,
+	.ld-pub-title a:focus-visible {
+		color: var(--accent-regular);
+	}
+
+	.ld-pub-authors {
+		margin: 0 0 0.25rem;
+		font-size: 0.88rem;
+		color: var(--gray-200);
+	}
+
+	.ld-pub-venue {
+		margin: 0;
+		font-size: 0.85rem;
+		color: var(--gray-300);
+		line-height: 1.4;
+	}
+</style>
+

@@ -1,0 +1,71 @@
+---
+// Shared "section container" — every learning section extends this
+// so titles, eyebrows, and spacing stay consistent.
+export interface Props {
+	id?: string;
+	eyebrow?: string;
+	title: string;
+	description?: string;
+}
+
+const { id, eyebrow, title, description } = Astro.props;
+---
+
+<section class="ld-section" id={id} aria-labelledby={id ? `${id}-title` : undefined}>
+	<header class="ld-section-head">
+		{eyebrow && <p class="ld-section-eyebrow">{eyebrow}</p>}
+		<h2 id={id ? `${id}-title` : undefined} class="ld-section-title">{title}</h2>
+		{description && <p class="ld-section-desc">{description}</p>}
+	</header>
+	<div class="ld-section-body">
+		<slot />
+	</div>
+</section>
+
+<style>
+	.ld-section {
+		display: flex;
+		flex-direction: column;
+		gap: 1.75rem;
+	}
+
+	.ld-section-head {
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
+	}
+
+	.ld-section-eyebrow {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: var(--text-base);
+		letter-spacing: 0.28em;
+		text-transform: uppercase;
+		color: var(--accent-regular);
+	}
+
+	.ld-section-title {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: clamp(var(--text-2xl), 3.6vw, var(--text-4xl));
+		line-height: 1.1;
+		letter-spacing: -0.01em;
+		color: var(--gray-0);
+		font-weight: 600;
+	}
+
+	.ld-section-desc {
+		margin: 0;
+		max-width: 62ch;
+		color: var(--gray-200);
+		font-size: var(--text-md);
+		line-height: 1.65;
+	}
+
+	.ld-section-body {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+</style>
+

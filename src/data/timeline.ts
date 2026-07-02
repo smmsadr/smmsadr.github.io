@@ -44,7 +44,7 @@ export const timelineData: TimelineEntry[] = [
 		description:
 			'Research field: Quantum Machine Learning. Supervisors: Prof. Dr. Loo Chu Kiong and Dr. Liew Wei Shiung.',
 		tags: ['Quantum Computing', 'Quantum Hybrid Language Processing'],
-		href: '/education/phd-candidate-university-of-malaya/',
+		href: '/learning/phd-candidate-university-of-malaya/',
 	},
 	{
 		id: 'y2021',
@@ -109,7 +109,7 @@ export const timelineData: TimelineEntry[] = [
 		description:
 			'Thesis: Enhanced Dynamic Quantum Clustering based on Von Neumann Entropy. Supervisor: Prof. Loo Chu Kiong.',
 		tags: ['Machine Learning', 'Quantum Clustering', 'Von Neumann Entropy'],
-		href: '/education/msc-computer-science-university-of-malaya/',
+		href: '/learning/msc-computer-science-university-of-malaya/',
 	},
 	{
 		id: 'y2014',
@@ -161,7 +161,7 @@ export const timelineData: TimelineEntry[] = [
 		description:
 			'Project: Analytical Solution of Heisenberg Model for one-dimensional quantum spin system. Supervisor: Prof. Abdollah Langari.',
 		tags: ['Physics', 'Heisenberg Model', 'Quantum Spin Systems'],
-		href: '/education/bsc-physics-sharif-university/',
+		href: '/learning/bsc-physics-sharif-university/',
 	},
 ];
 

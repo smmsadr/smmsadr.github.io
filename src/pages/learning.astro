@@ -1,0 +1,61 @@
+---
+// -----------------------------------------------------------------------
+// Learning & Discovery — Index page
+// -----------------------------------------------------------------------
+// Architectural scaffold only. Every section reads from its own
+// TypeScript data module under `src/data/learning/`, so content can
+// evolve without touching this page. Individual sections live in
+// `src/components/learning/` and receive their data via props.
+// -----------------------------------------------------------------------
+
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ContactCTA from '../components/ContactCTA.astro';
+
+import Hero from '../components/learning/Hero.astro';
+import EducationSection from '../components/learning/EducationSection.astro';
+import ResearchSection from '../components/learning/ResearchSection.astro';
+import PhDSection from '../components/learning/PhDSection.astro';
+import PublicationSection from '../components/learning/PublicationSection.astro';
+import ProfessionalLearningSection from '../components/learning/ProfessionalLearningSection.astro';
+import AchievementsSection from '../components/learning/AchievementsSection.astro';
+import RecognitionSection from '../components/learning/RecognitionSection.astro';
+
+import { education } from '../data/learning/education';
+import { researchVision } from '../data/learning/research';
+import { phd } from '../data/learning/phd';
+import { publications } from '../data/learning/publications';
+import { professionalLearning } from '../data/learning/professionalLearning';
+import { achievements } from '../data/learning/achievements';
+import { recognition } from '../data/learning/recognition';
+
+const heroLede =
+	'A continuous loop of formal study, applied research, professional learning, and community engagement — the shared thread through everything I build.';
+---
+
+<BaseLayout
+	title="Learning & Discovery | Sayed Mohammad Mahdi Sadrnezhaad"
+	description="Continuous learning across formal education, research, publications, professional development, and recognition."
+>
+	<div class="stack gap-20">
+		<main class="wrapper stack gap-20 lg:gap-30 learning">
+			<Hero title="Learning & Discovery" lede={heroLede} />
+
+			<EducationSection items={education} />
+			<ResearchSection vision={researchVision} />
+			<PhDSection phd={phd} />
+			<PublicationSection items={publications} />
+			<AchievementsSection items={achievements} />
+			<ProfessionalLearningSection items={professionalLearning} />
+			<RecognitionSection items={recognition} />
+		</main>
+		<ContactCTA />
+	</div>
+</BaseLayout>
+
+<style>
+	.learning {
+		/* Placeholder-friendly rhythm; each Section handles its own
+		   inner spacing. This page just composes them. */
+	}
+</style>
+

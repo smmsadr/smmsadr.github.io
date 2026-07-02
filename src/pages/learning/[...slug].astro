@@ -8,11 +8,11 @@ import Pill from '../../components/Pill.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 interface Props {
-	entry: CollectionEntry<'certifications'>;
+	entry: CollectionEntry<'education'>;
 }
 
 export async function getStaticPaths() {
-	const entries = await getCollection('certifications');
+	const entries = await getCollection('education');
 	return entries.map((entry) => ({
 		params: { slug: entry.id },
 		props: { entry },
@@ -28,7 +28,7 @@ const { Content } = await render(entry);
 		<div class="stack gap-15">
 			<header>
 				<div class="wrapper stack gap-2">
-					<a class="back-link" href="/awards/"><Icon icon="arrow-left" /> Awards & Certificates</a>
+					<a class="back-link" href="/learning/"><Icon icon="arrow-left" /> Learning &amp; Discovery</a>
 					<Hero title={entry.data.title} align="start">
 						<div class="details">
 							<div class="tags">

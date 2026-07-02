@@ -1,0 +1,159 @@
+---
+import Section from './Section.astro';
+import type { ProfessionalLearningItem } from '../../data/learning/professionalLearning';
+
+export interface Props {
+	items: ProfessionalLearningItem[];
+}
+
+const { items } = Astro.props;
+
+// Group by kind so certifications/courses/workshops/continuous each
+// get their own subheading. Order groups deliberately.
+const kindOrder = ['certification', 'course', 'workshop', 'continuous'] as const;
+const kindLabels: Record<(typeof kindOrder)[number], string> = {
+	certification: 'Certifications',
+	course: 'Courses',
+	workshop: 'Workshops',
+	continuous: 'Continuous learning',
+};
+
+const grouped = kindOrder
+	.map((k) => ({
+		kind: k,
+		label: kindLabels[k],
+		entries: items
+			.filter((i) => i.kind === k)
+			.sort((a, b) => {
+				const av = typeof a.year === 'number' ? a.year : -1;
+				const bv = typeof b.year === 'number' ? b.year : -1;
+				return bv - av;
+			}),
+	}))
+	.filter((g) => g.entries.length > 0);
+---
+
+<Section
+	id="professional-learning"
+	eyebrow="Professional Learning"
+	title="Certifications, courses & continuous learning"
+	description="Ongoing training — certifications and courses that widen the toolkit, plus the everyday habit of reading, replicating, and building."
+>
+	<div class="ld-pl">
+		{
+			grouped.map((group) => (
+				<section class="ld-pl-group" aria-label={group.label}>
+					<h3 class="ld-pl-group-title">{group.label}</h3>
+					<ul class="ld-pl-list">
+						{group.entries.map((it) => (
+							<li class="ld-pl-item">
+								<p class="ld-pl-year">{it.year}</p>
+								<div class="ld-pl-body">
+									<p class="ld-pl-title">
+										{it.credentialUrl ? (
+											<a href={it.credentialUrl} rel="noopener noreferrer">{it.title}</a>
+										) : (
+											it.title
+										)}
+									</p>
+									<p class="ld-pl-provider">{it.provider}</p>
+									{it.summary && <p class="ld-pl-summary">{it.summary}</p>}
+								</div>
+							</li>
+						))}
+					</ul>
+				</section>
+			))
+		}
+	</div>
+</Section>
+
+<style>
+	.ld-pl {
+		display: flex;
+		flex-direction: column;
+		gap: 1.5rem;
+	}
+
+	.ld-pl-group-title {
+		margin: 0 0 0.75rem;
+		font-family: var(--font-brand);
+		font-size: 0.72rem;
+		letter-spacing: 0.28em;
+		text-transform: uppercase;
+		color: var(--accent-regular);
+		font-weight: 600;
+	}
+
+	.ld-pl-list {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.65rem;
+	}
+
+	.ld-pl-item {
+		display: grid;
+		grid-template-columns: 4.5rem 1fr;
+		gap: 0.85rem;
+		padding: 0.85rem 1rem;
+		border-radius: 0.85rem;
+		border: 1px solid hsla(210, 80%, 70%, 0.12);
+		background: linear-gradient(
+			180deg,
+			hsla(var(--gray-999-basis), 0.5),
+			hsla(var(--gray-999-basis), 0.22)
+		);
+		backdrop-filter: blur(18px);
+		-webkit-backdrop-filter: blur(18px);
+	}
+
+	.ld-pl-year {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: 0.72rem;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		color: var(--gray-400);
+		align-self: center;
+	}
+
+	.ld-pl-body {
+		display: flex;
+		flex-direction: column;
+		gap: 0.2rem;
+	}
+
+	.ld-pl-title {
+		margin: 0;
+		font-size: 0.95rem;
+		color: var(--gray-0);
+		line-height: 1.35;
+		font-weight: 500;
+	}
+
+	.ld-pl-title a {
+		color: inherit;
+		text-decoration: none;
+	}
+	.ld-pl-title a:hover,
+	.ld-pl-title a:focus-visible {
+		color: var(--accent-regular);
+	}
+
+	.ld-pl-provider {
+		margin: 0;
+		font-size: 0.82rem;
+		color: var(--gray-300);
+	}
+
+	.ld-pl-summary {
+		margin: 0.25rem 0 0;
+		font-size: 0.85rem;
+		color: var(--gray-200);
+		line-height: 1.5;
+	}
+</style>
+

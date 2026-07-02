@@ -1,0 +1,96 @@
+---
+import Section from './Section.astro';
+import type { Achievement } from '../../data/learning/achievements';
+
+export interface Props {
+	items: Achievement[];
+}
+
+const { items } = Astro.props;
+---
+
+<Section
+	id="achievements"
+	eyebrow="Academic Achievements"
+	title="Milestones along the way"
+	description="Scholastic markers, research collaborations, and the moments that shaped the trajectory."
+>
+	<ol class="ld-ach">
+		{
+			items.map((a) => (
+				<li class="ld-ach-card">
+					<article>
+						{a.year && <p class="ld-ach-year">{a.year}</p>}
+						<h3 class="ld-ach-title">{a.title}</h3>
+						{a.context && <p class="ld-ach-context">{a.context}</p>}
+						{a.summary && <p class="ld-ach-summary">{a.summary}</p>}
+					</article>
+				</li>
+			))
+		}
+	</ol>
+</Section>
+
+<style>
+	.ld-ach {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 1rem;
+	}
+
+	.ld-ach-card {
+		padding: 1.15rem 1.25rem;
+		border-radius: 1rem;
+		border: 1px solid hsla(210, 80%, 70%, 0.14);
+		background: linear-gradient(
+			180deg,
+			hsla(var(--gray-999-basis), 0.55),
+			hsla(var(--gray-999-basis), 0.24)
+		);
+		backdrop-filter: blur(20px);
+		-webkit-backdrop-filter: blur(20px);
+		box-shadow: var(--shadow-sm);
+	}
+
+	.ld-ach-year {
+		margin: 0 0 0.35rem;
+		font-family: var(--font-brand);
+		font-size: 0.7rem;
+		letter-spacing: 0.24em;
+		text-transform: uppercase;
+		color: var(--accent-regular);
+	}
+
+	.ld-ach-title {
+		margin: 0 0 0.25rem;
+		font-family: var(--font-brand);
+		font-size: var(--text-md);
+		line-height: 1.25;
+		color: var(--gray-0);
+		font-weight: 600;
+	}
+
+	.ld-ach-context {
+		margin: 0 0 0.5rem;
+		font-size: 0.85rem;
+		color: var(--gray-300);
+	}
+
+	.ld-ach-summary {
+		margin: 0;
+		font-size: 0.9rem;
+		line-height: 1.55;
+		color: var(--gray-100);
+	}
+
+	@media (min-width: 50em) {
+		.ld-ach {
+			grid-template-columns: repeat(3, 1fr);
+			gap: 1.25rem;
+		}
+	}
+</style>
+
