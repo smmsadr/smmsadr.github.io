@@ -1,5 +1,6 @@
 ---
 import ContactCTA from '../components/ContactCTA.astro';
+import BeyondResumeGraph from '../components/BeyondResumeGraph';
 import Icon from '../components/Icon.astro';
 import Timeline from '../components/Timeline.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
@@ -112,6 +113,8 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 					</li>
 				</ul>
 			</section>
+
+			<Timeline />
 
 			<section class="how-i-think" aria-labelledby="how-i-think-title">
 				<header class="think-header">
@@ -253,7 +256,10 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 					</li>
 				</ol>
 			</section>
-			<Timeline />
+
+			<div class="person-behind-wrap">
+				<BeyondResumeGraph client:visible />
+			</div>
 		</main>
 
 		<ContactCTA />
@@ -478,7 +484,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 		gap: 0.6rem;
 	}
 
-	.story-eyebrow {
+	.story-eyebrow,
+	.think-eyebrow,
+	.cap-eyebrow {
 		margin: 0;
 		font-family: var(--font-brand);
 		font-size: var(--text-base);
@@ -487,7 +495,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 		color: var(--accent-regular);
 	}
 
-	.story-title {
+	.story-title,
+	.think-title,
+	.cap-title {
 		margin: 0;
 		font-family: var(--font-brand);
 		font-size: clamp(var(--text-2xl), 3.6vw, var(--text-4xl));
@@ -604,23 +614,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 		gap: 0.6rem;
 	}
 
-	.think-eyebrow {
-		margin: 0;
-		font-family: var(--font-brand);
-		font-size: var(--text-base);
-		letter-spacing: 0.24em;
-		text-transform: uppercase;
-		color: var(--accent-regular);
-	}
-
-	.think-title {
-		margin: 0;
-		font-family: var(--font-brand);
-		font-size: clamp(var(--text-2xl), 3.6vw, var(--text-4xl));
-		line-height: 1.15;
-		color: var(--gray-0);
-		font-weight: 600;
-	}
+	/* Shared by .story-*, .think-*, and .cap-* above. */
 
 
 	.think-grid {
@@ -762,23 +756,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 		gap: 0.6rem;
 	}
 
-	.cap-eyebrow {
-		margin: 0;
-		font-family: var(--font-brand);
-		font-size: var(--text-base);
-		letter-spacing: 0.24em;
-		text-transform: uppercase;
-		color: var(--accent-regular);
-	}
-
-	.cap-title {
-		margin: 0;
-		font-family: var(--font-brand);
-		font-size: clamp(var(--text-2xl), 3.6vw, var(--text-4xl));
-		line-height: 1.15;
-		color: var(--gray-0);
-		font-weight: 600;
-	}
+	/* Shared by .story-*, .think-*, and .cap-* above. */
 
 	.cap-grid {
 		list-style: none;
@@ -912,7 +890,19 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 	}
 
 
+
 	/* -------- Rest of page (unchanged) -------- */
+
+	.person-behind-wrap {
+		display: block;
+		width: 100%;
+	}
+
+	.person-behind-wrap :global(astro-island),
+	.person-behind-wrap :global(.person-behind) {
+		display: block;
+		width: 100%;
+	}
 
 
 	section {
@@ -957,11 +947,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 		.about > .my-story,
 		.about > .how-i-think,
 		.about > .capabilities,
+		.about > .person-behind-wrap,
 		.about > :global(.jr) {
 			grid-column: 1 / -1;
+			width: 100%;
 		}
 
-		section:not(.about-hero):not(.my-story):not(.how-i-think):not(.capabilities) {
+		section:not(.about-hero):not(.my-story):not(.how-i-think):not(.capabilities):not(.person-behind) {
 			display: contents;
 			font-size: var(--text-lg);
 		}
@@ -972,3 +964,4 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 		}
 	}
 </style>
+

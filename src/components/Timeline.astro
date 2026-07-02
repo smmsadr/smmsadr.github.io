@@ -6,7 +6,7 @@ type Pt = { x: number; y: number };
 
 const CANVAS_W = 1320;
 const CANVAS_H = 460;
-const CARD_TOP = 540;
+const CARD_TOP = 415;
 
 // Snaking premium path: Today (left) -> 2001 (right).
 const points: Pt[] = timelineData.map((_, i) => ({
@@ -39,7 +39,7 @@ const pathD = smoothPath(points);
 <section class="jr" aria-labelledby="jr-title" data-journey>
 	<div class="jr-left">
 		<p class="jr-eyebrow">Journey</p>
-		<h2 id="jr-title" class="jr-title">Experience &amp; Education</h2>
+		<h2 id="jr-title" class="jr-title">The Road So Far</h2>
 		<p class="jr-sub">
 			A roadmap from today back to the beginning of my scientific and engineering journey.
 		</p>
@@ -339,7 +339,7 @@ const pathD = smoothPath(points);
 	.jr-roadmap {
 		position: relative;
 		width: min(1320px, 100%);
-		height: 620px;
+		height: 700px;
 		margin-inline: auto;
 	}
 
@@ -525,7 +525,7 @@ const pathD = smoothPath(points);
 
 	.jr-card {
 		position: absolute;
-		top: 510px;
+		top: 420px;
 		left: 50%;
 		transform: translateX(-50%) translateY(12px);
 		width: min(700px, calc(100% - 1.25rem));
@@ -661,7 +661,7 @@ const pathD = smoothPath(points);
 		}
 
 		.jr-roadmap {
-			height: 640px;
+			height: 700px;
 		}
 	}
 

@@ -1,0 +1,428 @@
+.pbg {
+	display: flex;
+	flex-direction: column;
+	gap: 4.5rem;
+	padding-block: 2rem 3rem;
+	align-items: stretch;
+}
+
+.pbg-header {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+	align-items: flex-start;
+}
+
+.pbg-eyebrow {
+	margin: 0;
+	font-family: var(--font-brand);
+	font-size: var(--text-base);
+	letter-spacing: 0.24em;
+	text-transform: uppercase;
+	color: var(--accent-regular);
+}
+
+.pbg-title {
+	margin: 0;
+	font-family: var(--font-brand);
+	font-size: clamp(var(--text-3xl), 4.4vw, var(--text-5xl));
+	line-height: 1.08;
+	color: var(--gray-0);
+	font-weight: 600;
+}
+
+.pbg-intro {
+	margin: 0;
+	font-size: var(--text-md);
+	line-height: 1.72;
+	color: var(--gray-200);
+	max-width: 78ch;
+}
+
+.pbg-scene-wrap {
+	display: flex;
+	flex-direction: column;
+	gap: 1.5rem;
+	width: 100%;
+	margin-top: 2.5rem;
+}
+
+.pbg-scene {
+	position: relative;
+	isolation: isolate;
+	width: 100%;
+	margin-inline: 0;
+	min-height: clamp(32rem, 68vw, 52rem);
+	padding: clamp(2rem, 4vw, 3.5rem);
+	border-radius: 1.8rem;
+	border: 1px solid hsla(210, 80%, 70%, 0.16);
+	background: radial-gradient(circle at 52% 48%, hsla(187, 85%, 53%, 0.08), transparent 52%),
+		linear-gradient(180deg, hsla(var(--gray-999-basis), 0.6), hsla(var(--gray-999-basis), 0.23));
+	backdrop-filter: blur(22px);
+	-webkit-backdrop-filter: blur(22px);
+	box-shadow: var(--shadow-md), 0 0 64px -28px hsla(187, 85%, 53%, 0.35),
+		0 0 56px -28px hsla(265, 80%, 65%, 0.26);
+	overflow: hidden;
+}
+
+.pbg-scene::before {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background: radial-gradient(circle at 50% 50%, hsla(210, 85%, 62%, 0.08), transparent 68%);
+	pointer-events: none;
+}
+
+.pbg-edges {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+}
+
+.pbg-edge {
+	stroke: hsla(200, 85%, 70%, 0.28);
+	stroke-width: 0.2;
+	stroke-linecap: round;
+	stroke-dasharray: 1.8 1.4;
+	animation: pbg-edge-pulse 7.2s ease-in-out infinite;
+	transition: opacity 0.25s ease, stroke 0.25s ease, stroke-width 0.25s ease;
+}
+
+/* Strong: primary → major concepts (Curiosity → Science / Systems / Philosophy) */
+.pbg-edge--strong {
+	stroke: hsla(187, 90%, 74%, 0.7);
+	stroke-width: 0.36;
+	stroke-dasharray: none;
+	animation-duration: 5.4s;
+}
+
+/* Medium: primary → supporting concepts */
+.pbg-edge--medium {
+	stroke: hsla(200, 85%, 70%, 0.42);
+	stroke-width: 0.22;
+	stroke-dasharray: none;
+	animation-duration: 6.8s;
+}
+
+/* Subtle: secondary cross-cluster ties (dashed) */
+.pbg-edge--subtle {
+	stroke: hsla(210, 80%, 78%, 0.24);
+	stroke-width: 0.14;
+	stroke-dasharray: 1.4 1.6;
+	animation-duration: 8s;
+}
+
+.pbg-edge.is-active {
+	stroke: hsla(187, 90%, 78%, 0.95);
+	stroke-width: 0.4;
+	stroke-dasharray: none;
+	animation: none;
+	opacity: 1;
+}
+
+.pbg-edge.is-dim {
+	opacity: 0.1;
+}
+
+@keyframes pbg-edge-pulse {
+	0%,
+	100% {
+		opacity: 0.45;
+	}
+	50% {
+		opacity: 0.9;
+	}
+}
+
+.pbg-node {
+	position: absolute;
+	transform: translate(-50%, -50%);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 0.45rem;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+	z-index: 2;
+	transition: transform 0.25s ease, opacity 0.2s ease;
+}
+
+.pbg-node.is-dim {
+	opacity: 0.35;
+}
+
+.pbg-node-inner {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	will-change: transform;
+}
+
+.pbg-node-ring {
+	width: 2.6rem;
+	height: 2.6rem;
+	border-radius: 999rem;
+	border: 1px solid hsla(187, 85%, 73%, 0.42);
+	background: radial-gradient(circle at 40% 30%, hsla(187, 85%, 70%, 0.18), hsla(187, 85%, 45%, 0.06));
+	box-shadow: 0 0 12px -6px hsla(187, 85%, 65%, 0.5), 0 0 22px -14px hsla(265, 80%, 70%, 0.4);
+	transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease,
+		width 0.25s ease, height 0.25s ease;
+}
+
+.pbg-node-icon {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--accent-regular);
+	pointer-events: none;
+	transition: opacity 0.2s ease;
+}
+
+.pbg-node-icon svg {
+	width: 0.9rem;
+	height: 0.9rem;
+	transition: width 0.25s ease, height 0.25s ease;
+}
+
+/* Tier: Major concepts — Science, Systems Thinking, Philosophy */
+.pbg-node--major .pbg-node-ring {
+	width: 3.4rem;
+	height: 3.4rem;
+	border-color: hsla(187, 85%, 75%, 0.62);
+	background: radial-gradient(circle at 40% 30%, hsla(187, 85%, 70%, 0.28), hsla(187, 85%, 45%, 0.1));
+	box-shadow: 0 0 20px -4px hsla(187, 85%, 65%, 0.72), 0 0 32px -10px hsla(265, 80%, 70%, 0.55);
+}
+
+.pbg-node--major .pbg-node-icon svg {
+	width: 1.05rem;
+	height: 1.05rem;
+}
+
+.pbg-node--major .pbg-node-label {
+	font-size: 0.76rem;
+	color: var(--gray-0);
+}
+
+/* Tier: Supporting concepts — History, Diving, Traveller, Learning, Engineering */
+.pbg-node--supporting .pbg-node-ring {
+	width: 2.4rem;
+	height: 2.4rem;
+	border-color: hsla(187, 85%, 70%, 0.32);
+	background: radial-gradient(circle at 40% 30%, hsla(187, 85%, 70%, 0.14), hsla(187, 85%, 45%, 0.05));
+	box-shadow: 0 0 10px -6px hsla(187, 85%, 65%, 0.4), 0 0 18px -14px hsla(265, 80%, 70%, 0.32);
+}
+
+.pbg-node--supporting .pbg-node-icon svg {
+	width: 0.8rem;
+	height: 0.8rem;
+}
+
+.pbg-node--supporting .pbg-node-icon {
+	opacity: 0.85;
+}
+
+.pbg-node--supporting .pbg-node-label {
+	font-size: 0.68rem;
+	color: var(--gray-200);
+	opacity: 0.9;
+}
+
+.pbg-node-label {
+	font-family: var(--font-brand);
+	font-size: 0.72rem;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--gray-100);
+	white-space: nowrap;
+	padding: 0.12rem 0.4rem;
+	border-radius: 999rem;
+	background: hsla(var(--gray-999-basis), 0.33);
+	border: 1px solid hsla(210, 80%, 70%, 0.14);
+}
+
+.pbg-node:hover .pbg-node-ring,
+.pbg-node:focus-visible .pbg-node-ring,
+.pbg-node.is-current .pbg-node-ring {
+	transform: scale(1.12);
+	border-color: hsla(187, 85%, 76%, 0.95);
+	box-shadow: 0 0 28px -2px hsla(187, 85%, 65%, 0.85), 0 0 40px -10px hsla(265, 80%, 70%, 0.74);
+}
+
+.pbg-node:focus-visible {
+	outline: none;
+}
+
+.pbg-node:focus-visible .pbg-node-label {
+	border-color: hsla(187, 85%, 70%, 0.6);
+}
+
+/* Tier: Primary — Curiosity (significantly larger, brightest glow) */
+.pbg-node.is-core .pbg-node-ring,
+.pbg-node--primary .pbg-node-ring {
+	width: 5.4rem;
+	height: 5.4rem;
+	border-color: hsla(187, 90%, 82%, 0.95);
+	background: radial-gradient(circle at 40% 30%, hsla(187, 90%, 72%, 0.55), hsla(187, 90%, 45%, 0.25));
+	box-shadow:
+		0 0 48px 2px hsla(187, 90%, 68%, 0.9),
+		0 0 72px -6px hsla(210, 85%, 70%, 0.7),
+		0 0 90px -10px hsla(265, 80%, 70%, 0.62);
+}
+
+.pbg-node.is-core .pbg-node-icon svg,
+.pbg-node--primary .pbg-node-icon svg {
+	width: 1.35rem;
+	height: 1.35rem;
+}
+
+.pbg-node.is-core .pbg-node-label,
+.pbg-node--primary .pbg-node-label {
+	font-size: 0.82rem;
+	color: var(--gray-0);
+	border-color: hsla(187, 85%, 70%, 0.35);
+	background: hsla(var(--gray-999-basis), 0.5);
+}
+
+.pbg-panel {
+	border-radius: 1rem;
+	border: 1px solid hsla(210, 80%, 70%, 0.22);
+	background: linear-gradient(170deg, hsla(var(--gray-999-basis), 0.76), hsla(var(--gray-999-basis), 0.42));
+	backdrop-filter: blur(22px);
+	-webkit-backdrop-filter: blur(22px);
+	box-shadow: var(--shadow-md), 0 0 40px -18px hsla(187, 85%, 55%, 0.52);
+	padding: 1rem 1.05rem;
+}
+
+.pbg-panel.is-desktop {
+	position: absolute;
+	z-index: 4;
+	width: min(22rem, 42vw);
+	left: 50%;
+	top: 50%;
+	pointer-events: none;
+	transition: left 0.32s cubic-bezier(0.32, 0.72, 0.28, 1),
+		top 0.32s cubic-bezier(0.32, 0.72, 0.28, 1);
+}
+
+.pbg-panel.is-mobile {
+	display: block;
+}
+
+.pbg-panel-head {
+	display: flex;
+	align-items: center;
+	gap: 0.55rem;
+	margin-bottom: 0.5rem;
+}
+
+.pbg-panel-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.9rem;
+	height: 1.9rem;
+	border-radius: 0.6rem;
+	background: hsla(187, 85%, 53%, 0.12);
+	border: 1px solid hsla(187, 85%, 53%, 0.24);
+	color: var(--accent-regular);
+}
+
+.pbg-panel-icon svg {
+	width: 0.9rem;
+	height: 0.9rem;
+}
+
+.pbg-panel h3 {
+	margin: 0;
+	font-family: var(--font-brand);
+	font-size: var(--text-md);
+	color: var(--gray-0);
+}
+
+.pbg-panel-lead {
+	margin: 0;
+	color: var(--gray-200);
+	font-size: var(--text-sm);
+	line-height: 1.56;
+}
+
+.pbg-panel-support {
+	margin: 0.6rem 0 0;
+	color: var(--gray-400);
+	font-size: 0.81rem;
+	line-height: 1.55;
+}
+
+.pbg-quote {
+	margin: 1.5rem 0 0;
+	padding: 3rem 1.4rem;
+	border-radius: 1.5rem;
+	border: 1px solid hsla(210, 80%, 70%, 0.18);
+	background: linear-gradient(180deg, hsla(var(--gray-999-basis), 0.56), hsla(var(--gray-999-basis), 0.24));
+	backdrop-filter: blur(24px);
+	-webkit-backdrop-filter: blur(24px);
+	box-shadow: var(--shadow-sm), 0 0 64px -24px hsla(187, 85%, 55%, 0.36),
+		0 0 64px -26px hsla(265, 80%, 65%, 0.28);
+	text-align: center;
+}
+
+.pbg-quote blockquote {
+	margin: 0;
+	padding: 0;
+}
+
+.pbg-quote-text {
+	margin: 0;
+	font-family: var(--font-brand);
+	font-size: clamp(var(--text-xl), 3vw, var(--text-3xl));
+	font-weight: 600;
+	line-height: 1.4;
+	color: var(--gray-0);
+}
+
+.pbg-quote-caption {
+	margin-top: 0.8rem;
+	display: inline-block;
+	font-family: var(--font-brand);
+	font-size: var(--text-sm);
+	letter-spacing: 0.22em;
+	text-transform: uppercase;
+	color: var(--accent-regular);
+}
+
+@media (max-width: 60em) {
+	.pbg-panel.is-desktop {
+		display: none;
+	}
+
+	.pbg-node-label {
+		font-size: 0.66rem;
+	}
+}
+
+@media (min-width: 60.01em) {
+	.pbg-panel.is-mobile {
+		display: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.pbg-edge {
+		animation: none;
+	}
+
+	.pbg-node,
+	.pbg-node-ring {
+		transition: none;
+	}
+}
+
