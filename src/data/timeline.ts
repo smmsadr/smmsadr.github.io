@@ -22,7 +22,7 @@ export const timelineData: TimelineEntry[] = [
 	{
 		id: 'today',
 		year: '2021–Present',
-		chapter: 'CURRENT - Generative AI',
+		chapter: 'CURRENT: Decision Intelligence',
 		kind: 'experience',
 		title: 'Senior Data Scientist & Quantitative Engineer',
 		organization: 'KINESSO, Kuala Lumpur, Malaysia',
@@ -59,7 +59,7 @@ export const timelineData: TimelineEntry[] = [
 	{
 		id: 'y2018a',
 		year: '2018–2021',
-		chapter: 'Media Analytics',
+		chapter: 'Marketing Science',
 		kind: 'experience',
 		title: 'Quantitative Modelling Analyst',
 		organization: 'KINESSO Malaysia (formerly IPG Mediabrands Technologies), Kuala Lumpur, Malaysia',
