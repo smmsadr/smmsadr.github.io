@@ -239,14 +239,16 @@ export default function BeyondResumeGraph() {
 	return (
 		<section className="person-behind pbg" aria-labelledby="person-behind-title">
 			<header className="pbg-header">
-				<p className="pbg-eyebrow">Beyond the Resume</p>
+				<p className="pbg-eyebrow">Beyond the Work</p>
 				<h2 id="person-behind-title" className="pbg-title">
 					The Person Behind the Systems
 				</h2>
 				<p className="pbg-intro">
-					Curiosity sits at the center of how I think. The ideas around it are connected,
-					not isolated - each one reshapes how I approach complexity, evidence, and
-					engineering decisions.
+					"Exploring Deep Systems" is more than a theme for this website—it reflects how I
+					approach learning itself. Whether beneath the surface of the ocean, within the
+					history of civilizations, through philosophical ideas, or inside mathematical
+					models, I'm motivated by the same curiosity: understanding how complex systems
+					behave and how deeper understanding leads to better decisions.
 				</p>
 			</header>
 

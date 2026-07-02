@@ -25,7 +25,7 @@
 .pbg-title {
 	margin: 0;
 	font-family: var(--font-brand);
-	font-size: clamp(var(--text-3xl), 4.4vw, var(--text-5xl));
+	font-size: clamp(var(--text-2xl), 3.6vw, var(--text-4xl));
 	line-height: 1.08;
 	color: var(--gray-0);
 	font-weight: 600;
@@ -36,7 +36,6 @@
 	font-size: var(--text-md);
 	line-height: 1.72;
 	color: var(--gray-200);
-	max-width: 78ch;
 }
 
 .pbg-scene-wrap {
