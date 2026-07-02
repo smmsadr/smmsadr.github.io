@@ -81,8 +81,8 @@ export const timelineData: TimelineEntry[] = [
 		organization: 'EXPERIS (contract for IPG Mediabrands Technologies), Kuala Lumpur, Malaysia',
 		icon: 'strategy',
 		description:
-			'Supported quantitative modelling delivery for media planning initiatives as a contract analyst.',
-		tags: ['Quantitative Modelling', 'Media Planning'],
+			'Delivered contract quantitative modelling for a media technology team on a fast turnaround — the eight-month engagement that seeded the analytics later scaled into production and led directly to the full-time role at Kinesso.',
+		tags: ['Quantitative Modelling', 'Media Planning', 'Contract'],
 		href: '/experience/quantitative-modelling-analyst-experis/',
 	},
 	{

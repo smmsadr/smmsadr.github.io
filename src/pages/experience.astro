@@ -1,193 +1,44 @@
 ---
+import { getCollection } from 'astro:content';
 import CallToAction from '../components/CallToAction.astro';
 import ContactCTA from '../components/ContactCTA.astro';
 import Icon from '../components/Icon.astro';
 import BaseLayout from '../layouts/BaseLayout.astro';
 
-// ------------------------------------------------------------------
-// Curated engineering journey — story-first, not a chronological CV.
-// Order: newest first (most visually emphasized).
-// Metrics are qualitative markers drawn from existing role content;
-// no numeric metrics are invented.
-// ------------------------------------------------------------------
-type TechGroup = { label: string; items: string[] };
+// -------------------------------------------------------------------
+// Engineering Journey — sourced from src/content/experience/*.md
+// Each markdown file describes one milestone (frontmatter carries the
+// structured data, body carries the full narrative). Order is driven
+// by the optional `order` frontmatter field (1 = newest), falling
+// back to `publishDate` descending when order is missing.
+// -------------------------------------------------------------------
+const entries = (await getCollection('experience'))
+	.filter((e) => e.data.hidden !== true)
+	.sort((a, b) => {
+		const oa = a.data.order ?? Number.POSITIVE_INFINITY;
+		const ob = b.data.order ?? Number.POSITIVE_INFINITY;
+		if (oa !== ob) return oa - ob;
+		return b.data.publishDate.valueOf() - a.data.publishDate.valueOf();
+	});
 
-type Milestone = {
-	slug: string;                 // matches src/content/experience/<slug>.md
-	company: string;
-	position: string;
-	location: string;             // e.g. "Kuala Lumpur, Malaysia"
-	era: string;                  // display range, e.g. "2021 — Present"
-	shortLabel: string;           // for the timeline node
-	mission: string;
-	achievements: string[];
-	tech: TechGroup[];
-	metrics: string[];
-	emphasis: 'primary' | 'secondary' | 'tertiary';
-	accent: 'cyan' | 'violet' | 'blue' | 'teal';
-	current?: boolean;
-};
-
-const journey: Milestone[] = [
-	{
-		slug: 'senior-data-scientist-quantitative-engineer-kinesso',
-		company: 'Kinesso',
-		position: 'Senior Data Scientist & Quantitative Engineer',
-		location: 'Kuala Lumpur, Malaysia',
-		era: '2021 — Present',
-		shortLabel: '2021 – Now',
-		mission:
-			'Architect AI-driven optimization and decision intelligence platforms that shape global media planning decisions across multiple markets and business units.',
-		achievements: [
-			'Architected optimization engines for budget and performance planning',
-			'Delivered production ML and generative-AI workflows',
-			'Applied Pyomo, GAMS, CPLEX, and IPOPT to business optimization',
-			'Led cross-functional modelling initiatives',
-			'Productionized decision platforms on cloud data infrastructure',
-		],
-		tech: [
-			{ label: 'Optimization', items: ['Pyomo', 'GAMS', 'IPOPT', 'CPLEX'] },
-			{ label: 'AI', items: ['LangGraph', 'Gemini', 'LangChain', 'FastAPI'] },
-			{ label: 'Engineering', items: ['Python', 'Polars', 'Docker', 'AWS'] },
-		],
-		metrics: ['Global media planning', 'Production AI workflows', 'Cross-functional leadership'],
-		emphasis: 'primary',
-		accent: 'cyan',
-		current: true,
-	},
-	{
-		slug: 'quantitative-modelling-analyst-kinesso',
-		company: 'Kinesso',
-		position: 'Quantitative Engineer & Modelling Analyst',
-		location: 'Kuala Lumpur, Malaysia',
-		era: '2018 — 2021',
-		shortLabel: '2018 – 2021',
-		mission:
-			'Designed the audience, response, and optimization models that shape campaign investment and cross-channel planning decisions for enterprise media clients.',
-		achievements: [
-			'Developed audience and media-response models for strategic planning',
-			'Contributed to marketing mix and omnichannel optimization',
-			'Improved audience measurement with probabilistic modelling',
-			'Built solver-backed analytics services on data platforms',
-		],
-		tech: [
-			{ label: 'Modelling', items: ['Python', 'Pyomo', 'SciPy'] },
-			{ label: 'Analytics', items: ['SQL', 'Polars', 'NumPy'] },
-		],
-		metrics: ['Marketing mix modelling', 'Omnichannel optimization'],
-		emphasis: 'secondary',
-		accent: 'violet',
-	},
-	{
-		slug: 'quantitative-modelling-analyst-experis',
-		company: 'Experis',
-		position: 'Quantitative Modelling Analyst',
-		location: 'Kuala Lumpur, Malaysia',
-		era: '2018',
-		shortLabel: '2018 · Experis',
-		mission:
-			'Delivered the early quantitative modelling that later scaled into the production planning platforms clients rely on to make media decisions today.',
-		achievements: [
-			'Supported model development and analytics execution under a fast delivery cadence',
-			'Contributed to planning-focused quantitative workflows and reporting',
-			'Bridged operational data into planning-oriented analytical outputs',
-		],
-		tech: [
-			{ label: 'Modelling', items: ['Python', 'NumPy'] },
-			{ label: 'Analytics', items: ['SQL', 'Pandas'] },
-		],
-		metrics: ['Media planning support', 'Contract delivery'],
-		emphasis: 'tertiary',
-		accent: 'violet',
-	},
-	{
-		slug: 'quantitative-analyst-deriv',
-		company: 'Deriv',
-		position: 'Quantitative Analyst',
-		location: 'Cyberjaya, Malaysia',
-		era: '2016 — 2018',
-		shortLabel: '2016 – 2018',
-		mission:
-			'Turned trading and risk data into quantitative analyses that supported live decision-making across a global online trading platform.',
-		achievements: [
-			'Built quantitative workflows for decision support',
-			'Contributed to production analytics and model interpretation',
-			'Bridged operational data into trading and risk analytics',
-		],
-		tech: [
-			{ label: 'Analytics', items: ['Python', 'SQL', 'NumPy'] },
-			{ label: 'Systems', items: ['Linux', 'Bash'] },
-		],
-		metrics: ['Trading analytics', 'Risk decision support'],
-		emphasis: 'secondary',
-		accent: 'blue',
-	},
-	{
-		slug: 'linux-admin-devops-deriv',
-		company: 'Deriv',
-		position: 'Linux Administration & DevOps Engineer',
-		location: 'Cyberjaya, Malaysia',
-		era: '2014 — 2016',
-		shortLabel: '2014 – 2016',
-		mission:
-			'Kept high-volume production trading services reliable at scale — where deployment, uptime, and automation shaped an engineer\'s intuition for how large systems really behave.',
-		achievements: [
-			'Maintained Linux environments and deployment tooling',
-			'Automated operational tasks and improved reliability',
-			'Owned production support for critical services',
-		],
-		tech: [
-			{ label: 'Infrastructure', items: ['Linux', 'Bash'] },
-			{ label: 'Operations', items: ['DevOps', 'Automation'] },
-		],
-		metrics: ['Production Linux environments'],
-		emphasis: 'tertiary',
-		accent: 'teal',
-	},
-	{
-		slug: 'linux-admin-dba-behestan-rayan',
-		company: 'Behestan Rayan',
-		position: 'Linux Sysadmin & DBA',
-		location: 'Tehran, Iran',
-		era: '2011 — 2014',
-		shortLabel: '2011 – 2014',
-		mission:
-			'Kept the Linux infrastructure and enterprise databases that ran an organization\'s daily business dependable — the foundation for later work in production-grade data systems.',
-		achievements: [
-			'Managed Linux servers and networked services',
-			'Administered Oracle and MySQL database environments',
-			'Supported internal application delivery',
-		],
-		tech: [
-			{ label: 'Systems', items: ['Linux'] },
-			{ label: 'Databases', items: ['Oracle', 'MySQL'] },
-		],
-		metrics: ['Enterprise data operations'],
-		emphasis: 'tertiary',
-		accent: 'blue',
-	},
-	{
-		slug: 'it-manager-merc',
-		company: 'Materials & Energy Research Center',
-		position: 'IT Manager',
-		location: 'Karaj, Iran',
-		era: '2008 — 2010',
-		shortLabel: '2008 – 2010',
-		mission:
-			'Led the IT operations that kept a research organization\'s day-to-day science running — where thinking in systems rather than tools became the default lens.',
-		achievements: [
-			'Oversaw IT operations, systems administration, and service support',
-			'Coordinated infrastructure across research and administrative teams',
-			'Introduced Linux and network service practices across research units',
-		],
-		tech: [
-			{ label: 'Operations', items: ['IT Management', 'Linux', 'Networking'] },
-		],
-		metrics: ['Research organization IT'],
-		emphasis: 'tertiary',
-		accent: 'teal',
-	},
-];
+const journey = entries.map((entry) => {
+	const d = entry.data;
+	return {
+		slug: entry.id,
+		company: d.company ?? '',
+		position: d.position ?? d.title,
+		location: d.location ?? '',
+		era: d.era ?? '',
+		shortLabel: d.shortLabel ?? d.era ?? '',
+		mission: d.mission ?? d.description,
+		achievements: d.achievements ?? [],
+		tech: d.tech ?? [],
+		metrics: d.metrics ?? [],
+		emphasis: d.emphasis ?? 'secondary',
+		accent: d.accent ?? 'cyan',
+		current: d.current === true,
+	};
+});
 ---
 
 <BaseLayout

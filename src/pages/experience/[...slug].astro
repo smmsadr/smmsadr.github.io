@@ -2,9 +2,7 @@
 import { type CollectionEntry, getCollection, render } from 'astro:content';
 
 import ContactCTA from '../../components/ContactCTA.astro';
-import Hero from '../../components/Hero.astro';
 import Icon from '../../components/Icon.astro';
-import Pill from '../../components/Pill.astro';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 
 interface Props {
@@ -21,127 +19,477 @@ export async function getStaticPaths() {
 
 const { entry } = Astro.props;
 const { Content } = await render(entry);
+
+// Build the same journey ordering used on the index page so prev/next
+// resolves consistently. `order` (1 = newest) wins, publishDate desc
+// is the tiebreaker.
+const allEntries = (await getCollection('experience'))
+	.filter((e) => e.data.hidden !== true)
+	.sort((a, b) => {
+		const oa = a.data.order ?? Number.POSITIVE_INFINITY;
+		const ob = b.data.order ?? Number.POSITIVE_INFINITY;
+		if (oa !== ob) return oa - ob;
+		return b.data.publishDate.valueOf() - a.data.publishDate.valueOf();
+	});
+
+const idx = allEntries.findIndex((e) => e.id === entry.id);
+const newer = idx > 0 ? allEntries[idx - 1] : null;
+const earlier =
+	idx >= 0 && idx < allEntries.length - 1 ? allEntries[idx + 1] : null;
+
+// Minimum identity fields to confirm which role you're viewing. The
+// full summary (mission, achievements, technologies, metrics, meta)
+// is intentionally NOT repeated here — the Journey card already
+// carries it. This page exists for the full narrative content only.
+const d = entry.data;
+const displayPosition = d.position ?? d.title;
+const displayCompany = d.company;
+const displayEra = d.era;
+const displayAccent = d.accent ?? 'cyan';
+const displayCurrent = d.current === true;
+const isHidden = d.hidden === true;
+
+const pageTitle = `${displayPosition}${displayCompany ? ` · ${displayCompany}` : ''}`;
+const pageDescription = d.mission ?? d.description ?? displayPosition;
+
+const summarize = (e: CollectionEntry<'experience'>) => ({
+	slug: e.id,
+	position: e.data.position ?? e.data.title,
+	company: e.data.company ?? '',
+	era: e.data.era ?? '',
+	accent: e.data.accent ?? 'cyan',
+});
+
+const newerSummary = newer ? summarize(newer) : null;
+const earlierSummary = earlier ? summarize(earlier) : null;
 ---
 
-<BaseLayout title={entry.data.title} description={entry.data.description}>
+<BaseLayout title={pageTitle} description={pageDescription}>
 	<div class="stack gap-20">
-		<div class="stack gap-15">
-			<header>
-				<div class="wrapper stack gap-2">
-					<a class="back-link" href="/experience/"><Icon icon="arrow-left" /> Experience</a>
-					<Hero title={entry.data.title} align="start">
-						<div class="details">
-							<div class="tags">
-								{entry.data.tags.map((t) => <Pill>{t}</Pill>)}
-							</div>
-							<p class="description">{entry.data.description}</p>
-						</div>
-					</Hero>
+		<article class={`role role-accent-${displayAccent}`} data-role>
+			<!-- Ambient background: matches Engineering Journey aesthetic -->
+			<div class="role-bg" aria-hidden="true">
+				<div class="role-bg-gradient"></div>
+				<div class="role-bg-grid"></div>
+			</div>
+
+			<main class="wrapper role-wrapper stack gap-8">
+				<!-- Back to Engineering Journey (anchors directly to the
+				     milestone card the visitor came from) -->
+				<a
+					class="role-back"
+					href={
+						isHidden
+							? '/experience/'
+							: `/experience/#jr-milestone-${entry.id}`
+					}
+				>
+					<Icon icon="arrow-left" size="1em" />
+					<span>Engineering Journey</span>
+				</a>
+
+				<!-- Slim identity header — enough to confirm the page,
+				     nothing that duplicates the Journey card. -->
+				<header class="role-hero">
+					<p class="role-crumb">
+						{displayCompany && <span class="role-company">{displayCompany}</span>}
+						{displayCompany && displayEra && (
+							<span class="role-sep" aria-hidden="true">·</span>
+						)}
+						{displayEra && <span class="role-era">{displayEra}</span>}
+						{displayCurrent && <span class="role-now">Now</span>}
+					</p>
+					<h1 class="role-title">{displayPosition}</h1>
+				</header>
+
+				<!-- The full narrative content lives entirely in the
+				     markdown file — this page's reason to exist. -->
+				<div class="role-prose">
+					<Content />
 				</div>
-			</header>
-			<main class="wrapper">
-				<div class="stack gap-10 content">
-					{entry.data.img && <img src={entry.data.img} alt={entry.data.img_alt || ''} />}
-					<div class="content">
-						<Content />
-					</div>
-				</div>
+
+				<!-- Adjacent roles -->
+				{(newerSummary || earlierSummary) && (
+					<nav class="role-pager" aria-label="Adjacent roles">
+						{newerSummary ? (
+							<a
+								class={`role-pager-card role-pager-newer role-accent-${newerSummary.accent}`}
+								href={`/experience/${newerSummary.slug}/`}
+							>
+								<span class="role-pager-dir">
+									<Icon icon="arrow-left" size="1em" />
+									<span>Newer role</span>
+								</span>
+								<span class="role-pager-title">{newerSummary.position}</span>
+								<span class="role-pager-meta">
+									{newerSummary.company}
+									{newerSummary.company && newerSummary.era ? ' · ' : ''}
+									{newerSummary.era}
+								</span>
+							</a>
+						) : (
+							<span class="role-pager-card is-empty" aria-hidden="true"></span>
+						)}
+
+						{earlierSummary ? (
+							<a
+								class={`role-pager-card role-pager-earlier role-accent-${earlierSummary.accent}`}
+								href={`/experience/${earlierSummary.slug}/`}
+							>
+								<span class="role-pager-dir">
+									<span>Earlier role</span>
+									<Icon icon="arrow-right" size="1em" />
+								</span>
+								<span class="role-pager-title">{earlierSummary.position}</span>
+								<span class="role-pager-meta">
+									{earlierSummary.company}
+									{earlierSummary.company && earlierSummary.era ? ' · ' : ''}
+									{earlierSummary.era}
+								</span>
+							</a>
+						) : (
+							<span class="role-pager-card is-empty" aria-hidden="true"></span>
+						)}
+					</nav>
+				)}
 			</main>
-		</div>
+		</article>
+
 		<ContactCTA />
 	</div>
 </BaseLayout>
 
 <style>
-	header {
-		padding-bottom: 2.5rem;
-		border-bottom: 1px solid var(--gray-800);
+	/* =====================================================================
+	   Role detail page — deliberately slim.
+	   The Journey card already tells the story; this page hosts the
+	   full narrative from the markdown file, nothing else.
+	   ===================================================================== */
+
+	.role {
+		--r-accent: #22d3ee;
+		--r-accent-soft: hsla(187, 85%, 60%, 0.35);
+		--r-accent-glow: hsla(187, 85%, 60%, 0.6);
+		position: relative;
+		overflow: hidden;
+		isolation: isolate;
 	}
 
-	.back-link {
-		display: none;
+	.role-accent-cyan   { --r-accent: #22d3ee; --r-accent-soft: hsla(187, 85%, 60%, 0.35); --r-accent-glow: hsla(187, 85%, 60%, 0.6); }
+	.role-accent-violet { --r-accent: #a855f7; --r-accent-soft: hsla(265, 85%, 68%, 0.35); --r-accent-glow: hsla(265, 85%, 68%, 0.6); }
+	.role-accent-blue   { --r-accent: #60a5fa; --r-accent-soft: hsla(217, 90%, 68%, 0.35); --r-accent-glow: hsla(217, 90%, 68%, 0.6); }
+	.role-accent-teal   { --r-accent: #5eead4; --r-accent-soft: hsla(170, 78%, 65%, 0.35); --r-accent-glow: hsla(170, 78%, 65%, 0.6); }
+
+	.role-wrapper {
+		position: relative;
+		z-index: 1;
+		padding-top: 2.5rem;
+		padding-bottom: 3rem;
+		max-width: 55rem;
 	}
 
-	.details {
+	/* Ambient background */
+	.role-bg {
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		pointer-events: none;
+		overflow: hidden;
+	}
+
+	.role-bg-gradient {
+		position: absolute;
+		inset: -15%;
+		background:
+			radial-gradient(circle at 20% 8%, var(--r-accent-soft), transparent 55%),
+			radial-gradient(circle at 82% 4%, hsla(265, 85%, 68%, 0.18), transparent 60%);
+		filter: blur(2px);
+	}
+
+	.role-bg-grid {
+		position: absolute;
+		inset: 0;
+		background-image:
+			linear-gradient(to right, hsla(187, 85%, 75%, 0.045) 1px, transparent 1px),
+			linear-gradient(to bottom, hsla(187, 85%, 75%, 0.045) 1px, transparent 1px);
+		background-size: 48px 48px;
+		mask-image: radial-gradient(ellipse at top, #000 40%, transparent 90%);
+		-webkit-mask-image: radial-gradient(ellipse at top, #000 40%, transparent 90%);
+		opacity: 0.55;
+	}
+
+	/* Back link */
+	.role-back {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		align-self: flex-start;
+		padding: 0.4rem 0.75rem 0.4rem 0.55rem;
+		border-radius: 999rem;
+		border: 1px solid hsla(210, 80%, 70%, 0.16);
+		background: hsla(var(--gray-999-basis), 0.35);
+		color: var(--gray-200);
+		text-decoration: none;
+		font-family: var(--font-brand);
+		font-size: 0.78rem;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		width: max-content;
+		transition:
+			background-color var(--theme-transition),
+			border-color var(--theme-transition),
+			color var(--theme-transition),
+			transform var(--theme-transition);
+	}
+
+	.role-back:hover,
+	.role-back:focus-visible {
+		border-color: var(--r-accent-soft);
+		background: hsla(var(--gray-999-basis), 0.55);
+		color: var(--gray-0);
+		outline: none;
+		transform: translateX(-2px);
+	}
+
+	.role-back:focus-visible {
+		box-shadow: 0 0 0 3px var(--r-accent-soft);
+	}
+
+	/* Slim identity header */
+	.role-hero {
 		display: flex;
 		flex-direction: column;
-		padding: 0.5rem;
-		gap: 1.5rem;
-		justify-content: space-between;
-		align-items: center;
+		gap: 0.55rem;
 	}
 
-	.tags {
+	.role-crumb {
+		margin: 0;
 		display: flex;
-		gap: 0.5rem;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.35rem 0.55rem;
+		font-family: var(--font-brand);
+		font-size: 0.72rem;
+		letter-spacing: 0.24em;
+		text-transform: uppercase;
 	}
 
-	.description {
-		font-size: var(--text-lg);
-		max-width: 54ch;
+	.role-company {
+		color: var(--r-accent);
+		font-weight: 600;
 	}
 
-	.content {
-		max-width: 65ch;
-		margin-inline: auto;
+	.role-sep {
+		color: var(--gray-500);
 	}
 
-	.content > :global(* + *) {
-		margin-top: 1rem;
+	.role-era {
+		color: var(--gray-400);
 	}
 
-	.content :global(h1),
-	.content :global(h2),
-	.content :global(h3),
-	.content :global(h4),
-	.content :global(h5) {
-		margin: 1.5rem 0;
+	.role-now {
+		display: inline-flex;
+		align-items: center;
+		margin-left: 0.25rem;
+		padding: 0.18rem 0.5rem;
+		border-radius: 999rem;
+		border: 1px solid var(--r-accent-soft);
+		background: hsla(187, 85%, 53%, 0.15);
+		color: var(--r-accent);
+		font-size: 0.6rem;
+		line-height: 1;
+		letter-spacing: 0.22em;
 	}
 
-	.content :global(img) {
-		border-radius: 1.5rem;
-		box-shadow: var(--shadow-sm);
-		background: var(--gradient-subtle);
-		border: 1px solid var(--gray-800);
+	.role-title {
+		margin: 0;
+		font-family: var(--font-brand);
+		font-size: clamp(1.9rem, 4.6vw, var(--text-4xl));
+		line-height: 1.08;
+		letter-spacing: -0.01em;
+		color: var(--gray-0);
+		font-weight: 600;
 	}
 
-	.content :global(blockquote) {
-		font-size: var(--text-lg);
+	/* Markdown prose — the actual page content */
+	.role-prose {
+		color: var(--gray-200);
+		font-size: 1rem;
+		line-height: 1.7;
+	}
+
+	.role-prose :global(h2) {
+		margin: 2rem 0 0.75rem;
+		font-size: var(--text-md);
 		font-family: var(--font-brand);
 		font-weight: 600;
-		line-height: 1.1;
-		padding-inline-start: 1.5rem;
-		border-inline-start: 0.25rem solid var(--accent-dark);
 		color: var(--gray-0);
+		letter-spacing: -0.005em;
 	}
 
-	.back-link,
-	.content :global(a) {
+	.role-prose :global(h2:first-child) {
+		margin-top: 0;
+	}
+
+	.role-prose :global(h3) {
+		margin: 1.25rem 0 0.5rem;
+		font-size: var(--text-base);
+		font-family: var(--font-brand);
+		font-weight: 600;
+		color: var(--gray-100);
+	}
+
+	.role-prose :global(p) {
+		margin: 0 0 0.85rem;
+	}
+
+	.role-prose :global(ul),
+	.role-prose :global(ol) {
+		margin: 0 0 1rem;
+		padding-left: 1.15rem;
+		display: flex;
+		flex-direction: column;
+		gap: 0.4rem;
+	}
+
+	.role-prose :global(li) {
+		color: var(--gray-100);
+	}
+
+	.role-prose :global(li::marker) {
+		color: var(--r-accent);
+	}
+
+	.role-prose :global(a) {
+		color: var(--r-accent);
 		text-decoration: 1px solid underline transparent;
 		text-underline-offset: 0.25em;
 		transition: text-decoration-color var(--theme-transition);
 	}
 
-	.back-link:hover,
-	.back-link:focus,
-	.content :global(a:hover),
-	.content :global(a:focus) {
+	.role-prose :global(a:hover),
+	.role-prose :global(a:focus-visible) {
 		text-decoration-color: currentColor;
 	}
 
-	@media (min-width: 50em) {
-		.back-link {
-			display: block;
-			align-self: flex-start;
+	.role-prose :global(blockquote) {
+		margin: 1.5rem 0;
+		padding: 0.6rem 1rem;
+		border-left: 2px solid var(--r-accent-soft);
+		background: hsla(var(--gray-999-basis), 0.3);
+		border-radius: 0.35rem;
+		color: var(--gray-100);
+		font-style: italic;
+	}
+
+	.role-prose :global(code) {
+		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+		font-size: 0.9em;
+		padding: 0.1rem 0.35rem;
+		border-radius: 0.3rem;
+		background: hsla(var(--gray-999-basis), 0.4);
+		border: 1px solid hsla(210, 80%, 70%, 0.16);
+	}
+
+	/* Pager */
+	.role-pager {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 1rem;
+	}
+
+	.role-pager-card {
+		display: flex;
+		flex-direction: column;
+		gap: 0.35rem;
+		padding: 1.15rem 1.25rem;
+		border-radius: 1rem;
+		border: 1px solid hsla(210, 80%, 70%, 0.14);
+		background: linear-gradient(
+			180deg,
+			hsla(var(--gray-999-basis), 0.55),
+			hsla(var(--gray-999-basis), 0.24)
+		);
+		backdrop-filter: blur(20px);
+		-webkit-backdrop-filter: blur(20px);
+		box-shadow: var(--shadow-sm);
+		color: inherit;
+		text-decoration: none;
+		transition:
+			transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+			border-color 0.35s ease,
+			box-shadow 0.35s ease;
+	}
+
+	.role-pager-card.is-empty {
+		visibility: hidden;
+	}
+
+	.role-pager-earlier {
+		text-align: right;
+	}
+
+	.role-pager-dir {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.4rem;
+		font-family: var(--font-brand);
+		font-size: 0.7rem;
+		letter-spacing: 0.24em;
+		text-transform: uppercase;
+		color: var(--r-accent);
+	}
+
+	.role-pager-earlier .role-pager-dir {
+		justify-content: flex-end;
+	}
+
+	.role-pager-title {
+		font-family: var(--font-brand);
+		font-size: var(--text-md);
+		color: var(--gray-0);
+		font-weight: 600;
+		line-height: 1.25;
+	}
+
+	.role-pager-meta {
+		font-size: 0.82rem;
+		color: var(--gray-300);
+	}
+
+	.role-pager-card:hover,
+	.role-pager-card:focus-visible {
+		outline: none;
+		transform: translateY(-2px);
+		border-color: var(--r-accent-soft);
+		box-shadow:
+			var(--shadow-md),
+			0 0 28px -12px var(--r-accent-glow);
+	}
+
+	/* Desktop */
+	@media (min-width: 60em) {
+		.role-wrapper {
+			padding-top: 3.5rem;
+			padding-bottom: 4rem;
 		}
 
-		.details {
-			flex-direction: row;
-			gap: 2.5rem;
+		.role-pager {
+			grid-template-columns: 1fr 1fr;
+			gap: 1.5rem;
 		}
+	}
 
-		.content :global(blockquote) {
-			font-size: var(--text-2xl);
+	@media (prefers-reduced-motion: reduce) {
+		.role-back,
+		.role-pager-card {
+			transition: none;
+		}
+		.role-back:hover,
+		.role-back:focus-visible,
+		.role-pager-card:hover,
+		.role-pager-card:focus-visible {
+			transform: none;
 		}
 	}
 </style>
